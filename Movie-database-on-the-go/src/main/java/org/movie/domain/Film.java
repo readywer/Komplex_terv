@@ -19,9 +19,7 @@ public class Film {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(length = 4096)
     private String description;
-    @Column(name = "category")
     @Enumerated(EnumType.STRING)
     private List<Category> categories = new ArrayList<>();
     private List<String> actors = new ArrayList<>();

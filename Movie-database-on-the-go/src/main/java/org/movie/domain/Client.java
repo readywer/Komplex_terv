@@ -2,14 +2,13 @@ package org.movie.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @Entity
-public class User {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,5 +17,5 @@ public class User {
     private String password;
     private String email;
     @Enumerated(EnumType.STRING)
-    private Role roles;
+    private Role role;
 }
