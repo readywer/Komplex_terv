@@ -1,5 +1,5 @@
 package org.movie.domain;
 
 public enum Role {
-    ADMIN,CLIENT
+    ADMIN, CLIENT
 }

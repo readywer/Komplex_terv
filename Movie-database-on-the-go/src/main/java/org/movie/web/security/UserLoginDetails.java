@@ -1,4 +1,4 @@
-package org.movie.security;
+package org.movie.web.security;
 
 import org.movie.domain.Client;
 import org.springframework.security.core.GrantedAuthority;

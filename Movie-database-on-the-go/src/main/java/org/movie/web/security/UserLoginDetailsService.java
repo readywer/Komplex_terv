@@ -1,7 +1,6 @@
-package org.movie.security;
+package org.movie.web.security;
 
 import org.movie.domain.Client;
-import org.movie.persistance.ClientRepository;
 import org.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,15 +13,17 @@ import org.springframework.stereotype.Service;
 public class UserLoginDetailsService implements UserDetailsService {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private MovieService movieService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = clientRepository.findByUsername(username);
+        Client client = movieService.findClientByUsername(username);
         if (client == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return new UserLoginDetails(client);
     }
+
     public String loadAuthenticatedUsername() {
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

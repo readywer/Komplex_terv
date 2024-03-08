@@ -3,11 +3,13 @@ package org.movie.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
-@Entity
+@Builder
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
