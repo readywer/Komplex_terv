@@ -19,5 +19,5 @@ public class Client {
     private String password;
     private String email;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.CLIENT;
 }

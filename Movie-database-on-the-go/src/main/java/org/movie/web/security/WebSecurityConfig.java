@@ -18,9 +18,11 @@ public class WebSecurityConfig {
     SecurityFilterChain web(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/home").authenticated()
+                        .requestMatchers("/add_film").authenticated()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated()
 

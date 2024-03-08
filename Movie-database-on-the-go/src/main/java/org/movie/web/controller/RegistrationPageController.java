@@ -23,12 +23,10 @@ public class RegistrationPageController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("game") @Valid Client client, BindingResult result, Model model) {
+    public String register(@ModelAttribute("game") @Valid Client client, Model model) {
         if (movieService.createClient(client)){
-            System.out.println("siker");
             return "redirect:/home";
         }
-        System.out.println("f");
         model.addAttribute("client", client);
         return "registration-page";
     }
