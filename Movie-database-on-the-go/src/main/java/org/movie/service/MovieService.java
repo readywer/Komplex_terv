@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.movie.domain.Client;
 import org.movie.domain.Film;
 import org.movie.persistance.ClientRepository;
+import org.movie.persistance.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +19,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class MovieService {
 
-    @Autowired
-    private ClientRepository clientRepository;
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
     private final String[] allowedExtensions = {"mp4", "avi", "mkv", "mov"}; // Engedélyezett fájlkiterjesztések
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private FilmRepository filmRepository;
 
     @Transactional
     public boolean createClient(Client client) {
@@ -53,10 +58,86 @@ public class MovieService {
         }
     }
 
-    //TODO more robust validation
+    //TODO hiba visszajelzés
     public boolean isValidClient(Client client) {
-        return !client.getName().isEmpty() && !client.getUsername().isEmpty() &&
-                !client.getPassword().isEmpty() && !client.getEmail().isEmpty();
+        if (!isValidName(client.getName())) {
+            return false;
+        }
+        if (!isValidUsername(client.getUsername())) {
+            return false;
+        }
+        if (!isValidPassword(client.getPassword())) {
+            return false;
+        }
+        if (!isValidEmail(client.getEmail())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidUsername(String username) {
+        // Ellenőrizze, hogy a felhasználónév üres-e
+        if (username.isEmpty()) {
+            return false;
+        }
+
+        // Ellenőrizze a hosszt
+        if (username.length() < 3 || username.length() > 32) {
+            return false;
+        }
+
+        // Ellenőrizze, hogy a felhasználónév betűvel kezdődik
+        if (!Character.isLetter(username.charAt(0))) {
+            return false;
+        }
+
+        // Ellenőrizze az engedélyezett karaktereket
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
+        Matcher matcher = pattern.matcher(username);
+        return matcher.matches();
+    }
+
+    private boolean isValidName(String name) {
+        // Ellenőrizze, hogy a felhasználónév üres-e
+        if (name.isEmpty()) {
+            return false;
+        }
+
+        // Ellenőrizze a hosszt
+        if (name.length() < 3 || name.length() > 32) {
+            return false;
+        }
+        // Ellenőrizze, hogy a felhasználónév betűvel kezdődik
+        return Character.isLetter(name.charAt(0));
+    }
+
+    private boolean isValidPassword(String password) {
+        // Ellenőrizze, hogy a jelszó üres-e
+        if (password.isEmpty()) {
+            return false;
+        }
+
+        // Ellenőrizze a hosszt
+        if (password.length() < 6) {
+            return false;
+        }
+
+        // Ellenőrizze legalább egy kisbetűt, egy nagybetűt és egy számot
+        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    private boolean isValidEmail(String email) {
+        // Ellenőrizze, hogy az e-mail cím üres-e
+        if (email.isEmpty()) {
+            return false;
+        }
+
+        // Ellenőrizze az e-mail cím reguláris kifejezéssel
+        Pattern pattern = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public Client findClientByUsername(String username) {
@@ -80,20 +161,21 @@ public class MovieService {
         }
     }
 
-    //TODO fix id
     public boolean uploadFilm(String username, Film film, MultipartFile file) {
         film.setFilename(file.getOriginalFilename());
-        addFilmDataToClient(username,film);
-        storeVideoFile(username,file);
+        addFilmDataToClient(username, film);
+        storeVideoFile(username, file);
         return true;
     }
 
+    @Transactional
     private void addFilmDataToClient(String username, Film filmToAdd) {
         String basePath = storageDir + "/" + username;
         ObjectMapper objectMapper = new ObjectMapper();
-
-        List<Film> films = getClientFilms(username);
-        films.add(filmToAdd);
+        filmRepository.saveAll(getClientFilms(username));
+        filmRepository.save(filmToAdd);
+        Iterable<Film> films = filmRepository.findAll();
+        filmRepository.deleteAll();
         try {
             File file = new File(basePath, "film.json");
             objectMapper.writeValue(file, films);

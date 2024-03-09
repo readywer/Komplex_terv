@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Add New Movie</title>
     <link href="/css/bootstrap.css" rel="stylesheet"/>
     <link href="/css/custom.css" rel="stylesheet"/>
@@ -27,36 +27,39 @@
 <!-- Űrlap a film adatok bekérésére -->
 <div class="container mt-5">
     <h2>Add New Movie</h2>
-    <form enctype="multipart/form-data" th:action="@{/add_film}" method="post">
+    <form enctype="multipart/form-data" method="post" th:action="@{/add_film}">
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" th:required="required">
+            <input class="form-control" id="name" name="name" th:required="required" type="text">
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea class="form-control" id="description" name="description" rows="3" th:required="required"></textarea>
+            <textarea class="form-control" id="description" name="description" rows="3"
+                      th:required="required"></textarea>
         </div>
         <div class="form-group">
             <label for="categories">Categories:</label><br>
-            <select multiple class="form-control" id="categories" name="categories" th:required="required">
-                <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
+            <select class="form-control" id="categories" multiple name="categories" th:required="required">
+                <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
             </select>
         </div>
         <div class="form-group">
             <label for="actors">Actors:</label>
-            <input type="text" class="form-control" id="actors" name="actors" th:required="required">
-            <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett Johansson).</small>
+            <input class="form-control" id="actors" name="actors" th:required="required" type="text">
+            <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
+                Johansson).</small>
         </div>
         <div class="form-group">
             <label for="recommendedAge">Recommended Age:</label>
-            <input type="number" class="form-control" id="recommendedAge" name="recommendedAge" th:required="required">
+            <input class="form-control" id="recommendedAge" name="recommendedAge" th:required="required" type="number">
         </div>
         <div class="form-group">
             <label for="file">Select File:</label>
-            <input type="file" class="form-control-file" id="file" name="file" accept=".mp4,.avi,.mkv,.mov" th:required="required">
+            <input accept=".mp4,.avi,.mkv,.mov" class="form-control-file" id="file" name="file" th:required="required"
+                   type="file">
             <small class="form-text text-muted">Allowed extensions: <span th:text="${allowedExtensions}"></span></small>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </form>
 </div>
 </body>

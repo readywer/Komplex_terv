@@ -19,7 +19,6 @@ public class UserLoginDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> client.getRole().name());
-        System.out.println(authorities);
         return authorities;
     }
 

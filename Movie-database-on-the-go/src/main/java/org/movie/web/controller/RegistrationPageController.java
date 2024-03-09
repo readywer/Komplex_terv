@@ -6,7 +6,6 @@ import org.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +15,7 @@ public class RegistrationPageController {
 
     @Autowired
     private MovieService movieService;
+
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("client", new Client());
@@ -24,7 +24,7 @@ public class RegistrationPageController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("game") @Valid Client client, Model model) {
-        if (movieService.createClient(client)){
+        if (movieService.createClient(client)) {
             return "redirect:/home";
         }
         model.addAttribute("client", client);

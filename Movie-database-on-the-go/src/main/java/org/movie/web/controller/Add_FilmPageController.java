@@ -34,12 +34,12 @@ public class Add_FilmPageController {
 
         model.addAttribute("film", new Film());
         model.addAttribute("categories", categories);
-        model.addAttribute("allowedExtensions",movieService.getAllowedExtensions());
+        model.addAttribute("allowedExtensions", movieService.getAllowedExtensions());
         return "add_film-page";
     }
 
     @PostMapping("/add_film")
-    public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model , MultipartFile file) {
+    public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model, MultipartFile file) {
         if (movieService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file)) {
             return "redirect:/add_film";
         }
