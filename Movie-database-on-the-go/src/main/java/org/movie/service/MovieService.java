@@ -91,6 +91,11 @@ public class MovieService {
             return false;
         }
 
+        //Ha már létezik ilyen fehasznló mégegyszer ne lehessen létrehozni
+        if (findClientByUsername(username) != null) {
+            return false;
+        }
+
         // Ellenőrizze az engedélyezett karaktereket
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
         Matcher matcher = pattern.matcher(username);
