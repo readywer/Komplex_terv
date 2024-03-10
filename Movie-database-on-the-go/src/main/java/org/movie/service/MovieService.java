@@ -154,6 +154,16 @@ public class MovieService {
         return null;
     }
 
+    public Client findProtectedClientByUsername(String username) {
+        for (Client client : clientRepository.findAll()) {
+            if (client.getUsername().equals(username)) {
+                client.setPassword("");
+                return client;
+            }
+        }
+        return null;
+    }
+
     public List<Film> getClientFilms(String username) {
         String basePath = storageDir + "/" + username;
         try {
@@ -215,5 +225,10 @@ public class MovieService {
         } catch (IOException ex) {
             throw new RuntimeException("Could not store the file. Please try again!", ex);
         }
+    }
+
+    public File getFile(String filename, String username) {
+        Path filePath = Paths.get(storageDir + "/" + username).resolve(filename).toAbsolutePath().normalize();
+        return filePath.toFile();
     }
 }

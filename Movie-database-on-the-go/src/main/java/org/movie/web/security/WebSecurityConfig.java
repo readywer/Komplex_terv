@@ -21,6 +21,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/film_watcher/**").permitAll()
+                        .requestMatchers("/bug.mp4").permitAll()
                         .requestMatchers("/home").authenticated()
                         .requestMatchers("/add_film").authenticated()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
