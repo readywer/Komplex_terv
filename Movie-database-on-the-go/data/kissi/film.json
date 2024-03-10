@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Man in Black",
+    "name": "Test",
     "description": "A világ őrzőik, akik minket védelmeznek",
     "categories": [
       "ACTION"
@@ -10,6 +10,7 @@
       "Will Smith"
     ],
     "recommendedAge": 10,
-    "filename": "truck.mp4"
+    "filmpath": "data/kissi/Test/truck.mp4",
+    "picturepath": ""
   }
 ]

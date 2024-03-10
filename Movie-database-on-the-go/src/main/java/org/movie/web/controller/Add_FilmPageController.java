@@ -3,7 +3,7 @@ package org.movie.web.controller;
 import jakarta.validation.Valid;
 import org.movie.domain.Category;
 import org.movie.domain.Film;
-import org.movie.service.MovieService;
+import org.movie.service.FilmService;
 import org.movie.web.security.UserLoginDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import java.util.List;
 public class Add_FilmPageController {
 
     @Autowired
-    private MovieService movieService;
+    private FilmService filmService;
 
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
@@ -34,13 +34,13 @@ public class Add_FilmPageController {
 
         model.addAttribute("film", new Film());
         model.addAttribute("categories", categories);
-        model.addAttribute("allowedExtensions", movieService.getAllowedExtensions());
+        model.addAttribute("allowedExtensions", filmService.getAllowedExtensions());
         return "add_film-page";
     }
 
     @PostMapping("/add_film")
     public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model, MultipartFile file) {
-        if (movieService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file)) {
+        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file)) {
             return "redirect:/add_film";
         }
         model.addAttribute("film", film);

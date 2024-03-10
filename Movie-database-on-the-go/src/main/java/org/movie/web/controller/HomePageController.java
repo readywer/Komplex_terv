@@ -1,6 +1,7 @@
 package org.movie.web.controller;
 
-import org.movie.service.MovieService;
+import org.movie.service.ClientService;
+import org.movie.service.FilmService;
 import org.movie.web.security.UserLoginDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,14 @@ public class HomePageController {
     private UserLoginDetailsService userLoginDetailsService;
 
     @Autowired
-    private MovieService movieService;
+    private ClientService clientService;
+    @Autowired
+    private FilmService filmService;
 
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("client", movieService.findProtectedClientByUsername(userLoginDetailsService.loadAuthenticatedUsername()));
-        model.addAttribute("numberOfFilms", movieService.getClientFilms(userLoginDetailsService.loadAuthenticatedUsername()).size());
+        model.addAttribute("client", clientService.findProtectedClientByUsername(userLoginDetailsService.loadAuthenticatedUsername()));
+        model.addAttribute("numberOfFilms", filmService.getClientFilms(userLoginDetailsService.loadAuthenticatedUsername()).size());
         return "home-page";
     }
 }

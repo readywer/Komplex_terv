@@ -25,5 +25,6 @@ public class Film {
     private List<Category> categories = new ArrayList<>();
     private List<String> actors = new ArrayList<>();
     private int recommendedAge;
-    private String filename;
+    private String filmpath;
+    private String picturepath;
 }

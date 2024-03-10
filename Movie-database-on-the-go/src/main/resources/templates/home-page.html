@@ -15,6 +15,9 @@
                 <a class="nav-link" href="">Home</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="films">Films</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="add_film">Film Add</a>
             </li>
         </ul>
@@ -31,15 +34,12 @@
                 <dt class="col-sm-3">Name</dt>
                 <dd class="col-sm-9" th:text="${client.name}">Nagy Sándor</dd>
 
-                <dt class="col-sm-3">Username</dt>
-                <dd class="col-sm-9" th:text="${client.username}">nagys</dd>
-
                 <dt class="col-sm-3">Email</dt>
                 <dd class="col-sm-9" th:text="${client.email}">nagy.sandor@gmail.com</dd>
+
+                <dt class="col-sm-3">Number of Films</dt>
+                <dd class="col-sm-9" th:text="${numberOfFilms}">0</dd>
             </dl>
-            <div>
-                <p th:text="'Number of Films: ' + ${numberOfFilms}"></p>
-            </div>
         </div>
     </div>
 </div>
