@@ -19,19 +19,11 @@ public class Film_WatcherPageController {
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
-    @GetMapping("/film_watcher")
-    public String getFile(Model model) {
-        String filePath = "data/kissi/truck.mp4";
-        System.out.println(filePath);
-
-        model.addAttribute("filePath", filePath);
-        return "film_watcher-page";
-    }
-
     @GetMapping("/bug.mp4")
     public ResponseEntity<Resource> getVideo() throws IOException {
-        String filePath = "data/kissi/truck.mp4";
+        String filePath = "data/kissi/Test/truck.mp4";
         Path path = Paths.get(filePath);
+        System.out.println(path);
         Resource videoResource = new FileSystemResource(path.toFile());
 
         HttpHeaders headers = new HttpHeaders();

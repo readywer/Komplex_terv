@@ -11,13 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class FilmService {
@@ -46,11 +52,21 @@ public class FilmService {
     }
 
     //TODO: check film name for / and other problematic characters
-    public boolean uploadFilm(String username, Film film, MultipartFile file) {
-        film.setFilmpath(storageDir + "/" + username+ "/"+film.getName()+"/"+ file.getOriginalFilename());
-        System.out.println(film.getFilmpath());
+    public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
+        film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
+        film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename());
         addFilmDataToClient(username, film);
-        storeVideoFile(username, file,film);
+        //storeVideoFile(username, file, film);
+        //storeImageFile(username, picture, film);
+        CompletableFuture<Void> videoFileFuture = CompletableFuture.runAsync(() -> storeVideoFile(username, file, film));
+        CompletableFuture<Void> imageFileFuture = CompletableFuture.runAsync(() -> storeImageFile(username, picture, film));
+
+        // Várakozás, amíg mindkét művelet be nem fejeződik be
+        try {
+            CompletableFuture.allOf(videoFileFuture, imageFileFuture).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -85,7 +101,7 @@ public class FilmService {
             }
 
             // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
-            Path uploadPath = Paths.get(storageDir + "/" + username+ "/"+film.getName()).toAbsolutePath().normalize();
+            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getName()).toAbsolutePath().normalize();
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -95,6 +111,57 @@ public class FilmService {
             Files.copy(file.getInputStream(), filePath);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store the file. Please try again!", ex);
+        }
+    }
+
+    private void storeImageFile(String username, MultipartFile imageFile, Film film) {
+        try {
+            // Ellenőrizzük, hogy a feltöltött fájl kép-e
+            if (!imageFile.getContentType().startsWith("image/")) {
+                throw new IllegalArgumentException("Csak képfájlok engedélyezettek.");
+            }
+
+            // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
+            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getName()).toAbsolutePath().normalize();
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // A fájlt mentjük a feltöltési mappába
+            Path imagePath = uploadPath.resolve(imageFile.getOriginalFilename());
+            Files.copy(imageFile.getInputStream(), imagePath);
+        } catch (IOException ex) {
+            throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
+        }
+    }
+    public BufferedImage readStoredImageFile( String filename) {
+        try {
+            // A kép elérési útjának meghatározása
+            Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
+
+            // Kép beolvasása
+            BufferedImage image = ImageIO.read(imagePath.toFile());
+
+            return image;
+        } catch (IOException ex) {
+            throw new RuntimeException("Nem sikerült a képet beolvasni.", ex);
+        }
+    }
+    public String readStoredImageFileAsBase64(String filename) {
+        try {
+            // A kép elérési útjának meghatározása
+            Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
+
+            // Kép beolvasása BufferedImage-be
+            BufferedImage image = ImageIO.read(imagePath.toFile());
+
+            // Kép átalakítása base64-kódolt stringgé
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+            byte[] imageBytes = baos.toByteArray();
+            return Base64.getEncoder().encodeToString(imageBytes);
+        } catch (IOException ex) {
+            throw new RuntimeException("Nem sikerült a képet beolvasni vagy base64-kódolni.", ex);
         }
     }
 }

@@ -39,8 +39,8 @@ public class Add_FilmPageController {
     }
 
     @PostMapping("/add_film")
-    public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model, MultipartFile file) {
-        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file)) {
+    public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model, MultipartFile file, MultipartFile imageFile) {
+        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
             return "redirect:/add_film";
         }
         model.addAttribute("film", film);

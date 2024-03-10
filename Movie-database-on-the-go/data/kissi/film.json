@@ -11,6 +11,20 @@
     ],
     "recommendedAge": 10,
     "filmpath": "data/kissi/Test/truck.mp4",
-    "picturepath": ""
+    "picturepath": "data/kissi/reddd/jelenlegi.png"
+  },
+  {
+    "id": 2,
+    "name": "reddd",
+    "description": "dsda",
+    "categories": [
+      "THRILLER"
+    ],
+    "actors": [
+      "dds"
+    ],
+    "recommendedAge": 8,
+    "filmpath": "data/kissi/reddd/tester.mp4",
+    "picturepath": "data/kissi/reddd/jelenlegi.png"
   }
 ]

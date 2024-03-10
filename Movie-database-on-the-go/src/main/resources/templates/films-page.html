@@ -31,65 +31,16 @@
     <h2>Films</h2>
     <div class="row" id="filmTiles">
         <!-- Placeholder for film tiles -->
+        <div class="col-md-4 mb-4" th:each="film : ${films}">
+            <div class="card">
+                <img th:src="'data:image/jpeg;base64,' + ${image_ + film.name}" alt="Film kép" />
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${film.name}"></h5>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    // Dummy film data (replace with actual data from the backend)
-    var films = [
-        { name: "Film 1", imageUrl: "/path/to/image1.jpg" },
-        { name: "Film 2", imageUrl: "/path/to/image2.jpg" },
-        { name: "Film 3", imageUrl: "/path/to/image3.jpg" }
-        // Add more films as needed
-    ];
-
-    // Function to render film tiles
-    function renderFilmTiles() {
-        var filmTiles = document.getElementById("filmTiles");
-
-        // Clear previous film tiles
-        filmTiles.innerHTML = "";
-
-        // Sort films by name
-        films.sort(function(a, b) {
-            return a.name.localeCompare(b.name);
-        });
-
-        // Render film tiles
-        films.forEach(function(film) {
-            var tile = document.createElement("div");
-            tile.classList.add("col-md-4", "mb-4");
-
-            var card = document.createElement("div");
-            card.classList.add("card");
-
-            var image = document.createElement("img");
-            image.classList.add("card-img-top");
-            image.setAttribute("src", film.imageUrl);
-            image.setAttribute("alt", film.name);
-
-            var cardBody = document.createElement("div");
-            cardBody.classList.add("card-body");
-
-            var title = document.createElement("h5");
-            title.classList.add("card-title");
-            title.textContent = film.name;
-
-            cardBody.appendChild(title);
-            card.appendChild(image);
-            card.appendChild(cardBody);
-            tile.appendChild(card);
-            filmTiles.appendChild(tile);
-        });
-    }
-
-    // Call the renderFilmTiles function when the page is loaded
-    document.addEventListener("DOMContentLoaded", function() {
-        renderFilmTiles();
-    });
-    /*]]>*/
-</script>
 
 </body>
 </html>
