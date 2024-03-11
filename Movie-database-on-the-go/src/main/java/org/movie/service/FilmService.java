@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -41,11 +42,17 @@ public class FilmService {
 
     public List<Film> getClientFilms(String username) {
         String basePath = storageDir + "/" + username;
+        File file = Paths.get(basePath, "film.json").toFile();
+
+        if (!file.exists() || file.length() == 0) {
+            // Ha a fájl nem létezik vagy üres, visszaadjuk az üres listát
+            return new ArrayList<>();
+        }
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            TypeReference<List<Film>> typeRef = new TypeReference<>() {
-            };
-            return objectMapper.readValue(Paths.get(basePath, "film.json").toFile(), typeRef);
+            TypeReference<List<Film>> typeRef = new TypeReference<>() {};
+            return objectMapper.readValue(file, typeRef);
         } catch (IOException e) {
             throw new RuntimeException("IO error happened while reading personal properties: " + e);
         }
