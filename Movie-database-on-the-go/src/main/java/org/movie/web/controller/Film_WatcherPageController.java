@@ -8,7 +8,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,10 +25,8 @@ public class Film_WatcherPageController {
 
     @GetMapping("/film_watch")
     public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
-        Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(),filmId);
-        String filePath = film.getFilmpath();
-        Path path = Paths.get(filePath);
-        System.out.println(path);
+        Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
+        Path path = Paths.get(film.getFilmpath());
         Resource videoResource = new FileSystemResource(path.toFile());
 
         HttpHeaders headers = new HttpHeaders();

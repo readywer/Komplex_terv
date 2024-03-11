@@ -144,7 +144,8 @@ public class FilmService {
             throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
         }
     }
-    public BufferedImage readStoredImageFile( String filename) {
+
+    public BufferedImage readStoredImageFile(String filename) {
         try {
             // A kép elérési útjának meghatározása
             Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
@@ -157,6 +158,7 @@ public class FilmService {
             throw new RuntimeException("Nem sikerült a képet beolvasni.", ex);
         }
     }
+
     public String readStoredImageFileAsBase64(String filename) {
         try {
             // A kép elérési útjának meghatározása
