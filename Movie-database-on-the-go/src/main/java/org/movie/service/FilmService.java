@@ -51,6 +51,16 @@ public class FilmService {
         }
     }
 
+    public Film getFilmById(String username, Long filmId) {
+        List<Film> films = getClientFilms(username);
+        for (Film film : films) {
+            if (film.getId() != null && film.getId().equals(filmId)) {
+                return film;
+            }
+        }
+        return null; // Ha nem található film az adott id-jel, null értékkel tér vissza
+    }
+
     //TODO: check film name for / and other problematic characters
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
         film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
@@ -151,7 +161,7 @@ public class FilmService {
         try {
             // A kép elérési útjának meghatározása
             Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
-
+            System.out.println(imagePath);
             // Kép beolvasása BufferedImage-be
             BufferedImage image = ImageIO.read(imagePath.toFile());
 
