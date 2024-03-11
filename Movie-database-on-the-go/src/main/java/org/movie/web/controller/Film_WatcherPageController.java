@@ -1,5 +1,7 @@
 package org.movie.web.controller;
 
+import org.movie.domain.Film;
+import org.movie.service.FilmService;
 import org.movie.web.security.UserLoginDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -8,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,11 +20,14 @@ import java.nio.file.Paths;
 public class Film_WatcherPageController {
 
     @Autowired
+    private FilmService filmService;
+    @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
-    @GetMapping("/bug.mp4")
-    public ResponseEntity<Resource> getVideo() throws IOException {
-        String filePath = "data/kissi/Test/truck.mp4";
+    @GetMapping("/film_watch")
+    public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
+        Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(),filmId);
+        String filePath = film.getFilmpath();
         Path path = Paths.get(filePath);
         System.out.println(path);
         Resource videoResource = new FileSystemResource(path.toFile());

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +13,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="">Home</a>
+                <a class="nav-link" href="home">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="films">Films</a>
@@ -28,24 +29,33 @@
 </nav>
 <div class="container mt-5">
     <h2>Film details</h2>
-    <div class="card border border-info border-3">
-        <div class="card-body bg-light">
-            <dl class="row">
-                <dt class="col-sm-3">Name</dt>
-                <dd class="col-sm-9" th:text="${film.name}">Nagy Sándor</dd>
+    <div class="row">
+        <div class="col-md-3">
+            <a th:href="@{'/film_watch?filmId=' + ${film.id}}">
+            <img th:src="${film.picturepath}" alt="Film kép" class="img-fluid" />
+            </a>
+        </div>
+        <div class="col-md-9">
+            <div class="card border border-info border-3">
+                <div class="card-body bg-light">
+                    <dl class="row">
+                        <dt class="col-sm-3">Name</dt>
+                        <dd class="col-sm-9" th:text="${film.name}">Nagy Sándor</dd>
 
-                <dt class="col-sm-3">Description</dt>
-                <dd class="col-sm-9" th:text="${film.description}">nagy.sandor@gmail.com</dd>
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9" th:text="${film.description}">nagy.sandor@gmail.com</dd>
 
-                <dt class="col-sm-3">Categories</dt>
-                <dd class="col-sm-9" th:text="${film.categories}">0</dd>
+                        <dt class="col-sm-3">Categories</dt>
+                        <dd class="col-sm-9" th:text="${film.categories}">0</dd>
 
-                <dt class="col-sm-3">Actors</dt>
-                <dd class="col-sm-9" th:text="${film.actors}">0</dd>
+                        <dt class="col-sm-3">Actors</dt>
+                        <dd class="col-sm-9" th:text="${film.actors}">0</dd>
 
-                <dt class="col-sm-3">Recommended Age</dt>
-                <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
-            </dl>
+                        <dt class="col-sm-3">Recommended Age</dt>
+                        <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
+                    </dl>
+                </div>
+            </div>
         </div>
     </div>
 </div>
