@@ -39,11 +39,16 @@ public class Add_FilmPageController {
     }
 
     @PostMapping("/add_film")
-    public String register(@ModelAttribute("game") @Valid Film film, BindingResult result, Model model, MultipartFile file, MultipartFile imageFile) {
+    public String register(@ModelAttribute("film") @Valid Film film, BindingResult result, Model model, MultipartFile file, MultipartFile imageFile) {
         if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
             return "redirect:/add_film";
         }
+        List<Category> categories = new ArrayList<>();
+        categories.addAll(Arrays.asList(Category.values()));
+        model.addAttribute("nameError", "A filmnév már foglalt.");
+        model.addAttribute("categories", categories);
         model.addAttribute("film", film);
+        model.addAttribute("allowedExtensions", filmService.getAllowedExtensions());
         return "add_film-page";
     }
 }

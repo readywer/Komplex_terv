@@ -24,7 +24,7 @@ public class Film {
     @Enumerated(EnumType.STRING)
     private List<Category> categories = new ArrayList<>();
     private List<String> actors = new ArrayList<>();
-    private int recommendedAge;
+    private int recommendedAge = 0;
     private String filmpath;
     private String picturepath = "images/noimage.jpg";
 }

@@ -71,6 +71,13 @@ public class FilmService {
 
     //TODO: check film name for / and other problematic characters
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
+        film.setFilmpath(file.getOriginalFilename());
+        film.setPicturepath(picture.getOriginalFilename());
+        System.out.println(film.getName());
+        if(!isValidFilm(film,username)){
+            System.out.println("hiba");
+            return false;
+        }
         film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
         film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename());
         addFilmDataToClient(username, film);
@@ -153,6 +160,36 @@ public class FilmService {
         }
     }
 
+    public boolean isValidFilm(Film film, String username){
+        if(!isValidName(film.getName(),username)){
+            return false;
+        }
+        if (film.getFilmpath().contains(".")) {
+            return false;
+        }
+        if (film.getPicturepath().contains(".")) {
+            return false;
+        }
+        if(film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidName(String name, String username){
+        if ( name.isEmpty()) {
+            return false;
+        }
+        if (name.contains("/") || name.contains("\\")) {
+            return false;
+        }
+        for(Film film : getClientFilms(username)){
+            if (film.getName().equals(name)){
+                return false;
+            }
+        }
+        return true;
+    }
     public BufferedImage readStoredImageFile(String filename) {
         try {
             // A kép elérési útjának meghatározása
