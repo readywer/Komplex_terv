@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link href="css/bootstrap.css" rel="stylesheet"/>
-    <link href="css/custom.css" rel="stylesheet"/>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Regisztráció</title>
@@ -53,30 +52,77 @@
             background-color: #0056b3;
         }
     </style>
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var email = document.getElementById("email").value;
+            var isValid = true;
+
+            // Név ellenőrzése
+            if (name.length < 3 || name.length > 32 || !/^[a-zA-Z][a-zA-Z0-9.,_-]{2,31}$/.test(name)) {
+                document.getElementById("nameError").innerText = "A név legalább 3 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
+                isValid = false;
+            } else {
+                document.getElementById("nameError").innerText = "";
+            }
+
+            // Felhasználónév ellenőrzése
+            if (username.length < 3 || username.length > 32 || !/^[a-zA-Z][a-zA-Z0-9.,_-]{2,31}$/.test(username)) {
+                document.getElementById("usernameError").innerText = "A felhasználónév legalább 3 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
+                isValid = false;
+            } else {
+                document.getElementById("usernameError").innerText = "";
+            }
+
+            // Jelszó ellenőrzése
+            if (password.length < 6 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(password)) {
+                document.getElementById("passwordError").innerText = "A jelszónak legalább 6 karakter hosszúnak kell lennie, és tartalmaznia kell legalább egy kisbetűt, egy nagybetűt és egy számot.";
+                isValid = false;
+            } else {
+                document.getElementById("passwordError").innerText = "";
+            }
+
+            // E-mail ellenőrzése
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("emailError").innerText = "Kérlek adj meg egy valós e-mail címet.";
+                isValid = false;
+            } else {
+                document.getElementById("emailError").innerText = "";
+            }
+
+            return isValid;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
     <h2>Regisztráció</h2>
-    <form method="post" th:action="@{/register}" th:object="${client}">
+    <form method="post" th:action="@{/register}" th:object="${client}" onsubmit="return validateForm()">
 
         <div class="form-group">
             <label for="name">Név:</label>
             <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
+            <span id="nameError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
             <label for="username">Felhasználónév:</label>
             <input class="form-control" id="username" required="required" th:field="*{username}" type="text">
+            <span id="usernameError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
             <label for="password">Jelszó:</label>
-            <input class="form-control" id="password" required="required" th:field="*{password}" type="text">
+            <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
+            <span id="passwordError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
             <label for="email">E-mail cím:</label>
-            <input class="form-control" id="email" required="required" th:field="*{email}" type="text">
+            <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
+            <span id="emailError" style="color: red;"></span>
         </div>
 
         <button type="submit">Regisztráció</button>
