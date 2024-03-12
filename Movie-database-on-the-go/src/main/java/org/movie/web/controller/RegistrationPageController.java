@@ -27,6 +27,7 @@ public class RegistrationPageController {
         if (clientService.createClient(client)) {
             return "redirect:/home";
         }
+        model.addAttribute("nameError", "A felhasználónév már foglalt.");
         model.addAttribute("client", client);
         return "registration-page";
     }

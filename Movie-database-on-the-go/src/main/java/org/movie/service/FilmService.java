@@ -51,7 +51,8 @@ public class FilmService {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            TypeReference<List<Film>> typeRef = new TypeReference<>() {};
+            TypeReference<List<Film>> typeRef = new TypeReference<>() {
+            };
             return objectMapper.readValue(file, typeRef);
         } catch (IOException e) {
             throw new RuntimeException("IO error happened while reading personal properties: " + e);
