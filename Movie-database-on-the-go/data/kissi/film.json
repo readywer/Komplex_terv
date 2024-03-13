@@ -1,1 +1,30 @@
-[{"id":36,"name":"Test","description":"A világ őrzőik, akik minket védelmeznek","categories":["ACTION"],"actors":["Will Smith"],"recommendedAge":10,"filmpath":"data/kissi/Test/truck.mp4","picturepath":"data/kissi/reddd/jelenlegi.png"},{"id":37,"name":"reddd","description":"dsda","categories":["THRILLER"],"actors":["dds"],"recommendedAge":8,"filmpath":"data/kissi/reddd/tester.mp4","picturepath":"images/noimage.jpg"},{"id":38,"name":"Test","description":"asd","categories":["ACTION"],"actors":["a"],"recommendedAge":-1,"filmpath":"data/kissi/Test/tester.mp4","picturepath":"data/kissi/Test/"},{"id":39,"name":"a\\/a","description":"sad","categories":["ANIMATED"],"actors":["ds"],"recommendedAge":-7,"filmpath":"data/kissi/a\\/a/tester.mp4","picturepath":"data/kissi/a\\/a/"}]
+[
+  {
+    "id": 225,
+    "name": "Test",
+    "description": "A világ őrzőik, akik minket védelmeznek",
+    "categories": [
+      "ACTION"
+    ],
+    "actors": [
+      "Will Smith"
+    ],
+    "recommendedAge": 10,
+    "filmpath": "data/kissi/Test/truck.mp4",
+    "picturepath": "data/kissi/Test/jelenlegi.png"
+  },
+  {
+    "id": 226,
+    "name": "reddd",
+    "description": "dsda",
+    "categories": [
+      "THRILLER"
+    ],
+    "actors": [
+      "dds"
+    ],
+    "recommendedAge": 8,
+    "filmpath": "data/kissi/reddd/tester.mp4",
+    "picturepath": "images/noimage.jpg"
+  }
+]

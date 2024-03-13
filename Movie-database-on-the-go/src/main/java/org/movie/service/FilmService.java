@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class FilmService {
@@ -69,29 +67,22 @@ public class FilmService {
         return null; // Ha nem található film az adott id-jel, null értékkel tér vissza
     }
 
-    //TODO: check film name for / and other problematic characters
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
         film.setFilmpath(file.getOriginalFilename());
-        film.setPicturepath(picture.getOriginalFilename());
-        System.out.println(film.getName());
-        if(!isValidFilm(film,username)){
-            System.out.println("hiba");
+        System.out.println(picture.getName());
+        if (picture.getName().isEmpty()) {
+            film.setPicturepath(picture.getOriginalFilename());
+        }
+        if (!isValidFilm(film, username)) {
             return false;
         }
-        film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
-        film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename());
-        addFilmDataToClient(username, film);
-        //storeVideoFile(username, file, film);
-        //storeImageFile(username, picture, film);
-        CompletableFuture<Void> videoFileFuture = CompletableFuture.runAsync(() -> storeVideoFile(username, file, film));
-        CompletableFuture<Void> imageFileFuture = CompletableFuture.runAsync(() -> storeImageFile(username, picture, film));
-
-        // Várakozás, amíg mindkét művelet be nem fejeződik be
-        try {
-            CompletableFuture.allOf(videoFileFuture, imageFileFuture).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        if (!picture.isEmpty()) {
+            film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename());
+            storeImageFile(username, picture, film);
         }
+        film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
+        addFilmDataToClient(username, film);
+        storeVideoFile(username, file, film);
         return true;
     }
 
@@ -160,36 +151,47 @@ public class FilmService {
         }
     }
 
-    public boolean isValidFilm(Film film, String username){
-        if(!isValidName(film.getName(),username)){
+    public boolean isValidFilm(Film film, String username) {
+        if (!isValidName(film.getName(), username)) {
             return false;
         }
-        if (film.getFilmpath().contains(".")) {
+        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
             return false;
         }
-        if (film.getPicturepath().contains(".")) {
+        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
             return false;
         }
-        if(film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18){
+        if (film.getRecommendedAge() < 0 || film.getRecommendedAge() > 18) {
             return false;
         }
         return true;
     }
 
-    private boolean isValidName(String name, String username){
-        if ( name.isEmpty()) {
+    private int countOccurrences(String str, char character) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == character) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private boolean isValidName(String name, String username) {
+        if (name.isEmpty()) {
             return false;
         }
         if (name.contains("/") || name.contains("\\")) {
             return false;
         }
-        for(Film film : getClientFilms(username)){
-            if (film.getName().equals(name)){
+        for (Film film : getClientFilms(username)) {
+            if (film.getName().equals(name)) {
                 return false;
             }
         }
         return true;
     }
+
     public BufferedImage readStoredImageFile(String filename) {
         try {
             // A kép elérési útjának meghatározása
