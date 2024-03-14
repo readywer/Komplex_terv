@@ -1,9 +1,9 @@
 function validateFilmForm() {
     var name = document.getElementById("name").value;
     var description = document.getElementById("description").value;
-    var categories = document.getElementById("categories").value;
+    var categories = document.getElementById("categories").selectedOptions;
     var actors = document.getElementById("actors").value;
-    var recommendedAge = document.getElementById("recommendedAge").value;
+    var recommendedAge = parseInt(document.getElementById("recommendedAge").value);
     var file = document.getElementById("file").value;
     var imageFile = document.getElementById("imageFile").value;
     var isValid = true;
@@ -25,7 +25,7 @@ function validateFilmForm() {
     }
 
     // Kategóriák ellenőrzése
-    if (!categories || categories.length === 0) {
+    if (categories.length === 0) {
         document.getElementById("categoriesError").innerText = "Invalid categories!";
         isValid = false;
     } else {
@@ -41,7 +41,7 @@ function validateFilmForm() {
     }
 
     // Ajánlott életkor ellenőrzése
-    if (!recommendedAge || isNaN(recommendedAge) || recommendedAge < 0 || recommendedAge > 18) {
+    if (isNaN(recommendedAge) || recommendedAge < 0 || recommendedAge > 18) {
         document.getElementById("recommendedAgeError").innerText = "Invalid recommended age!";
         isValid = false;
     } else {

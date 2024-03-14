@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class FilmService {
@@ -69,7 +67,6 @@ public class FilmService {
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
         film.setFilmpath(file.getOriginalFilename());
-        System.out.println(picture.getName());
         if (picture.getName().isEmpty()) {
             film.setPicturepath(picture.getOriginalFilename());
         }
@@ -84,6 +81,46 @@ public class FilmService {
         addFilmDataToClient(username, film);
         storeVideoFile(username, file, film);
         return true;
+    }
+
+    public boolean isValidFilm(Film film, String username) {
+        if (!isValidName(film.getName(), username)) {
+            return false;
+        }
+        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
+            return false;
+        }
+        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
+            return false;
+        }
+        if (film.getRecommendedAge() < 0 || film.getRecommendedAge() > 18) {
+            return false;
+        }
+        return true;
+    }
+
+    private int countOccurrences(String str, char character) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == character) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private boolean isValidName(String name, String username) {
+        if (name.isEmpty()) {
+            return false;
+        }
+        for (Film film : getClientFilms(username)) {
+            if (film.getName().equals(name)) {
+                return false;
+            }
+        }
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
+        Matcher matcher = pattern.matcher(username);
+        return matcher.matches();
     }
 
     @Transactional
@@ -148,79 +185,6 @@ public class FilmService {
             Files.copy(imageFile.getInputStream(), imagePath);
         } catch (IOException ex) {
             throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
-        }
-    }
-
-    public boolean isValidFilm(Film film, String username) {
-        if (!isValidName(film.getName(), username)) {
-            return false;
-        }
-        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
-            return false;
-        }
-        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
-            return false;
-        }
-        if (film.getRecommendedAge() < 0 || film.getRecommendedAge() > 18) {
-            return false;
-        }
-        return true;
-    }
-
-    private int countOccurrences(String str, char character) {
-        int count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == character) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private boolean isValidName(String name, String username) {
-        if (name.isEmpty()) {
-            return false;
-        }
-        if (name.contains("/") || name.contains("\\")) {
-            return false;
-        }
-        for (Film film : getClientFilms(username)) {
-            if (film.getName().equals(name)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public BufferedImage readStoredImageFile(String filename) {
-        try {
-            // A kép elérési útjának meghatározása
-            Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
-
-            // Kép beolvasása
-            BufferedImage image = ImageIO.read(imagePath.toFile());
-
-            return image;
-        } catch (IOException ex) {
-            throw new RuntimeException("Nem sikerült a képet beolvasni.", ex);
-        }
-    }
-
-    public String readStoredImageFileAsBase64(String filename) {
-        try {
-            // A kép elérési útjának meghatározása
-            Path imagePath = Paths.get(filename).toAbsolutePath().normalize();
-            System.out.println(imagePath);
-            // Kép beolvasása BufferedImage-be
-            BufferedImage image = ImageIO.read(imagePath.toFile());
-
-            // Kép átalakítása base64-kódolt stringgé
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", baos);
-            byte[] imageBytes = baos.toByteArray();
-            return Base64.getEncoder().encodeToString(imageBytes);
-        } catch (IOException ex) {
-            throw new RuntimeException("Nem sikerült a képet beolvasni vagy base64-kódolni.", ex);
         }
     }
 }

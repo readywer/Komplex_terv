@@ -31,14 +31,14 @@
 <!-- Űrlap a film adatok bekérésére -->
 <div class="container mt-5">
     <h2>Add New Movie</h2>
-    <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/add_film}"
+        <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/add_film}"
           th:object="${film}">
 
         <div class="form-group">
             <label for="name">Name:</label>
             <input class="form-control" id="name" th:field="*{name}" required="required" type="text">
             <span id="nameError" style="color: red;"></span>
-            <div class="text-danger" th:if="${nameError}" th:text="${nameError}"></div>
+            <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
         </div>
 
         <div class="form-group">
