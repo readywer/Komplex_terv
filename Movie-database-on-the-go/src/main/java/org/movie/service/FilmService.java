@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -167,6 +172,58 @@ public class FilmService {
         }
     }
 
+    private static byte[] convertToJpg(MultipartFile imageFile) throws IOException {
+        // Olvassuk be a bemeneti fájlt BufferedImage-be
+        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
+
+        // Hozzunk létre egy új BufferedImage-t, hogy JPG formátumú legyen
+        BufferedImage jpgImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        jpgImage.createGraphics().drawImage(originalImage, 0, 0, java.awt.Color.WHITE, null);
+
+        // Konvertáljuk a BufferedImage-t byte tömbbé
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(jpgImage, "jpg", outputStream);
+        byte[] jpgBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return jpgBytes;
+    }
+
+    private static byte[] resizeImage(byte[] jpgBytes, int maxWidth, int maxHeight) throws IOException {
+        // Olvassuk be a byte tömbből BufferedImage-t
+        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(jpgBytes));
+
+        // Szélesség és magasság ellenőrzése
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        int newWidth = originalWidth;
+        int newHeight = originalHeight;
+
+        // Képarány megtartása
+        if (originalWidth > maxWidth || originalHeight > maxHeight) {
+            double widthRatio = (double) maxWidth / originalWidth;
+            double heightRatio = (double) maxHeight / originalHeight;
+            double ratio = Math.min(widthRatio, heightRatio);
+
+            newWidth = (int) (originalWidth * ratio);
+            newHeight = (int) (originalHeight * ratio);
+        }
+
+        // Új BufferedImage létrehozása a méretezéshez
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        // BufferedImage-t byte tömbbé konvertálása
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(resizedImage, "jpg", outputStream);
+        byte[] resizedBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return resizedBytes;
+    }
+
     private void storeImageFile(String username, MultipartFile imageFile, Film film) {
         try {
             // Ellenőrizzük, hogy a feltöltött fájl kép-e
@@ -180,9 +237,21 @@ public class FilmService {
                 Files.createDirectories(uploadPath);
             }
 
+            // Kép konvertálása JPG formátummá
+            byte[] jpgBytes = convertToJpg(imageFile);
+
+            // Kép átméretezése
+            int maxWidth = 480;
+            int maxHeight = 720;
+            byte[] resizedBytes = resizeImage(jpgBytes, maxWidth, maxHeight);
+
             // A fájlt mentjük a feltöltési mappába
-            Path imagePath = uploadPath.resolve(imageFile.getOriginalFilename());
-            Files.copy(imageFile.getInputStream(), imagePath);
+            String fileName = imageFile.getOriginalFilename();
+            if (fileName != null && fileName.toLowerCase().endsWith(".png")) {
+                fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
+            }
+            Path imagePath = uploadPath.resolve(fileName);
+            Files.write(imagePath, resizedBytes);
         } catch (IOException ex) {
             throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
         }

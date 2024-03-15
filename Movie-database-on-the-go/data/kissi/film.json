@@ -1,20 +1,6 @@
 [
   {
-    "id": 257,
-    "name": "Test",
-    "description": "A világ őrzőik, akik minket védelmeznek",
-    "categories": [
-      "ACTION"
-    ],
-    "actors": [
-      "Will Smith"
-    ],
-    "recommendedAge": 10,
-    "filmpath": "data/kissi/Test/truck.mp4",
-    "picturepath": "data/kissi/Test/jelenlegi.png"
-  },
-  {
-    "id": 258,
+    "id": 354,
     "name": "reddd",
     "description": "dsda",
     "categories": [
@@ -26,5 +12,19 @@
     "recommendedAge": 8,
     "filmpath": "data/kissi/reddd/tester.mp4",
     "picturepath": "images/noimage.jpg"
+  },
+  {
+    "id": 355,
+    "name": "try",
+    "description": "asd",
+    "categories": [
+      "ACTION"
+    ],
+    "actors": [
+      "fd"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/kissi/try/tester.mp4",
+    "picturepath": "data/kissi/try/jelenlegi.png"
   }
 ]
