@@ -4,8 +4,6 @@ import org.movie.domain.Film;
 import org.movie.service.FilmService;
 import org.movie.web.security.UserLoginDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +30,7 @@ public class FilmsPageController {
         model.addAttribute("films", films);
         return "films-page";
     }
+
     @GetMapping("/data/{folder}/{folder2}/{filename:.+}")
     public ResponseEntity<byte[]> getImage(@PathVariable String folder, @PathVariable String folder2, @PathVariable String filename) throws IOException {
         String username = userLoginDetailsService.loadAuthenticatedUsername();

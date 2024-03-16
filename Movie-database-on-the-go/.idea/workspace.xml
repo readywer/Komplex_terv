@@ -5,18 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/Test/jelenlegi.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/Test/truck.mp4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/reddd/tester.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/try/jelenlegi.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/try/tester.mp4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Add_FilmPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Add_FilmPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_WatcherPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_WatcherPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/add_film-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/add_film-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,20 +44,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Movie-database-on-the-go [:Main.main()].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.4090909",
-    "settings.editor.selected.configurable": "project.kotlinCompiler"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Movie-database-on-the-go [:Main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.4090909&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.kotlinCompiler&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.movie.Main" />

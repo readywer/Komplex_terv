@@ -40,6 +40,57 @@ public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
+    private static byte[] convertToJpg(MultipartFile imageFile) throws IOException {
+        // Olvassuk be a bemeneti fájlt BufferedImage-be
+        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
+
+        // Hozzunk létre egy új BufferedImage-t, hogy JPG formátumú legyen
+        BufferedImage jpgImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        jpgImage.createGraphics().drawImage(originalImage, 0, 0, java.awt.Color.WHITE, null);
+
+        // Konvertáljuk a BufferedImage-t byte tömbbé
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(jpgImage, "jpg", outputStream);
+        byte[] jpgBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return jpgBytes;
+    }
+
+    private static byte[] resizeImage(byte[] jpgBytes, int maxWidth, int maxHeight) throws IOException {
+        // Olvassuk be a byte tömbből BufferedImage-t
+        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(jpgBytes));
+
+        // Szélesség és magasság ellenőrzése
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        int newWidth = originalWidth;
+        int newHeight = originalHeight;
+
+        // Képarány megtartása
+        if (originalWidth > maxWidth || originalHeight > maxHeight) {
+            double widthRatio = (double) maxWidth / originalWidth;
+            double heightRatio = (double) maxHeight / originalHeight;
+            double ratio = Math.min(widthRatio, heightRatio);
+
+            newWidth = (int) (originalWidth * ratio);
+            newHeight = (int) (originalHeight * ratio);
+        }
+
+        // Új BufferedImage létrehozása a méretezéshez
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        // BufferedImage-t byte tömbbé konvertálása
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(resizedImage, "jpg", outputStream);
+        byte[] resizedBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return resizedBytes;
+    }
 
     public List<Film> getClientFilms(String username) {
         String basePath = storageDir + "/" + username;
@@ -79,7 +130,7 @@ public class FilmService {
             return false;
         }
         if (!picture.isEmpty()) {
-            film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename());
+            film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }
         film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
@@ -172,58 +223,6 @@ public class FilmService {
         }
     }
 
-    private static byte[] convertToJpg(MultipartFile imageFile) throws IOException {
-        // Olvassuk be a bemeneti fájlt BufferedImage-be
-        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
-
-        // Hozzunk létre egy új BufferedImage-t, hogy JPG formátumú legyen
-        BufferedImage jpgImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-        jpgImage.createGraphics().drawImage(originalImage, 0, 0, java.awt.Color.WHITE, null);
-
-        // Konvertáljuk a BufferedImage-t byte tömbbé
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(jpgImage, "jpg", outputStream);
-        byte[] jpgBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return jpgBytes;
-    }
-
-    private static byte[] resizeImage(byte[] jpgBytes, int maxWidth, int maxHeight) throws IOException {
-        // Olvassuk be a byte tömbből BufferedImage-t
-        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(jpgBytes));
-
-        // Szélesség és magasság ellenőrzése
-        int originalWidth = originalImage.getWidth();
-        int originalHeight = originalImage.getHeight();
-        int newWidth = originalWidth;
-        int newHeight = originalHeight;
-
-        // Képarány megtartása
-        if (originalWidth > maxWidth || originalHeight > maxHeight) {
-            double widthRatio = (double) maxWidth / originalWidth;
-            double heightRatio = (double) maxHeight / originalHeight;
-            double ratio = Math.min(widthRatio, heightRatio);
-
-            newWidth = (int) (originalWidth * ratio);
-            newHeight = (int) (originalHeight * ratio);
-        }
-
-        // Új BufferedImage létrehozása a méretezéshez
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-        g.dispose();
-
-        // BufferedImage-t byte tömbbé konvertálása
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(resizedImage, "jpg", outputStream);
-        byte[] resizedBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return resizedBytes;
-    }
-
     private void storeImageFile(String username, MultipartFile imageFile, Film film) {
         try {
             // Ellenőrizzük, hogy a feltöltött fájl kép-e
@@ -247,8 +246,16 @@ public class FilmService {
 
             // A fájlt mentjük a feltöltési mappába
             String fileName = imageFile.getOriginalFilename();
-            if (fileName != null && fileName.toLowerCase().endsWith(".png")) {
-                fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
+            if (fileName != null) {
+                String lowercaseFileName = fileName.toLowerCase();
+                if (lowercaseFileName.endsWith(".png") ||
+                        lowercaseFileName.endsWith(".jpeg") ||
+                        lowercaseFileName.endsWith(".gif") ||
+                        lowercaseFileName.endsWith(".bmp") ||
+                        lowercaseFileName.endsWith(".tiff")) {
+
+                    fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
+                }
             }
             Path imagePath = uploadPath.resolve(fileName);
             Files.write(imagePath, resizedBytes);

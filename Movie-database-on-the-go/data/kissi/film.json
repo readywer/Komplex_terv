@@ -1,30 +1,44 @@
 [
   {
-    "id": 354,
-    "name": "reddd",
-    "description": "dsda",
+    "id": 484,
+    "name": "Mp4",
+    "description": "try",
     "categories": [
-      "THRILLER"
+      "ANIMATED"
     ],
     "actors": [
-      "dds"
-    ],
-    "recommendedAge": 8,
-    "filmpath": "data/kissi/reddd/tester.mp4",
-    "picturepath": "images/noimage.jpg"
-  },
-  {
-    "id": 355,
-    "name": "try",
-    "description": "asd",
-    "categories": [
-      "ACTION"
-    ],
-    "actors": [
-      "fd"
+      "try"
     ],
     "recommendedAge": 0,
-    "filmpath": "data/kissi/try/tester.mp4",
-    "picturepath": "data/kissi/try/jelenlegi.png"
+    "filmpath": "data/kissi/Mp4/truck.mp4",
+    "picturepath": "data/kissi/Mp4/Men_in_Black_Poster.jpg"
+  },
+  {
+    "id": 485,
+    "name": "mkv",
+    "description": "mkv",
+    "categories": [
+      "COMEDY"
+    ],
+    "actors": [
+      "ad"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/kissi/mkv/2024-02-26 14-29-13.mkv",
+    "picturepath": "data/kissi/mkv/jelenlegi.jpg"
+  },
+  {
+    "id": 486,
+    "name": "long",
+    "description": "asd",
+    "categories": [
+      "ADVENTURE"
+    ],
+    "actors": [
+      "ds"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/kissi/long/bug.mp4",
+    "picturepath": "images/noimage.jpg"
   }
 ]

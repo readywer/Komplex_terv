@@ -31,20 +31,20 @@
 <!-- Űrlap a film adatok bekérésére -->
 <div class="container mt-5">
     <h2>Add New Movie</h2>
-        <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/add_film}"
+    <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/add_film}"
           th:object="${film}">
 
         <div class="form-group">
             <label for="name">Name:</label>
-            <input class="form-control" id="name" th:field="*{name}" required="required" type="text">
+            <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
             <span id="nameError" style="color: red;"></span>
             <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
         </div>
 
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea class="form-control" id="description" rows="3" th:field="*{description}"
-                      required="required"></textarea>
+            <textarea class="form-control" id="description" required="required" rows="3"
+                      th:field="*{description}"></textarea>
             <span id="descriptionError" style="color: red;"></span>
         </div>
 
@@ -58,7 +58,7 @@
 
         <div class="form-group">
             <label for="actors">Actors:</label>
-            <input class="form-control" id="actors" th:field="*{actors}" required="required" type="text">
+            <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
             <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
                 Johansson).</small>
             <span id="actorsError" style="color: red;"></span>
@@ -66,7 +66,7 @@
 
         <div class="form-group">
             <label for="recommendedAge">Recommended Age:</label>
-            <input class="form-control" id="recommendedAge" th:field="*{recommendedAge}" required="required"
+            <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
                    type="number">
             <span id="recommendedAgeError" style="color: red;"></span>
         </div>
@@ -75,15 +75,15 @@
             <label for="file">Select File:</label>
             <input accept=".mp4,.avi,.mkv,.mov" class="form-control-file" id="file" name="file" required="required"
                    type="file">
-            <small class="form-text text-muted">Allowed extensions: <span th:text="${allowedExtensions}"></span></small>
+            <small class="form-text text-muted">Allowed extensions: <span>.mp4, .avi, .mkv, .mov</span></small>
             <span id="fileError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
             <label for="imageFile">Select Image:</label>
-            <input accept="image/*" class="form-control-file" id="imageFile" name="imageFile"
+            <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile" name="imageFile"
                    type="file">
-            <small class="form-text text-muted">Allowed image formats: <span>jpg, jpeg, png, gif</span></small>
+            <small class="form-text text-muted">Allowed image formats: <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
             <span id="imageFileError" style="color: red;"></span>
         </div>
 

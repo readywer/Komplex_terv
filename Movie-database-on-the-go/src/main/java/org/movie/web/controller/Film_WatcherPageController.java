@@ -23,14 +23,37 @@ public class Film_WatcherPageController {
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
+    //TODO html5 csak mp4-et tud lejátszani a többit csak letölti
     @GetMapping("/film_watch")
     public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
         Path path = Paths.get(film.getFilmpath());
         Resource videoResource = new FileSystemResource(path.toFile());
 
+        String contentType;
+        String fileName = path.getFileName().toString();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        switch (fileExtension.toLowerCase()) {
+            case "mp4":
+                contentType = "video/mp4";
+                break;
+            case "avi":
+                contentType = "video/x-msvideo";
+                break;
+            case "mkv":
+                contentType = "video/x-matroska";
+                break;
+            case "mov":
+                contentType = "video/quicktime";
+                break;
+            default:
+                // Ha az adott kiterjesztés nem támogatott, akkor hibát dobunk
+                throw new IllegalArgumentException("Unsupported file format");
+        }
+
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("video/mp4"));
+        headers.setContentType(MediaType.valueOf(contentType));
         headers.setContentLength(videoResource.contentLength());
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
