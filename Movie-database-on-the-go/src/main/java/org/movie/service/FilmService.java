@@ -263,4 +263,67 @@ public class FilmService {
             throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
         }
     }
+
+    public void deleteFilm(String username, Long filmId) {
+        deleteFolder(username, getFilmById(username, filmId).getName());
+        deleteFilmByIdFromJson(username, filmId);
+    }
+
+    public void deleteFolder(String username, String folderName) {
+        // Elérési útvonal felépítése
+        String path = storageDir + "/" + username + "/" + folderName;
+        File folder = new File(path);
+
+        // Ellenőrizzük, hogy a mappa létezik-e
+        if (!folder.exists()) {
+            System.out.println("A megadott mappa nem létezik.");
+            return;
+        }
+
+        // Ellenőrizzük, hogy a megadott elérési útvonal egy mappa-e
+        if (!folder.isDirectory()) {
+            System.out.println("A megadott elérési útvonal nem egy mappa.");
+            return;
+        }
+
+        // Rekurzívan töröljük a mappa tartalmát
+        deleteContents(folder);
+
+        // Töröljük magát a mappát
+        if (folder.delete()) {
+            System.out.println("A mappa és annak tartalma sikeresen törölve lett.");
+        } else {
+            System.out.println("Nem sikerült törölni a mappát és annak tartalmát.");
+        }
+    }
+
+    public void deleteContents(File folder) {
+        File[] contents = folder.listFiles();
+        if (contents != null) {
+            for (File file : contents) {
+                if (file.isDirectory()) {
+                    // Rekurzívan töröljük a mappa tartalmát
+                    deleteContents(file);
+                }
+                // Töröljük a fájlokat vagy a mappákat
+                file.delete();
+            }
+        }
+    }
+
+    //TODO FIX
+    private void deleteFilmByIdFromJson(String username, Long filmId) {
+        String basePath = storageDir + "/" + username;
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Film> films = getClientFilms(username);
+        Film film = getFilmById(username, filmId);
+        System.out.println(film.getName());
+        films.remove(film);
+        try {
+            File file = new File(basePath, "film.json");
+            objectMapper.writeValue(file, films);
+        } catch (IOException e) {
+            throw new RuntimeException("IO error happened while adding a film: " + e);
+        }
+    }
 }

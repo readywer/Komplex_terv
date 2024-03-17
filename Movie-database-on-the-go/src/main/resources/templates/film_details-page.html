@@ -53,6 +53,10 @@
                         <dt class="col-sm-3">Recommended Age</dt>
                         <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
                     </dl>
+                    <form action="/film_details" method="post">
+                        <input type="hidden" name="deleteFilmId" th:value="${film.id}" />
+                        <button type="submit" class="btn btn-danger">Film törlése</button>
+                    </form>
                 </div>
             </div>
         </div>
