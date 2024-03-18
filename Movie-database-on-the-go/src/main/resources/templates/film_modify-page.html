@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Add New Movie</title>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="navbar-brand">Movie Database</div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="films">Films</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Film Add</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<!-- Űrlap a film adatok bekérésére -->
+<div class="container mt-5">
+    <h2>Add New Movie</h2>
+    <form enctype="multipart/form-data" method="post" th:action="@{/film_modify}"
+          th:object="${film}">
+
+        <!-- Rejtett input mező a filmId átadásához -->
+        <input type="hidden" name="id" th:value="*{id}" />
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
+            <span id="nameError" style="color: red;"></span>
+            <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" required="required" rows="3"
+                      th:field="*{description}"></textarea>
+            <span id="descriptionError" style="color: red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="categories">Categories:</label><br>
+            <select class="form-control" id="categories" multiple name="categories" required="required">
+                <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
+                <span id="categoriesError" style="color: red;"></span>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="actors">Actors:</label>
+            <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
+            <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
+                Johansson).</small>
+            <span id="actorsError" style="color: red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="recommendedAge">Recommended Age:</label>
+            <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
+                   type="number">
+            <span id="recommendedAgeError" style="color: red;"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="imageFile">Select Image:</label>
+            <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile" name="imageFile"
+                   type="file">
+            <small class="form-text text-muted">Allowed image formats: <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
+            <span id="imageFileError" style="color: red;"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>

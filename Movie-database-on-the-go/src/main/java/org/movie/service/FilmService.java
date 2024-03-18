@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -311,7 +312,6 @@ public class FilmService {
         }
     }
 
-    //TODO FIX
     private void deleteFilmByIdFromJson(String username, Long filmId) {
         String basePath = storageDir + "/" + username;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -326,4 +326,41 @@ public class FilmService {
             throw new RuntimeException("IO error happened while adding a film: " + e);
         }
     }
+
+    public boolean modifyFilm(String username, Film film, MultipartFile picture) {
+        Film ogFilm = getFilmById(username, film.getId());
+        film.setFilmpath(ogFilm.getFilmpath());
+        film.setPicturepath(ogFilm.getPicturepath());
+        if (!isValidFilm(film, username)) {
+            return false;
+        }
+        if (!picture.isEmpty()) {
+            File pictureFile = new File(film.getPicturepath());
+            boolean deleted = pictureFile.delete();
+            film.setPicturepath(storageDir + "/" + username + "/" + film.getName() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
+            storeImageFile(username, picture, film);
+        }
+        deleteFilmByIdFromJson(username, film.getId());
+        addFilmDataToClient(username, film);
+        return true;
+    }
+
+    private void moveVideoFile(String username, Film sourceFilm, Film destinationFilm) {
+        try {
+            // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
+            Path uploadPathSource = Paths.get(storageDir + "/" + username + "/" + sourceFilm.getName()).toAbsolutePath().normalize();
+            Path uploadPathDestination = Paths.get(storageDir + "/" + username + "/" + destinationFilm.getName()).toAbsolutePath().normalize();
+
+            if (!Files.exists(uploadPathDestination)) {
+                Files.createDirectories(uploadPathDestination);
+            }
+
+            // A fájlt másoljuk a cél mappába
+            Files.copy(uploadPathSource, uploadPathDestination.resolve(sourceFilm.getFilmpath()), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not store the file. Please try again!", ex);
+        }
+    }
+
+
 }

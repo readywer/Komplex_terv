@@ -28,6 +28,6 @@ public class Film_DetailsPageController {
     @PostMapping("/film_details")
     public String filmDelete(@RequestParam(name = "deleteFilmId") Long deletefilmId, Model model) {
         filmService.deleteFilm(userLoginDetailsService.loadAuthenticatedUsername(), deletefilmId);
-        return "films-page";
+        return "redirect:/films";
     }
 }

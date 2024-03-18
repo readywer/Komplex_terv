@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Modify_FilmPageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/domain/Film.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/domain/Film.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_DetailsPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_DetailsPageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +26,13 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
