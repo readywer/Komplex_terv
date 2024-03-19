@@ -5,18 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.trace.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Add_FilmPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_AddPageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Modify_FilmPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_ModifyPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_ModifyPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_ModifyPageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/security/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/add_film-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_add-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/images/noimage.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/images/noimage.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_add-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/films-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +44,17 @@
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
+  <component name="ProblemsViewState">
+    <hideBySeverity>
+      <option value="11" />
+      <option value="12" />
+      <option value="13" />
+      <option value="14" />
+      <option value="15" />
+      <option value="16" />
+    </hideBySeverity>
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 0
@@ -55,6 +66,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Build Movie-database-on-the-go.executor": "Run",
     "Gradle.Movie-database-on-the-go [:Main.main()].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",

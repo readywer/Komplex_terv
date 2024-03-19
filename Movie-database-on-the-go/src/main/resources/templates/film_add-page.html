@@ -31,7 +31,7 @@
 <!-- Űrlap a film adatok bekérésére -->
 <div class="container mt-5">
     <h2>Add New Movie</h2>
-    <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/add_film}"
+    <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/film_add}"
           th:object="${film}">
 
         <div class="form-group">

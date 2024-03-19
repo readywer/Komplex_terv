@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/film_add").authenticated()
                         .requestMatchers("/film_modify").authenticated()
                         .requestMatchers("/data/**").authenticated()
+                        .requestMatchers("/images/**").authenticated()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().denyAll()
 

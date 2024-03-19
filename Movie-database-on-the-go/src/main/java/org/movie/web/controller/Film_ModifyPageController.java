@@ -29,7 +29,7 @@ public class Film_ModifyPageController {
 
     @GetMapping("/film_modify")
     public String filmModify(@RequestParam(name = "filmId") Long filmId, Model model) {
-        model.addAttribute("film", filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(),filmId));
+        model.addAttribute("film", filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId));
         List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
         return "film_modify-page";

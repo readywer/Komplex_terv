@@ -34,7 +34,7 @@
           th:object="${film}">
 
         <!-- Rejtett input mező a filmId átadásához -->
-        <input type="hidden" name="id" th:value="*{id}" />
+        <input name="id" th:value="*{id}" type="hidden"/>
 
         <div class="form-group">
             <label for="name">Name:</label>

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.movie.domain.Film;
-import org.movie.persistance.ClientRepository;
 import org.movie.persistance.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,10 +34,8 @@ public class FilmService {
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
     private final String[] allowedFilmExtensions = {"mp4", "avi", "mkv", "mov"}; // Engedélyezett fájlkiterjesztések
-    private final String[] allowedPictureExtensions={"jpg","png","gif","tif","bmp","jpeg"};
+    private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
 
-    @Autowired
-    private ClientRepository clientRepository;
     @Autowired
     private FilmRepository filmRepository;
 
@@ -271,7 +268,7 @@ public class FilmService {
         deleteFilmByIdFromJson(username, filmId);
     }
 
-    public void deleteFolder(String username, String folderName) {
+    private void deleteFolder(String username, String folderName) {
         // Elérési útvonal felépítése
         String path = storageDir + "/" + username + "/" + folderName;
         File folder = new File(path);
@@ -299,7 +296,7 @@ public class FilmService {
         }
     }
 
-    public void deleteContents(File folder) {
+    private void deleteContents(File folder) {
         File[] contents = folder.listFiles();
         if (contents != null) {
             for (File file : contents) {
