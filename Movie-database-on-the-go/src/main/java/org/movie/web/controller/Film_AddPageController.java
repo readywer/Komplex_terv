@@ -27,7 +27,7 @@ public class Film_AddPageController {
     private UserLoginDetailsService userLoginDetailsService;
 
     @GetMapping("/film_add")
-    public String home(Model model) {
+    public String filmadd(Model model) {
         model.addAttribute("film", new Film());
         List<Category> categories = new ArrayList<>();
         categories.addAll(Arrays.asList(Category.values()));
@@ -36,7 +36,7 @@ public class Film_AddPageController {
     }
 
     @PostMapping("/film_add")
-    public String register(@ModelAttribute("film") @Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
+    public String add(@ModelAttribute("film") @Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
         if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
             return "redirect:/film_add";
         }

@@ -39,10 +39,7 @@ public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
-    private static byte[] convertToJpg(MultipartFile imageFile) throws IOException {
-        // Olvassuk be a bemeneti fájlt BufferedImage-be
-        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
-
+    private static byte[] convertToJpg(BufferedImage originalImage) throws IOException {
         // Hozzunk létre egy új BufferedImage-t, hogy JPG formátumú legyen
         BufferedImage jpgImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
         jpgImage.createGraphics().drawImage(originalImage, 0, 0, java.awt.Color.WHITE, null);
@@ -56,10 +53,7 @@ public class FilmService {
         return jpgBytes;
     }
 
-    private static byte[] resizeImage(byte[] jpgBytes, int maxWidth, int maxHeight) throws IOException {
-        // Olvassuk be a byte tömbből BufferedImage-t
-        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(jpgBytes));
-
+    private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {
         // Szélesség és magasság ellenőrzése
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
@@ -222,46 +216,61 @@ public class FilmService {
         }
     }
 
+    private void validateImageFile(MultipartFile imageFile) {
+        // Ellenőrizzük, hogy a feltöltött fájl kép-e
+        if (!imageFile.getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Csak képfájlok engedélyezettek.");
+        }
+    }
+
+    private void createDirectoryIfNotExists(String username, String filmName) throws IOException {
+        // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
+        Path uploadPath = Paths.get(storageDir + "/" + username + "/" + filmName).toAbsolutePath().normalize();
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+    }
+
+    private String getTargetFileName(String originalFileName) {
+        String fileName = originalFileName;
+        if (fileName != null) {
+            String lowercaseFileName = fileName.toLowerCase();
+            if (lowercaseFileName.endsWith(".png") ||
+                    lowercaseFileName.endsWith(".jpeg") ||
+                    lowercaseFileName.endsWith(".gif") ||
+                    lowercaseFileName.endsWith(".bmp") ||
+                    lowercaseFileName.endsWith(".tiff")) {
+
+                fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
+            }
+        }
+        return fileName;
+    }
+
     private void storeImageFile(String username, MultipartFile imageFile, Film film) {
         try {
-            // Ellenőrizzük, hogy a feltöltött fájl kép-e
-            if (!imageFile.getContentType().startsWith("image/")) {
-                throw new IllegalArgumentException("Csak képfájlok engedélyezettek.");
-            }
-
-            // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
-            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getName()).toAbsolutePath().normalize();
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
+            validateImageFile(imageFile);
+            createDirectoryIfNotExists(username, film.getName());
 
             // Kép konvertálása JPG formátummá
-            byte[] jpgBytes = convertToJpg(imageFile);
+            BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
+            byte[] jpgBytes = convertToJpg(originalImage);
 
             // Kép átméretezése
             int maxWidth = 480;
             int maxHeight = 720;
-            byte[] resizedBytes = resizeImage(jpgBytes, maxWidth, maxHeight);
+            byte[] resizedBytes = resizeImage(originalImage, maxWidth, maxHeight);
 
             // A fájlt mentjük a feltöltési mappába
-            String fileName = imageFile.getOriginalFilename();
-            if (fileName != null) {
-                String lowercaseFileName = fileName.toLowerCase();
-                if (lowercaseFileName.endsWith(".png") ||
-                        lowercaseFileName.endsWith(".jpeg") ||
-                        lowercaseFileName.endsWith(".gif") ||
-                        lowercaseFileName.endsWith(".bmp") ||
-                        lowercaseFileName.endsWith(".tiff")) {
-
-                    fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
-                }
-            }
+            String fileName = getTargetFileName(imageFile.getOriginalFilename());
+            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getName()).toAbsolutePath().normalize();
             Path imagePath = uploadPath.resolve(fileName);
             Files.write(imagePath, resizedBytes);
         } catch (IOException ex) {
             throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
         }
     }
+
 
     public void deleteFilm(String username, Long filmId) {
         deleteFolder(username, getFilmById(username, filmId).getName());

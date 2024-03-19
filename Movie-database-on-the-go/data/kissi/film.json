@@ -1,6 +1,6 @@
 [
   {
-    "id": 801,
+    "id": 865,
     "name": "Mp4",
     "description": "try",
     "categories": [
@@ -14,7 +14,7 @@
     "picturepath": "data/kissi/Mp4/Men_in_Black_Poster.jpg"
   },
   {
-    "id": 802,
+    "id": 866,
     "name": "mkv",
     "description": "mkv",
     "categories": [
@@ -26,19 +26,5 @@
     "recommendedAge": 0,
     "filmpath": "data/kissi/mkv/2024-02-26 14-29-13.mkv",
     "picturepath": "data/kissi/mkv/jelenlegi.jpg"
-  },
-  {
-    "id": 803,
-    "name": "try",
-    "description": "sad",
-    "categories": [
-      "FANTASY"
-    ],
-    "actors": [
-      "df"
-    ],
-    "recommendedAge": 1,
-    "filmpath": "data/kissi/try/truck.mp4",
-    "picturepath": "images/noimage.jpg"
   }
 ]
