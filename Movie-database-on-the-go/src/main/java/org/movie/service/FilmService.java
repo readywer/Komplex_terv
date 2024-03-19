@@ -34,7 +34,8 @@ public class FilmService {
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
-    private final String[] allowedExtensions = {"mp4", "avi", "mkv", "mov"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedFilmExtensions = {"mp4", "avi", "mkv", "mov"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedPictureExtensions={"jpg","png","gif","tif","bmp","jpeg"};
 
     @Autowired
     private ClientRepository clientRepository;
@@ -200,7 +201,7 @@ public class FilmService {
         try {
             // Ellenőrizzük, hogy a feltöltött fájl kiterjesztése videó-e
             boolean isValidExtension = false;
-            for (String extension : allowedExtensions) {
+            for (String extension : allowedFilmExtensions) {
                 if (Objects.requireNonNull(file.getOriginalFilename()).toLowerCase().endsWith(extension)) {
                     isValidExtension = true;
                     break;
@@ -361,6 +362,4 @@ public class FilmService {
             throw new RuntimeException("Could not store the file. Please try again!", ex);
         }
     }
-
-
 }

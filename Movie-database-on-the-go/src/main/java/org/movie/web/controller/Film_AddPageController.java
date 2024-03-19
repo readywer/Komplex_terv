@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class Modify_FilmPageController {
+public class Film_AddPageController {
 
     @Autowired
     private FilmService filmService;
@@ -27,24 +26,25 @@ public class Modify_FilmPageController {
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
-    @GetMapping("/film_modify")
-    public String filmModify(@RequestParam(name = "filmId") Long filmId, Model model) {
-        model.addAttribute("film", filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(),filmId));
-        List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
+    @GetMapping("/film_add")
+    public String home(Model model) {
+        model.addAttribute("film", new Film());
+        List<Category> categories = new ArrayList<>();
+        categories.addAll(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
-        return "film_modify-page";
+        return "film_add-page";
     }
 
-    @PostMapping("/film_modify")
-    public String modify(@ModelAttribute("film") @Valid Film film, Model model, MultipartFile imageFile) {
-        if (filmService.modifyFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, imageFile)) {
-            return "redirect:/films";
+    @PostMapping("/film_add")
+    public String register(@ModelAttribute("film") @Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
+        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
+            return "redirect:/film_add";
         }
         model.addAttribute("film", film);
-        List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
+        List<Category> categories = new ArrayList<>();
+        categories.addAll(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
-        model.addAttribute("allowedExtensions", filmService.getAllowedExtensions());
         model.addAttribute("nameFError", "A filmnév már foglalt.");
-        return "film_modify-page";
+        return "film_add-page";
     }
 }

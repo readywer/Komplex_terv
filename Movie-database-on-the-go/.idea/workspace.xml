@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Modify_FilmPageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/service/FilmService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_DetailsPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_DetailsPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Add_FilmPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_AddPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Modify_FilmPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/controller/Film_ModifyPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/movie/web/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/movie/web/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/add_film-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_add-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_details-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/film_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/films-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/home-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,20 +53,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Movie-database-on-the-go [:Main.main()].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.4090909&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.kotlinCompiler&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Movie-database-on-the-go [:Main.main()].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.4090909",
+    "settings.editor.selected.configurable": "project.kotlinCompiler"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.movie.Main" />

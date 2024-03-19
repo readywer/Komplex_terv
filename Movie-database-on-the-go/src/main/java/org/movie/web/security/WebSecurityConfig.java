@@ -26,9 +26,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/films").authenticated()
                         .requestMatchers("/film_details/**").authenticated()
                         .requestMatchers("/film_watch/**").authenticated()
-                        .requestMatchers("/add_film").authenticated()
+                        .requestMatchers("/film_add").authenticated()
+                        .requestMatchers("/film_modify").authenticated()
+                        .requestMatchers("/data/**").authenticated()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().denyAll()
 
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll
