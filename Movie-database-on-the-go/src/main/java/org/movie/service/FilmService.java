@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -38,71 +39,6 @@ public class FilmService {
 
     @Autowired
     private FilmRepository filmRepository;
-
-    private static byte[] convertToJpg(BufferedImage originalImage) throws IOException {
-        // Hozzunk létre egy új BufferedImage-t, hogy JPG formátumú legyen
-        BufferedImage jpgImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-        jpgImage.createGraphics().drawImage(originalImage, 0, 0, java.awt.Color.WHITE, null);
-
-        // Konvertáljuk a BufferedImage-t byte tömbbé
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(jpgImage, "jpg", outputStream);
-        byte[] jpgBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return jpgBytes;
-    }
-
-    private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {
-        // Szélesség és magasság ellenőrzése
-        int originalWidth = originalImage.getWidth();
-        int originalHeight = originalImage.getHeight();
-        int newWidth = originalWidth;
-        int newHeight = originalHeight;
-
-        // Képarány megtartása
-        if (originalWidth > maxWidth || originalHeight > maxHeight) {
-            double widthRatio = (double) maxWidth / originalWidth;
-            double heightRatio = (double) maxHeight / originalHeight;
-            double ratio = Math.min(widthRatio, heightRatio);
-
-            newWidth = (int) (originalWidth * ratio);
-            newHeight = (int) (originalHeight * ratio);
-        }
-
-        // Új BufferedImage létrehozása a méretezéshez
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-        g.dispose();
-
-        // BufferedImage-t byte tömbbé konvertálása
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(resizedImage, "jpg", outputStream);
-        byte[] resizedBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return resizedBytes;
-    }
-
-    public List<Film> getClientFilms(String username) {
-        String basePath = storageDir + "/" + username;
-        File file = Paths.get(basePath, "film.json").toFile();
-
-        if (!file.exists() || file.length() == 0) {
-            // Ha a fájl nem létezik vagy üres, visszaadjuk az üres listát
-            return new ArrayList<>();
-        }
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            TypeReference<List<Film>> typeRef = new TypeReference<>() {
-            };
-            return objectMapper.readValue(file, typeRef);
-        } catch (IOException e) {
-            throw new RuntimeException("IO error happened while reading personal properties: " + e);
-        }
-    }
 
     public Film getFilmById(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
@@ -127,7 +63,7 @@ public class FilmService {
             storeImageFile(username, picture, film);
         }
         film.setFilmpath(storageDir + "/" + username + "/" + film.getName() + "/" + file.getOriginalFilename());
-        addFilmDataToClient(username, film);
+        addFilmToClient(username, film);
         storeVideoFile(username, file, film);
         return true;
     }
@@ -172,21 +108,52 @@ public class FilmService {
         return matcher.matches();
     }
 
-    @Transactional
-    private void addFilmDataToClient(String username, Film filmToAdd) {
+    public List<Film> getClientFilms(String username) {
+        String basePath = storageDir + "/" + username;
+        File file = Paths.get(basePath, "film.json").toFile();
+
+        if (!file.exists() || file.length() == 0) {
+            // Ha a fájl nem létezik vagy üres, visszaadjuk az üres listát
+            return new ArrayList<>();
+        }
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            TypeReference<List<Film>> typeRef = new TypeReference<>() {
+            };
+            return objectMapper.readValue(file, typeRef);
+        } catch (IOException e) {
+            throw new RuntimeException("IO error happened while reading personal properties: " + e);
+        }
+    }
+
+    private void saveFilmsToJson(String username, List<Film> films) {
         String basePath = storageDir + "/" + username;
         ObjectMapper objectMapper = new ObjectMapper();
-        filmRepository.saveAll(getClientFilms(username));
-        filmRepository.save(filmToAdd);
-        Iterable<Film> films = filmRepository.findAll();
-        filmRepository.deleteAll();
         try {
             File file = new File(basePath, "film.json");
             objectMapper.writeValue(file, films);
         } catch (IOException e) {
-            throw new RuntimeException("IO error happened while adding a film: " + e);
+            throw new RuntimeException("IO error happened while saving films to JSON: " + e);
         }
     }
+
+    @Transactional
+    private void addFilmToClient(String username, Film filmToAdd) {
+        List<Film> films = getClientFilms(username);
+        filmRepository.saveAll(films);
+        filmRepository.save(filmToAdd);
+        saveFilmsToJson(username, (List<Film>) filmRepository.findAll());
+        filmRepository.deleteAll();
+    }
+
+    private void deleteFilmByIdFromJson(String username, Long filmId) {
+        List<Film> films = getClientFilms(username);
+        Film film = getFilmById(username, filmId);
+        films.remove(film);
+        saveFilmsToJson(username, films);
+    }
+
 
     private void storeVideoFile(String username, MultipartFile file, Film film) {
         try {
@@ -216,13 +183,6 @@ public class FilmService {
         }
     }
 
-    private void validateImageFile(MultipartFile imageFile) {
-        // Ellenőrizzük, hogy a feltöltött fájl kép-e
-        if (!imageFile.getContentType().startsWith("image/")) {
-            throw new IllegalArgumentException("Csak képfájlok engedélyezettek.");
-        }
-    }
-
     private void createDirectoryIfNotExists(String username, String filmName) throws IOException {
         // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
         Path uploadPath = Paths.get(storageDir + "/" + username + "/" + filmName).toAbsolutePath().normalize();
@@ -235,13 +195,12 @@ public class FilmService {
         String fileName = originalFileName;
         if (fileName != null) {
             String lowercaseFileName = fileName.toLowerCase();
-            if (lowercaseFileName.endsWith(".png") ||
-                    lowercaseFileName.endsWith(".jpeg") ||
-                    lowercaseFileName.endsWith(".gif") ||
-                    lowercaseFileName.endsWith(".bmp") ||
-                    lowercaseFileName.endsWith(".tiff")) {
-
-                fileName = fileName.substring(0, fileName.length() - 4) + ".jpg";
+            for (String extension : allowedPictureExtensions) {
+                if (lowercaseFileName.endsWith("." + extension)) {
+                    // Ha a fájl végződése megfelel valamelyik engedélyezett kiterjesztésnek, konvertáljuk azt JPG formátumra
+                    fileName = fileName.substring(0, fileName.length() - (extension.length() + 1)) + ".jpg";
+                    break;
+                }
             }
         }
         return fileName;
@@ -251,10 +210,7 @@ public class FilmService {
         try {
             validateImageFile(imageFile);
             createDirectoryIfNotExists(username, film.getName());
-
-            // Kép konvertálása JPG formátummá
             BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
-            byte[] jpgBytes = convertToJpg(originalImage);
 
             // Kép átméretezése
             int maxWidth = 480;
@@ -271,6 +227,57 @@ public class FilmService {
         }
     }
 
+    private void validateImageFile(MultipartFile imageFile) {
+        // Ellenőrizzük a fájl kiterjesztését
+        String originalFileName = imageFile.getOriginalFilename();
+        if (originalFileName != null) {
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+            boolean isValidExtension = false;
+            for (String extension : allowedPictureExtensions) {
+                if (extension.equals(fileExtension)) {
+                    isValidExtension = true;
+                    break;
+                }
+            }
+            if (!isValidExtension) {
+                throw new IllegalArgumentException("Csak a következő kiterjesztéseket fogadjuk el: " + Arrays.toString(allowedPictureExtensions));
+            }
+        } else {
+            throw new IllegalArgumentException("A fájlnak kiterjesztést kell tartalmaznia.");
+        }
+    }
+
+    private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {
+        // Szélesség és magasság ellenőrzése
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        int newWidth = originalWidth;
+        int newHeight = originalHeight;
+
+        // Képarány megtartása
+        if (originalWidth > maxWidth || originalHeight > maxHeight) {
+            double widthRatio = (double) maxWidth / originalWidth;
+            double heightRatio = (double) maxHeight / originalHeight;
+            double ratio = Math.min(widthRatio, heightRatio);
+
+            newWidth = (int) (originalWidth * ratio);
+            newHeight = (int) (originalHeight * ratio);
+        }
+
+        // Új BufferedImage létrehozása a méretezéshez
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        // BufferedImage-t byte tömbbé konvertálása
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(resizedImage, "jpg", outputStream);
+        byte[] resizedBytes = outputStream.toByteArray();
+        outputStream.close();
+
+        return resizedBytes;
+    }
 
     public void deleteFilm(String username, Long filmId) {
         deleteFolder(username, getFilmById(username, filmId).getName());
@@ -319,21 +326,6 @@ public class FilmService {
         }
     }
 
-    private void deleteFilmByIdFromJson(String username, Long filmId) {
-        String basePath = storageDir + "/" + username;
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Film> films = getClientFilms(username);
-        Film film = getFilmById(username, filmId);
-        System.out.println(film.getName());
-        films.remove(film);
-        try {
-            File file = new File(basePath, "film.json");
-            objectMapper.writeValue(file, films);
-        } catch (IOException e) {
-            throw new RuntimeException("IO error happened while adding a film: " + e);
-        }
-    }
-
     public boolean modifyFilm(String username, Film film, MultipartFile picture) {
         Film ogFilm = getFilmById(username, film.getId());
         film.setFilmpath(ogFilm.getFilmpath());
@@ -348,7 +340,7 @@ public class FilmService {
             storeImageFile(username, picture, film);
         }
         deleteFilmByIdFromJson(username, film.getId());
-        addFilmDataToClient(username, film);
+        addFilmToClient(username, film);
         return true;
     }
 
