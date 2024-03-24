@@ -7,7 +7,10 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/movie-domain" />
+            <option value="$PROJECT_DIR$/movie-persistence" />
+            <option value="$PROJECT_DIR$/movie-service" />
+            <option value="$PROJECT_DIR$/movie-web" />
           </set>
         </option>
       </GradleProjectSettings>

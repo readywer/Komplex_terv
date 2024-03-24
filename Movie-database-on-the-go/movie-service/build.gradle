@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':movie-domain')
+    implementation project(':movie-persistence')
+}
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}

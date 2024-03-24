@@ -1,1 +1,5 @@
 rootProject.name = 'Movie'
+include 'movie-domain'
+include 'movie-service'
+include 'movie-web'
+include 'movie-persistence'

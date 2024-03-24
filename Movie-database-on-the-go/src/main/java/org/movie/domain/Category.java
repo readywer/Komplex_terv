@@ -1,5 +1,0 @@
-package org.movie.domain;
-
-public enum Category {
-    ACTION, ADVENTURE, ANIMATED, COMEDY, DRAMA, FANTASY, HISTORICAL, HORROR, MUSICAL, NOIR, ROMANCE, THRILLER, WESTERN
-}

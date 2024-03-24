@@ -1,0 +1,21 @@
+apply plugin: 'application'
+application {
+    mainClass = 'org.movie.database.MovieDatabaseApplication'
+}
+dependencies {
+    implementation project(':movie-domain')
+    implementation project(':movie-persistence')
+    implementation project(':movie-service')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    runtimeOnly 'com.h2database:h2'
+}
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}
