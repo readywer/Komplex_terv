@@ -2,7 +2,6 @@ package org.movie.service;
 
 import org.movie.domain.Client;
 import org.movie.persistance.ClientRepository;
-import org.movie.persistance.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +19,6 @@ public class ClientService {
     private FilmService filmService;
     @Autowired
     private ClientRepository clientRepository;
-    @Autowired
-    private FilmRepository filmRepository;
 
     @Transactional
     public boolean createClient(Client client) {
@@ -152,5 +149,26 @@ public class ClientService {
             }
         }
         return null;
+    }
+
+    //todo validate
+    public boolean modifyClient(Client updatedClient) {
+        // Ellenőrizni kell, hogy az ügyfél, amelyet frissíteni szeretnénk, megtalálható-e az adatbázisban
+        Client existingClient = clientRepository.findById(updatedClient.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Az ügyfél nem található az adatbázisban"));
+
+        // Ellenőrizni kell, hogy a felhasználónév nem módosítható
+        if (!existingClient.getUsername().equals(updatedClient.getUsername())) {
+            throw new IllegalArgumentException("A felhasználónév nem módosítható");
+        }
+
+        // A többi mezőt frissítjük a kapott értékekkel
+        existingClient.setName(updatedClient.getName());
+        existingClient.setPassword(updatedClient.getPassword());
+        existingClient.setEmail(updatedClient.getEmail());
+
+        // A frissített ügyfelet mentjük
+        clientRepository.save(existingClient);
+        return true;
     }
 }

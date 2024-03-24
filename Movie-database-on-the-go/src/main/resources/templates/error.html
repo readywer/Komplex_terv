@@ -28,8 +28,8 @@
 </nav>
 <div class="container">
     <h3>Unexpected error occurred.</h3>
-    <p th:if="${errMessage}" th:text="${errMessage}" class="alert alert-danger"></p>
-    <p th:unless="${errMessage}" class="alert alert-danger">Hiba!</p>
+    <p class="alert alert-danger" th:if="${errMessage}" th:text="${errMessage}"></p>
+    <p class="alert alert-danger" th:unless="${errMessage}">Hiba!</p>
 </div>
 </body>
 </html>
