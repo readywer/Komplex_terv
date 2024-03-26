@@ -6,86 +6,36 @@
     <title>Movie Database</title>
     <link href="css/bootstrap.css" rel="stylesheet"/>
     <script defer src="/js/validateForm.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="password"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 <body>
-<div class="container">
-    <h2>Registration</h2>
-    <form method="post" onsubmit="return validateForm()" th:action="@{/register}" th:object="${client}">
-
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
-            <span id="nameError" style="color: red;"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input class="form-control" id="username" required="required" th:field="*{username}" type="text">
-            <span id="usernameError" style="color: red;"></span>
-            <div class="text-danger" th:if="${nameError}" th:text="${nameError}"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
-            <span id="passwordError" style="color: red;"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="email">E-mail:</label>
-            <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
-            <span id="emailError" style="color: red;"></span>
-        </div>
-
-        <button type="submit">Register</button>
-    </form>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 col-md-6">
+        <h2 class="text-center mb-4">Registration</h2>
+        <form method="post" onsubmit="return validateForm()" action="@{/register}" th:object="${client}">
+            <div class="form-group mt-2">
+                <label for="name">Name:</label>
+                <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
+                <span id="nameError" style="color: red;"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label for="username">Username:</label>
+                <input class="form-control" id="username" required="required" th:field="*{username}" type="text">
+                <span id="usernameError" style="color: red;"></span>
+                <div class="text-danger" th:if="${nameError}" th:text="${nameError}"></div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="password">Password:</label>
+                <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
+                <span id="passwordError" style="color: red;"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label for="email">E-mail:</label>
+                <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
+                <span id="emailError" style="color: red;"></span>
+            </div>
+            <button class="btn btn-primary mt-3" type="submit">Register</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>
