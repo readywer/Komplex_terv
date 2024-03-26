@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Regisztráció</title>
+    <title>Movie Database</title>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <script defer src="/js/validateForm.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,40 +53,38 @@
             background-color: #0056b3;
         }
     </style>
-    <link href="css/bootstrap.css" rel="stylesheet"/>
-    <script defer src="/js/validateForm.js"></script>
 </head>
 <body>
 <div class="container">
-    <h2>Regisztráció</h2>
+    <h2>Registration</h2>
     <form method="post" onsubmit="return validateForm()" th:action="@{/register}" th:object="${client}">
 
         <div class="form-group">
-            <label for="name">Név:</label>
+            <label for="name">Name:</label>
             <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
             <span id="nameError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
-            <label for="username">Felhasználónév:</label>
+            <label for="username">Username:</label>
             <input class="form-control" id="username" required="required" th:field="*{username}" type="text">
             <span id="usernameError" style="color: red;"></span>
             <div class="text-danger" th:if="${nameError}" th:text="${nameError}"></div>
         </div>
 
         <div class="form-group">
-            <label for="password">Jelszó:</label>
+            <label for="password">Password:</label>
             <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
             <span id="passwordError" style="color: red;"></span>
         </div>
 
         <div class="form-group">
-            <label for="email">E-mail cím:</label>
+            <label for="email">E-mail:</label>
             <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
             <span id="emailError" style="color: red;"></span>
         </div>
 
-        <button type="submit">Regisztráció</button>
+        <button type="submit">Register</button>
     </form>
 </div>
 </body>
