@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-persistence/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/movie-persistence/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,19 +115,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Movie" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Movie" />
-      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
