@@ -27,11 +27,11 @@
     </div>
 </nav>
 
-<div class="container mt-5">
+<div class="container mt-2">
     <h2>Films</h2>
     <div class="row" id="filmTiles">
         <!-- Placeholder for film tiles -->
-        <div class="col-md-4 mb-4" th:each="film : ${films}">
+        <div class="col-sm-4 mb-2" th:each="film : ${films}">
             <a th:href="@{'/film_details?filmId=' + ${film.id}}">
                 <div class="card">
                     <img alt="Film kép" th:src="${film.picturepath}"/>
