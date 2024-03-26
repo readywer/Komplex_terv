@@ -53,14 +53,16 @@
                         <dt class="col-sm-3">Recommended Age</dt>
                         <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
                     </dl>
-                    <form action="/film_modify" method="get">
-                        <input name="filmId" th:value="${film.id}" type="hidden"/>
-                        <button class="btn btn-primary" type="submit">Film módosítása</button>
-                    </form>
-                    <form action="/film_details" method="post">
-                        <input name="deleteFilmId" th:value="${film.id}" type="hidden"/>
-                        <button class="btn btn-danger" type="submit">Film törlése</button>
-                    </form>
+                    <div class="row">
+                        <form action="/film_modify" method="get">
+                            <input name="filmId" th:value="${film.id}" type="hidden"/>
+                            <button class="btn btn-primary mx-1" type="submit">Film modify</button>
+                        </form>
+                        <form action="/film_details" method="post">
+                            <input name="deleteFilmId" th:value="${film.id}" type="hidden"/>
+                            <button class="btn btn-danger mx-1" type="submit">Film delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
