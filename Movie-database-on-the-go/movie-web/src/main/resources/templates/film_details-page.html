@@ -8,25 +8,27 @@
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-brand">Movie Database</div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="films">Films</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="film_add">Film Add</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
-        </form>
+    <div class="container-fluid">
+        <div class="navbar-brand">Movie Database</div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="films">Films</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="film_add">Film Add</a>
+                </li>
+            </ul>
+            <form class="d-flex" method="post" th:action="@{/logout}">
+                <button class="btn btn-outline-success" type="submit">Logout</button>
+            </form>
+        </div>
     </div>
 </nav>
-<div class="container mt-5">
+<div class="container m-5">
     <h2>Film details</h2>
     <div class="row">
         <div class="col-md-3">
@@ -53,12 +55,12 @@
                         <dt class="col-sm-3">Recommended Age</dt>
                         <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
                     </dl>
-                    <div class="row">
-                        <form action="/film_modify" method="get">
+                    <div>
+                        <form action="/film_modify" class="d-inline-block" method="get">
                             <input name="filmId" th:value="${film.id}" type="hidden"/>
                             <button class="btn btn-primary mx-1" type="submit">Film modify</button>
                         </form>
-                        <form action="/film_details" method="post">
+                        <form action="/film_details" class="d-inline-block" method="post">
                             <input name="deleteFilmId" th:value="${film.id}" type="hidden"/>
                             <button class="btn btn-danger mx-1" type="submit">Film delete</button>
                         </form>

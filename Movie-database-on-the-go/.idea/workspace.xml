@@ -5,15 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_AddPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_AddPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_DetailsPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_DetailsPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

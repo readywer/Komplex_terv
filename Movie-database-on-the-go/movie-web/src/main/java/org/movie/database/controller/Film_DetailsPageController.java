@@ -26,8 +26,8 @@ public class Film_DetailsPageController {
     }
 
     @PostMapping("/film_details")
-    public String filmDelete(@RequestParam(name = "deleteFilmId") Long deletefilmId, Model model) {
-        filmService.deleteFilm(userLoginDetailsService.loadAuthenticatedUsername(), deletefilmId);
+    public String filmDelete(@RequestParam(name = "deleteFilmId") Long deleteFilmId, Model model) {
+        filmService.deleteFilm(userLoginDetailsService.loadAuthenticatedUsername(), deleteFilmId);
         return "redirect:/films";
     }
 }

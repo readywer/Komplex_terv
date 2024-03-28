@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Movie Database</title>
-    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
     <script defer src="/js/validateForm.js"></script>
 </head>
 <body>
 <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card p-4 col-md-6">
         <h2 class="text-center mb-4">Registration</h2>
-        <form method="post" onsubmit="return validateForm()" action="@{/register}" th:object="${client}">
+        <form action="@{/register}" method="post" onsubmit="return validateForm()" th:object="${client}">
             <div class="form-group mt-2">
                 <label for="name">Name:</label>
                 <input class="form-control" id="name" required="required" th:field="*{name}" type="text">

@@ -8,22 +8,24 @@
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-brand">Movie Database</div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="films">Films</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="film_add">Film Add</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
-        </form>
+    <div class="container-fluid">
+        <div class="navbar-brand">Movie Database</div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="films">Films</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="film_add">Film Add</a>
+                </li>
+            </ul>
+            <form class="d-flex" method="post" th:action="@{/logout}">
+                <button class="btn btn-outline-success" type="submit">Logout</button>
+            </form>
+        </div>
     </div>
 </nav>
 <div class="container mt-5">

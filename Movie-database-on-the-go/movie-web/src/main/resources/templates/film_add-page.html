@@ -9,22 +9,24 @@
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-brand">Movie Database</div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="films">Films</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Film Add</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
-        </form>
+    <div class="container-fluid">
+        <div class="navbar-brand">Movie Database</div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="films">Films</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="film_add">Film Add</a>
+                </li>
+            </ul>
+            <form class="d-flex" method="post" th:action="@{/logout}">
+                <button class="btn btn-outline-success" type="submit">Logout</button>
+            </form>
+        </div>
     </div>
 </nav>
 
@@ -34,29 +36,31 @@
     <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/film_add}"
           th:object="${film}">
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="name">Name:</label>
             <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
             <span id="nameError" style="color: red;"></span>
             <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="description">Description:</label>
             <textarea class="form-control" id="description" required="required" rows="3"
                       th:field="*{description}"></textarea>
             <span id="descriptionError" style="color: red;"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="categories">Categories:</label><br>
             <select class="form-control" id="categories" multiple name="categories" required="required">
                 <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
                 <span id="categoriesError" style="color: red;"></span>
             </select>
         </div>
+        <small class="form-text text-muted">
+            <span>Hold the control to select more than 1 categories.</span></small>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="actors">Actors:</label>
             <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
             <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
@@ -64,30 +68,35 @@
             <span id="actorsError" style="color: red;"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="recommendedAge">Recommended Age:</label>
             <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
                    type="number">
             <span id="recommendedAgeError" style="color: red;"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="file">Select File:</label>
             <input accept=".mp4,.avi,.mkv,.mov" class="form-control-file" id="file" name="file" required="required"
                    type="file">
-            <small class="form-text text-muted">Allowed extensions: <span>.mp4, .avi, .mkv, .mov</span></small>
             <span id="fileError" style="color: red;"></span>
         </div>
+        <small class="form-text text-muted">Allowed extensions: <span>.mp4, .avi, .mkv, .mov</span></small>
 
-        <div class="form-group">
+
+        <div class="form-group mt-2">
             <label for="imageFile">Select Image:</label>
             <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile" name="imageFile"
                    type="file">
-            <small class="form-text text-muted">Allowed image formats: <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
             <span id="imageFileError" style="color: red;"></span>
         </div>
+        <small class="form-text text-muted">Allowed image formats:
+            <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
 
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <div>
+            <button class="btn btn-primary my-2" type="submit">Submit</button>
+        </div>
+
     </form>
 </div>
 </body>

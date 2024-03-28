@@ -34,23 +34,15 @@ public class Film_WatcherPageController {
         String fileName = path.getFileName().toString();
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-        switch (fileExtension.toLowerCase()) {
-            case "mp4":
-                contentType = "video/mp4";
-                break;
-            case "avi":
-                contentType = "video/x-msvideo";
-                break;
-            case "mkv":
-                contentType = "video/x-matroska";
-                break;
-            case "mov":
-                contentType = "video/quicktime";
-                break;
-            default:
+        contentType = switch (fileExtension.toLowerCase()) {
+            case "mp4" -> "video/mp4";
+            case "avi" -> "video/x-msvideo";
+            case "mkv" -> "video/x-matroska";
+            case "mov" -> "video/quicktime";
+            default ->
                 // Ha az adott kiterjesztés nem támogatott, akkor hibát dobunk
-                throw new IllegalArgumentException("Unsupported file format");
-        }
+                    throw new IllegalArgumentException("Unsupported file format");
+        };
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(contentType));

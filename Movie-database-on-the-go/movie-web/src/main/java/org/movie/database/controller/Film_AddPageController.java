@@ -27,22 +27,21 @@ public class Film_AddPageController {
     private UserLoginDetailsService userLoginDetailsService;
 
     @GetMapping("/film_add")
-    public String filmadd(Model model) {
+    public String filmAdd(Model model) {
         model.addAttribute("film", new Film());
-        List<Category> categories = new ArrayList<>();
-        categories.addAll(Arrays.asList(Category.values()));
+        List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
         return "film_add-page";
     }
 
+    //todo start upload as film added, upload status display
     @PostMapping("/film_add")
     public String add(@ModelAttribute("film") @Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
         if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
             return "redirect:/film_add";
         }
         model.addAttribute("film", film);
-        List<Category> categories = new ArrayList<>();
-        categories.addAll(Arrays.asList(Category.values()));
+        List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
         model.addAttribute("nameFError", "A filmnév már foglalt.");
         return "film_add-page";
