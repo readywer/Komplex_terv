@@ -338,8 +338,6 @@ public class FilmService {
 
     public boolean modifyFilm(String username, Film film, MultipartFile picture) {
         Film ogFilm = getFilmById(username, film.getId());
-        System.out.println("eredeti id:" + film.getId());
-        film.setId(ogFilm.getId());
         film.setFilmpath(ogFilm.getFilmpath());
         film.setPicturepath(ogFilm.getPicturepath());
         if (!isValidFilm(film, username)) {
