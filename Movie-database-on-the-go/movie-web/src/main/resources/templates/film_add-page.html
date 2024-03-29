@@ -33,72 +33,73 @@
 <!-- Űrlap a film adatok bekérésére -->
 <div class="d-flex justify-content-center align-items-center m-3" style="min-height: 100vh;">
     <div class="card p-4 col-md-6">
-    <h2>Add New Movie</h2>
-    <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/film_add}"
-          th:object="${film}">
+        <h2>Add New Movie</h2>
+        <form enctype="multipart/form-data" method="post" onsubmit="return validateFilmForm()" th:action="@{/film_add}"
+              th:object="${film}">
 
-        <div class="form-group mt-2">
-            <label for="name">Name:</label>
-            <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
-            <span id="nameError" style="color: red;"></span>
-            <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
-        </div>
+            <div class="form-group mt-2">
+                <label for="name">Name:</label>
+                <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
+                <span id="nameError" style="color: red;"></span>
+                <div class="text-danger" th:if="${nameFError}" th:text="${nameFError}"></div>
+            </div>
 
-        <div class="form-group mt-2">
-            <label for="description">Description:</label>
-            <textarea class="form-control" id="description" required="required" rows="3"
-                      th:field="*{description}"></textarea>
-            <span id="descriptionError" style="color: red;"></span>
-        </div>
+            <div class="form-group mt-2">
+                <label for="description">Description:</label>
+                <textarea class="form-control" id="description" required="required" rows="3"
+                          th:field="*{description}"></textarea>
+                <span id="descriptionError" style="color: red;"></span>
+            </div>
 
-        <div class="form-group mt-2">
-            <label for="categories">Categories:</label><br>
-            <select class="form-control" id="categories" multiple name="categories" required="required">
-                <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
-                <span id="categoriesError" style="color: red;"></span>
-            </select>
-        </div>
-        <small class="form-text text-muted">
-            <span>Hold the control to select more than 1 categories.</span></small>
+            <div class="form-group mt-2">
+                <label for="categories">Categories:</label><br>
+                <select class="form-control" id="categories" multiple name="categories" required="required">
+                    <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
+                    <span id="categoriesError" style="color: red;"></span>
+                </select>
+            </div>
+            <small class="form-text text-muted">
+                <span>Hold the control to select more than 1 categories.</span></small>
 
-        <div class="form-group mt-2">
-            <label for="actors">Actors:</label>
-            <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
-            <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
-                Johansson).</small>
-            <span id="actorsError" style="color: red;"></span>
-        </div>
+            <div class="form-group mt-2">
+                <label for="actors">Actors:</label>
+                <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
+                <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
+                    Johansson).</small>
+                <span id="actorsError" style="color: red;"></span>
+            </div>
 
-        <div class="form-group mt-2">
-            <label for="recommendedAge">Recommended Age:</label>
-            <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
-                   type="number">
-            <span id="recommendedAgeError" style="color: red;"></span>
-        </div>
+            <div class="form-group mt-2">
+                <label for="recommendedAge">Recommended Age:</label>
+                <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
+                       type="number">
+                <span id="recommendedAgeError" style="color: red;"></span>
+            </div>
 
-        <div class="form-group mt-2">
-            <label for="file">Select File:</label>
-            <input accept=".mp4,.avi,.mkv,.mov" class="form-control-file" id="file" name="file" required="required"
-                   type="file">
-            <span id="fileError" style="color: red;"></span>
-        </div>
-        <small class="form-text text-muted">Allowed extensions: <span>.mp4, .avi, .mkv, .mov</span></small>
+            <div class="form-group mt-2">
+                <label for="file">Select File:</label>
+                <input accept=".mp4,.avi,.mkv,.mov" class="form-control-file" id="file" name="file" required="required"
+                       type="file">
+                <span id="fileError" style="color: red;"></span>
+            </div>
+            <small class="form-text text-muted">Allowed extensions: <span>.mp4, .avi, .mkv, .mov</span></small>
 
 
-        <div class="form-group mt-2">
-            <label for="imageFile">Select Image:</label>
-            <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile" name="imageFile"
-                   type="file">
-            <span id="imageFileError" style="color: red;"></span>
-        </div>
-        <small class="form-text text-muted">Allowed image formats:
-            <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
+            <div class="form-group mt-2">
+                <label for="imageFile">Select Image:</label>
+                <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile"
+                       name="imageFile"
+                       type="file">
+                <span id="imageFileError" style="color: red;"></span>
+            </div>
+            <small class="form-text text-muted">Allowed image formats:
+                <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
 
-        <div>
-            <button class="btn btn-primary my-2" type="submit">Submit</button>
-        </div>
+            <div>
+                <button class="btn btn-primary my-2" type="submit">Submit</button>
+            </div>
 
-    </form>
+        </form>
     </div>
 </div>
 </body>

@@ -7,12 +7,10 @@
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/Mp4/Men_in_Black_Poster.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/mkv/jelenlegi.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,1 +1,30 @@
-[{"id":1025,"name":"Mp4","description":"try","categories":["ANIMATED"],"actors":["try"],"recommendedAge":0,"filmpath":"data/kissi/Mp4/truck.mp4","picturepath":"data/kissi/Mp4/Men_in_Black_Poster.jpg"},{"id":1026,"name":"mkv","description":"mkv","categories":["COMEDY"],"actors":["ad"],"recommendedAge":0,"filmpath":"data/kissi/mkv/2024-02-26 14-29-13.mkv","picturepath":"data/kissi/mkv/jelenlegi.jpg"}]
+[
+  {
+    "id": 1,
+    "name": "mp4",
+    "description": "mp4",
+    "categories": [
+      "ANIMATED"
+    ],
+    "actors": [
+      "me"
+    ],
+    "recommendedAge": 1,
+    "filmpath": "data/kissi/1/truck.mp4",
+    "picturepath": "data/kissi/1/jelenlegi.jpg"
+  },
+  {
+    "id": 2,
+    "name": "mp",
+    "description": "asd3",
+    "categories": [
+      "ACTION"
+    ],
+    "actors": [
+      "asd"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/kissi/2/truck.mp4",
+    "picturepath": "images/noimage.jpg"
+  }
+]
