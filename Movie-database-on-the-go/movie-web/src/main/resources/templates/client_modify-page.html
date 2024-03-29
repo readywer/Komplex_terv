@@ -3,101 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Regisztráció</title>
-    <style>
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="password"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <title>Movie Database</title>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
     <script defer src="/js/validateForm.js"></script>
 </head>
 <body>
-
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-brand">Movie Database</div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="films">Films</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="film_add">Film Add</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 col-md-6">
+        <h2 class="text-center mb-4">Account modify</h2>
+        <form action="@{/client_modify}" method="post" onsubmit="return validateForm()" th:object="${client}">
+            <div class="form-group mt-2">
+                <label for="name">Name:</label>
+                <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
+                <span id="nameError" style="color: red;"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label for="password">Password:</label>
+                <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
+                <span id="passwordError" style="color: red;"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label for="email">E-mail:</label>
+                <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
+                <span id="emailError" style="color: red;"></span>
+            </div>
+            <button class="btn btn-primary mt-3" type="submit">Modify</button>
         </form>
     </div>
-</nav>
-
-<div class="container">
-    <h2>Regisztráció</h2>
-    <form method="post" onsubmit="return validateForm()" th:action="@{/register}" th:object="${client}">
-
-        <div class="form-group">
-            <label for="name">Név:</label>
-            <input class="form-control" id="name" required="required" th:field="*{name}" type="text">
-            <span id="nameError" style="color: red;"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="username">Felhasználónév:</label>
-            <input class="form-control" id="username" required="required" th:field="*{username}" type="text">
-            <span id="usernameError" style="color: red;"></span>
-            <div class="text-danger" th:if="${nameError}" th:text="${nameError}"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Jelszó:</label>
-            <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
-            <span id="passwordError" style="color: red;"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="email">E-mail cím:</label>
-            <input class="form-control" id="email" required="required" th:field="*{email}" type="email">
-            <span id="emailError" style="color: red;"></span>
-        </div>
-
-        <button type="submit">Regisztráció</button>
-    </form>
 </div>
 </body>
 </html>
