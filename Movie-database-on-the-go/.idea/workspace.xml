@@ -7,10 +7,12 @@
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/Mp4/Men_in_Black_Poster.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/kissi/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kissi/mkv/jelenlegi.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/1/jelenlegi.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/kissi/film.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/ClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

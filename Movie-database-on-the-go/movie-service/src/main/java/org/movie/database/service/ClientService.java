@@ -3,6 +3,7 @@ package org.movie.database.service;
 import org.movie.database.domain.Client;
 import org.movie.database.persistence.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +21,14 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public boolean createClient(Client client) {
         if (isValidClient(client)) {
+            String encodedPassword = passwordEncoder.encode(client.getPassword());
+            client.setPassword(encodedPassword);
             createDirectory(client);
             clientRepository.save(client);
             return true;
