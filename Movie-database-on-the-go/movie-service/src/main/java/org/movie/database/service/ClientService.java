@@ -51,7 +51,6 @@ public class ClientService {
         }
     }
 
-    //TODO hiba visszajelzés
     public boolean isValidClient(Client client) {
         if (!isValidName(client.getName())) {
             return false;
@@ -62,10 +61,7 @@ public class ClientService {
         if (!isValidPassword(client.getPassword())) {
             return false;
         }
-        if (!isValidEmail(client.getEmail())) {
-            return false;
-        }
-        return true;
+        return isValidEmail(client.getEmail());
     }
 
     private boolean isValidUsername(String username) {
@@ -157,21 +153,36 @@ public class ClientService {
         return null;
     }
 
-    //todo validate
     public boolean modifyClient(Client updatedClient) {
         // Ellenőrizni kell, hogy az ügyfél, amelyet frissíteni szeretnénk, megtalálható-e az adatbázisban
         Client existingClient = clientRepository.findById(updatedClient.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Az ügyfél nem található az adatbázisban"));
-
-        // Ellenőrizni kell, hogy a felhasználónév nem módosítható
-        if (!existingClient.getUsername().equals(updatedClient.getUsername())) {
-            throw new IllegalArgumentException("A felhasználónév nem módosítható");
+        if (updatedClient.getName().isEmpty() && updatedClient.getEmail().isEmpty() && updatedClient.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Empty input.");
         }
 
-        // A többi mezőt frissítjük a kapott értékekkel
-        existingClient.setName(updatedClient.getName());
-        existingClient.setPassword(updatedClient.getPassword());
-        existingClient.setEmail(updatedClient.getEmail());
+        if (!updatedClient.getName().isEmpty()) {
+            if (isValidName(updatedClient.getName())) {
+                existingClient.setName(updatedClient.getName());
+            } else {
+                return false;
+            }
+        }
+        if (!updatedClient.getEmail().isEmpty()) {
+            if (isValidEmail(updatedClient.getEmail())) {
+                existingClient.setEmail(updatedClient.getEmail());
+            } else {
+                return false;
+            }
+        }
+        if (!updatedClient.getPassword().isEmpty()) {
+            if (isValidPassword(updatedClient.getPassword())) {
+                String encodedPassword = passwordEncoder.encode(updatedClient.getPassword());
+                existingClient.setPassword(encodedPassword);
+            } else {
+                return false;
+            }
+        }
 
         // A frissített ügyfelet mentjük
         clientRepository.save(existingClient);

@@ -35,7 +35,6 @@ public class Client_ModifyPageController {
             return "redirect:/home";
         }
         model.addAttribute("client", client);
-        model.addAttribute("nameFError", "A filmnév már foglalt.");
         return "client_modify-page";
     }
 }
