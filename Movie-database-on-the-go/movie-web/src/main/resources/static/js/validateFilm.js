@@ -49,7 +49,7 @@ function validateFilmForm() {
     }
 
     // Fájl ellenőrzése
-    if (!file || file.trim() === "" || !isValidExtension(file, [".mp4", ".avi", ".mkv", ".mov"])) {
+    if (!file || file.trim() === "" || !isValidExtension(file, [".mp4", ".webm", ".ogg"])) {
         document.getElementById("fileError").innerText = "Invalid file format!";
         isValid = false;
     } else {

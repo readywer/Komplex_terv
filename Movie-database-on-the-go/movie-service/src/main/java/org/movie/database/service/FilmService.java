@@ -31,7 +31,7 @@ public class FilmService {
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
-    private final String[] allowedFilmExtensions = {"mp4", "avi", "mkv", "mov"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg"}; // Engedélyezett fájlkiterjesztések
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
 
     private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {

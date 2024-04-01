@@ -23,7 +23,6 @@ public class Film_WatcherPageController {
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
-    //TODO html5 csak mp4-et tud lejátszani a többit csak letölti
     @GetMapping("/film_watch")
     public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
@@ -36,9 +35,8 @@ public class Film_WatcherPageController {
 
         contentType = switch (fileExtension.toLowerCase()) {
             case "mp4" -> "video/mp4";
-            case "avi" -> "video/x-msvideo";
-            case "mkv" -> "video/x-matroska";
-            case "mov" -> "video/quicktime";
+            case "webm" -> "video/webm";
+            case "ogg" -> "video/ogg";
             default ->
                 // Ha az adott kiterjesztés nem támogatott, akkor hibát dobunk
                     throw new IllegalArgumentException("Unsupported file format");
