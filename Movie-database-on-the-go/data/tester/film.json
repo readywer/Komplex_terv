@@ -1,0 +1,45 @@
+[
+  {
+    "id": 1,
+    "name": "mp4",
+    "description": "mp4",
+    "categories": [
+      "ACTION",
+      "ADVENTURE"
+    ],
+    "actors": [
+      "me"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/tester/1/truck.mp4",
+    "picturepath": "data/tester/1/Men_in_Black_Poster.jpg"
+  },
+  {
+    "id": 2,
+    "name": "blank",
+    "description": "me",
+    "categories": [
+      "ACTION"
+    ],
+    "actors": [
+      "me"
+    ],
+    "recommendedAge": 0,
+    "filmpath": "data/tester/2/truck.mp4",
+    "picturepath": "images/noimage.jpg"
+  },
+  {
+    "id": 3,
+    "name": "mkv",
+    "description": "try",
+    "categories": [
+      "ACTION"
+    ],
+    "actors": [
+      "asd"
+    ],
+    "recommendedAge": 1,
+    "filmpath": "data/tester/3/2024-02-26 14-29-13.mkv",
+    "picturepath": "images/noimage.jpg"
+  }
+]
