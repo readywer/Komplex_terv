@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Movie Database</title>
     <link href="/css/bootstrap.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/bootstrap-icons/font/bootstrap-icons.min.css">
+    <link href="/css/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
     <script defer src="/js/validateRegister.js"></script>
 </head>
 <body>
@@ -27,8 +27,9 @@
             <div class="form-group mt-2">
                 <label for="password">Password:</label>
                 <div class="input-group">
-                    <input class="form-control" id="password" required="required" th:field="*{password}" type="password">
-                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <input class="form-control" id="password" required="required" th:field="*{password}"
+                           type="password">
+                    <button class="btn btn-outline-secondary" id="togglePassword" type="button">
                         <i class="bi bi-eye-slash"></i>
                     </button>
                 </div>

@@ -83,7 +83,7 @@ public class FilmService {
         if (picture.getName().isEmpty()) {
             film.setPicturepath(picture.getOriginalFilename());
         }
-        if (!isValidFilm(film, username)) {
+        if (!isValidFilm(film)) {
             return false;
         }
         if (!checkIfNameIsUsed(film.getName(), username)) {
@@ -99,8 +99,8 @@ public class FilmService {
         return true;
     }
 
-    public boolean isValidFilm(Film film, String username) {
-        if (!isValidName(film.getName(), username)) {
+    public boolean isValidFilm(Film film) {
+        if (!isValidName(film.getName())) {
             return false;
         }
         if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
@@ -109,10 +109,7 @@ public class FilmService {
         if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
             return false;
         }
-        if (film.getRecommendedAge() < 0 || film.getRecommendedAge() > 18) {
-            return false;
-        }
-        return true;
+        return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
     }
 
     private int countOccurrences(String str, char character) {
@@ -134,12 +131,12 @@ public class FilmService {
         return true;
     }
 
-    private boolean isValidName(String name, String username) {
+    private boolean isValidName(String name) {
         if (name.isEmpty()) {
             return false;
         }
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
-        Matcher matcher = pattern.matcher(username);
+        Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 
@@ -340,7 +337,7 @@ public class FilmService {
         Film ogFilm = getFilmById(username, film.getId());
         film.setFilmpath(ogFilm.getFilmpath());
         film.setPicturepath(ogFilm.getPicturepath());
-        if (!isValidFilm(film, username)) {
+        if (!isValidFilm(film)) {
             return false;
         }
         if (!ogFilm.getName().equals(film.getName())) {
@@ -350,7 +347,9 @@ public class FilmService {
         }
         if (!picture.isEmpty()) {
             File pictureFile = new File(film.getPicturepath());
-            boolean deleted = pictureFile.delete();
+            if (pictureFile.delete()) {
+                return false;
+            }
             film.setPicturepath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }

@@ -1,7 +1,8 @@
 package org.movie.database.controller;
 
+import org.movie.database.domain.Client;
+import org.movie.database.persistence.ClientRepository;
 import org.movie.database.security.UserLoginDetailsService;
-import org.movie.database.service.ClientService;
 import org.movie.database.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,15 +14,16 @@ public class HomePageController {
 
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
-
-    @Autowired
-    private ClientService clientService;
     @Autowired
     private FilmService filmService;
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("client", clientService.findProtectedClientByUsername(userLoginDetailsService.loadAuthenticatedUsername()));
+        Client client = clientRepository.findByUsername(userLoginDetailsService.loadAuthenticatedUsername());
+        client.setPassword("");
+        model.addAttribute("client", client);
         model.addAttribute("numberOfFilms", filmService.getClientFilms(userLoginDetailsService.loadAuthenticatedUsername()).size());
         return "home-page";
     }

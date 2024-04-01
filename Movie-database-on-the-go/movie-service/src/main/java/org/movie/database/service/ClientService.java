@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class ClientService {
@@ -20,15 +18,13 @@ public class ClientService {
     private FilmService filmService;
     @Autowired
     private ClientRepository clientRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Transactional
     public boolean createClient(Client client) {
         if (isValidClient(client)) {
-            String encodedPassword = passwordEncoder.encode(client.getPassword());
-            client.setPassword(encodedPassword);
+            encodePassword(client);
             createDirectory(client);
             clientRepository.save(client);
             return true;
@@ -36,15 +32,18 @@ public class ClientService {
         return false;
     }
 
+    private void encodePassword(Client client) {
+        String encodedPassword = passwordEncoder.encode(client.getPassword());
+        client.setPassword(encodedPassword);
+    }
+
     private void createDirectory(Client client) {
         String folderPath = filmService.getStorageDir() + "/" + client.getUsername();
         try {
-            Path directoryPath = Paths.get(folderPath);
-            Files.createDirectories(directoryPath);
-            String filePath = folderPath + "/film.json";
-            Path file = Paths.get(filePath);
-            if (!Files.exists(file)) {
-                Files.createFile(file);
+            Files.createDirectories(Paths.get(folderPath));
+            Path filePath = Paths.get(folderPath, "film.json");
+            if (!Files.exists(filePath)) {
+                Files.createFile(filePath);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,105 +51,32 @@ public class ClientService {
     }
 
     public boolean isValidClient(Client client) {
-        if (!isValidName(client.getName())) {
-            return false;
-        }
-        if (!isValidUsername(client.getUsername())) {
-            return false;
-        }
-        if (!isValidPassword(client.getPassword())) {
-            return false;
-        }
-        return isValidEmail(client.getEmail());
+        return isValidName(client.getName()) &&
+                isValidUsername(client.getUsername()) &&
+                isValidPassword(client.getPassword()) &&
+                isValidEmail(client.getEmail());
     }
 
     private boolean isValidUsername(String username) {
-        // Ellenőrizze, hogy a felhasználónév üres-e
-        if (username.isEmpty()) {
-            return false;
-        }
-
-        // Ellenőrizze a hosszt
-        if (username.length() < 3 || username.length() > 32) {
-            return false;
-        }
-
-        // Ellenőrizze, hogy a felhasználónév betűvel kezdődik
-        if (!Character.isLetter(username.charAt(0))) {
-            return false;
-        }
-
-        //Ha már létezik ilyen fehasznló mégegyszer ne lehessen létrehozni
-        if (findClientByUsername(username) != null) {
-            return false;
-        }
-
-        // Ellenőrizze az engedélyezett karaktereket
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
-        Matcher matcher = pattern.matcher(username);
-        return matcher.matches();
+        return username.length() >= 3 && username.length() <= 32 &&
+                Character.isLetter(username.charAt(0)) &&
+                clientRepository.findByUsername(username) == null &&
+                username.matches("^[a-zA-Z0-9.,_-]+$");
     }
 
     private boolean isValidName(String name) {
-        // Ellenőrizze, hogy a felhasználónév üres-e
-        if (name.isEmpty()) {
-            return false;
-        }
-
-        // Ellenőrizze a hosszt
-        if (name.length() < 3 || name.length() > 32) {
-            return false;
-        }
-        // Ellenőrizze, hogy a felhasználónév betűvel kezdődik
-        return Character.isLetter(name.charAt(0));
+        return name.length() >= 3 && name.length() <= 32 &&
+                Character.isLetter(name.charAt(0));
     }
 
     private boolean isValidPassword(String password) {
-        // Ellenőrizze, hogy a jelszó üres-e
-        if (password.isEmpty()) {
-            return false;
-        }
-
-        // Ellenőrizze a hosszt
-        if (password.length() < 6) {
-            return false;
-        }
-
-        // Ellenőrizze legalább egy kisbetűt, egy nagybetűt és egy számot
-        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
+        return password.length() >= 6 &&
+                password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
     }
 
     private boolean isValidEmail(String email) {
-        // Ellenőrizze, hogy az e-mail cím üres-e
-        if (email.isEmpty()) {
-            return false;
-        }
-
-        // Ellenőrizze az e-mail cím reguláris kifejezéssel
-        Pattern pattern = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])");
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
-    public Client findClientByUsername(String username) {
-        for (Client client : clientRepository.findAll()) {
-            if (client.getUsername().equals(username)) {
-                return client;
-            }
-        }
-        return null;
-    }
-
-    public Client findProtectedClientByUsername(String username) {
-        for (Client client : clientRepository.findAll()) {
-            if (client.getUsername().equals(username)) {
-                client.setPassword("");
-                return client;
-            }
-        }
-        return null;
+        return !email.isEmpty() &&
+                email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f])+)])");
     }
 
     public boolean modifyClient(Client updatedClient) {
@@ -177,14 +103,13 @@ public class ClientService {
         }
         if (!updatedClient.getPassword().isEmpty()) {
             if (isValidPassword(updatedClient.getPassword())) {
-                String encodedPassword = passwordEncoder.encode(updatedClient.getPassword());
-                existingClient.setPassword(encodedPassword);
+                encodePassword(updatedClient);
+                existingClient.setPassword(updatedClient.getPassword());
             } else {
                 return false;
             }
         }
 
-        // A frissített ügyfelet mentjük
         clientRepository.save(existingClient);
         return true;
     }

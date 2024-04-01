@@ -18,13 +18,14 @@ public class Client_ModifyPageController {
     private ClientService clientService;
     @Autowired
     private ClientRepository clientRepository;
-
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
     @GetMapping("/client_modify")
     public String clientModify(Model model) {
-        model.addAttribute("client", clientRepository.findByUsername(userLoginDetailsService.loadAuthenticatedUsername()));
+        Client client = clientRepository.findByUsername(userLoginDetailsService.loadAuthenticatedUsername());
+        client.setPassword("");
+        model.addAttribute("client", client);
         return "client_modify-page";
     }
 
