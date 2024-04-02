@@ -23,7 +23,7 @@ public class RegistrationPageController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("film") @Valid Client client, Model model) {
+    public String register(@Valid Client client, Model model) {
         if (clientService.createClient(client)) {
             return "redirect:/home";
         }

@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class FilmService {
@@ -68,12 +66,10 @@ public class FilmService {
 
     public Film getFilmById(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
-        for (Film film : films) {
-            if (film.getId() != null && film.getId().equals(filmId)) {
-                return film;
-            }
-        }
-        return null; // Ha nem található film az adott id-jel, null értékkel tér vissza
+        return films.stream()
+                .filter(film -> Objects.equals(film.getId(), filmId))
+                .findFirst()
+                .orElse(null); // Ha nem található film az adott id-jel, null értékkel tér vissza
     }
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
@@ -83,10 +79,7 @@ public class FilmService {
         if (picture.getName().isEmpty()) {
             film.setPicturepath(picture.getOriginalFilename());
         }
-        if (!isValidFilm(film)) {
-            return false;
-        }
-        if (!checkIfNameIsUsed(film.getName(), username)) {
+        if (!isValidFilm(film) || !checkIfNameIsUsed(film.getName(), username)) {
             return false;
         }
         if (!picture.isEmpty()) {
@@ -100,44 +93,22 @@ public class FilmService {
     }
 
     public boolean isValidFilm(Film film) {
-        if (!isValidName(film.getName())) {
-            return false;
-        }
-        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
-            return false;
-        }
-        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
-            return false;
-        }
-        return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
+        return isValidName(film.getName()) &&
+                !film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') <= 1 &&
+                !film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') <= 1 &&
+                film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
     }
 
     private int countOccurrences(String str, char character) {
-        int count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == character) {
-                count++;
-            }
-        }
-        return count;
+        return (int) str.chars().filter(c -> c == character).count();
     }
 
     private boolean checkIfNameIsUsed(String name, String username) {
-        for (Film film : getClientFilms(username)) {
-            if (film.getName().equals(name)) {
-                return false;
-            }
-        }
-        return true;
+        return getClientFilms(username).stream().noneMatch(film -> film.getName().equals(name));
     }
 
     private boolean isValidName(String name) {
-        if (name.isEmpty()) {
-            return false;
-        }
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9.,_-]+$");
-        Matcher matcher = pattern.matcher(name);
-        return matcher.matches();
+        return !name.isEmpty() && name.matches("^[a-zA-Z0-9.,_-]+$");
     }
 
     public List<Film> getClientFilms(String username) {
@@ -178,13 +149,7 @@ public class FilmService {
     }
 
     private long getNextAvailableId(List<Film> films) {
-        if (films.isEmpty()) {
-            // If the list is empty, start with ID 1
-            return 1;
-        } else {
-            // Otherwise, get the ID of the last film and add 1
-            return films.getLast().getId() + 1;
-        }
+        return films.isEmpty() ? 1 : films.getLast().getId() + 1;
     }
 
     private void deleteFilmByIdFromJson(String username, Long filmId) {
