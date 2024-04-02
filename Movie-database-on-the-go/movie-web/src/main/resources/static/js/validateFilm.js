@@ -1,43 +1,16 @@
-function validateFilmForm() {
+function validateFilm() {
     var name = document.getElementById("name").value;
-    var description = document.getElementById("description").value;
-    var categories = document.getElementById("categories").selectedOptions;
-    var actors = document.getElementById("actors").value;
     var recommendedAge = parseInt(document.getElementById("recommendedAge").value);
     var file = document.getElementById("file").value;
     var imageFile = document.getElementById("imageFile").value;
     var isValid = true;
 
     // Név ellenőrzése
-    if (!isValidName(name)) {
-        document.getElementById("nameError").innerText = "Invalid name!";
+    if (!/^[a-zA-Z][a-zA-Z0-9.,_-]{1,32}$/.test(name)) {
+        document.getElementById("nameError").innerText = "A név legalább 1 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
         isValid = false;
     } else {
         document.getElementById("nameError").innerText = "";
-    }
-
-    // Leírás ellenőrzése
-    if (!description || description.trim() === "") {
-        document.getElementById("descriptionError").innerText = "Invalid description!";
-        isValid = false;
-    } else {
-        document.getElementById("descriptionError").innerText = "";
-    }
-
-    // Kategóriák ellenőrzése
-    if (categories.length === 0) {
-        document.getElementById("categoriesError").innerText = "Invalid categories!";
-        isValid = false;
-    } else {
-        document.getElementById("categoriesError").innerText = "";
-    }
-
-    // Színészek ellenőrzése
-    if (!actors || actors.trim() === "") {
-        document.getElementById("actorsError").innerText = "Invalid actors!";
-        isValid = false;
-    } else {
-        document.getElementById("actorsError").innerText = "";
     }
 
     // Ajánlott életkor ellenőrzése
@@ -56,19 +29,14 @@ function validateFilmForm() {
         document.getElementById("fileError").innerText = "";
     }
 
-    // Képfájl ellenőrzése
-    if (!imageFile || imageFile.trim() === "" || !isValidImageExtension(imageFile)) {
-        document.getElementById("imageFileError").innerText = "Invalid image format!";
-        isValid = false;
-    } else {
-        document.getElementById("imageFileError").innerText = "";
-    }
+    if (imageFile.trim() !== "" && !isValidImageExtension(imageFile)) {
+           document.getElementById("imageFileError").innerText = "Invalid image format!";
+           isValid = false;
+       } else {
+           document.getElementById("imageFileError").innerText = "";
+       }
 
     return isValid;
-}
-
-function isValidName(name) {
-    return name && name.trim() !== "" && !name.includes("/") && !name.includes("\\");
 }
 
 function isValidExtension(filename, extensions) {

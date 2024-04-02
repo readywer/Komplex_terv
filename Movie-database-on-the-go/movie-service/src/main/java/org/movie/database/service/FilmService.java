@@ -93,10 +93,16 @@ public class FilmService {
     }
 
     public boolean isValidFilm(Film film) {
-        return isValidName(film.getName()) &&
-                !film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') <= 1 &&
-                !film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') <= 1 &&
-                film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
+        if (!isValidName(film.getName())) {
+            return false;
+        }
+        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
+            return false;
+        }
+        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
+            return false;
+        }
+        return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
     }
 
     private int countOccurrences(String str, char character) {
