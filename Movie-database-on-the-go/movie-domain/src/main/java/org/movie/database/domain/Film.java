@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,8 +28,8 @@ public class Film {
     private List<Category> categories = new ArrayList<>();
     private List<String> actors = new ArrayList<>();
     private int recommendedAge = 0;
-    private Date releaseDate;
-    private Date uploadDate;
+    private String releaseDate;
+    private String uploadDate;
     private String filmPath;
     private String picturePath = "images/noimage.jpg";
     private boolean processing = true;

@@ -52,6 +52,9 @@
                         <dt class="col-sm-3">Actors</dt>
                         <dd class="col-sm-9" th:text="${#strings.arrayJoin(film.actors, ', ')}">actors</dd>
 
+                        <dt class="col-sm-3">Release Date</dt>
+                        <dd class="col-sm-9" th:text="${film.releaseDate}">0</dd>
+
                         <dt class="col-sm-3">Recommended Age</dt>
                         <dd class="col-sm-9" th:text="${film.recommendedAge}">0</dd>
                     </dl>
