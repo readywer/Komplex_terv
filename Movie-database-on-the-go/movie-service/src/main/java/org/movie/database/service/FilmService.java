@@ -79,7 +79,7 @@ public class FilmService {
         if (picture.getName().isEmpty()) {
             film.setPicturepath(picture.getOriginalFilename());
         }
-        if (!isValidFilm(film) || !checkIfNameIsUsed(film.getName(), username)) {
+        if (isValidFilm(film) || !checkIfNameIsUsed(film.getName(), username)) {
             return false;
         }
         if (!picture.isEmpty()) {
@@ -93,7 +93,7 @@ public class FilmService {
     }
 
     public boolean isValidFilm(Film film) {
-        if (!isValidName(film.getName())) {
+        if (isValidName(film.getName())) {
             return false;
         }
         if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
