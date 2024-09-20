@@ -26,7 +26,7 @@ public class Film_WatcherPageController {
     @GetMapping("/film_watch")
     public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
-        Path path = Paths.get(film.getFilmpath());
+        Path path = Paths.get(film.getFilmPath());
         Resource videoResource = new FileSystemResource(path.toFile());
 
         String contentType;

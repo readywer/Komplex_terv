@@ -73,20 +73,20 @@ public class FilmService {
     }
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
-        film.setFilmpath(file.getOriginalFilename());
+        film.setFilmPath(file.getOriginalFilename());
         List<Film> films = getClientFilms(username);
         film.setId(getNextAvailableId(films));
         if (picture.getName().isEmpty()) {
-            film.setPicturepath(picture.getOriginalFilename());
+            film.setPicturePath(picture.getOriginalFilename());
         }
         if (isValidFilm(film)) {
             return false;
         }
         if (!picture.isEmpty()) {
-            film.setPicturepath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
+            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }
-        film.setFilmpath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
+        film.setFilmPath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
         addFilmToClient(username, film);
         storeVideoFile(username, file, film);
         return true;
@@ -96,10 +96,10 @@ public class FilmService {
         if (isValidName(film.getName())) {
             return false;
         }
-        if (film.getFilmpath().contains(".") && countOccurrences(film.getFilmpath(), '.') > 1) {
+        if (film.getFilmPath().contains(".") && countOccurrences(film.getFilmPath(), '.') > 1) {
             return false;
         }
-        if (film.getPicturepath().contains(".") && countOccurrences(film.getPicturepath(), '.') > 1) {
+        if (film.getPicturePath().contains(".") && countOccurrences(film.getPicturePath(), '.') > 1) {
             return false;
         }
         return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
@@ -306,18 +306,18 @@ public class FilmService {
 
     public boolean modifyFilm(String username, Film film, MultipartFile picture) {
         Film ogFilm = getFilmById(username, film.getId());
-        film.setFilmpath(ogFilm.getFilmpath());
-        film.setPicturepath(ogFilm.getPicturepath());
+        film.setFilmPath(ogFilm.getFilmPath());
+        film.setPicturePath(ogFilm.getPicturePath());
         if (!isValidFilm(film)) {
             return false;
         }
-        
+
         if (!picture.isEmpty()) {
-            File pictureFile = new File(film.getPicturepath());
+            File pictureFile = new File(film.getPicturePath());
             if (pictureFile.delete()) {
                 return false;
             }
-            film.setPicturepath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
+            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }
         deleteFilmByIdFromJson(username, film.getId());
