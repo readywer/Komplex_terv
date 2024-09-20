@@ -29,6 +29,7 @@ public class Film {
     private int recommendedAge = 0;
     private String filmpath;
     private String picturepath = "images/noimage.jpg";
+    private boolean processing = true;
 
     @Override
     public final boolean equals(Object o) {

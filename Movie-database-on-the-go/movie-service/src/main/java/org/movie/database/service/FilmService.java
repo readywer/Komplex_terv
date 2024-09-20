@@ -69,7 +69,7 @@ public class FilmService {
         return films.stream()
                 .filter(film -> Objects.equals(film.getId(), filmId))
                 .findFirst()
-                .orElse(null); // Ha nem található film az adott id-jel, null értékkel tér vissza
+                .orElse(null); // Ha nem található film az adott id-vel, null értékkel tér vissza
     }
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
@@ -79,7 +79,7 @@ public class FilmService {
         if (picture.getName().isEmpty()) {
             film.setPicturepath(picture.getOriginalFilename());
         }
-        if (isValidFilm(film) || !checkIfNameIsUsed(film.getName(), username)) {
+        if (isValidFilm(film)) {
             return false;
         }
         if (!picture.isEmpty()) {
@@ -311,11 +311,7 @@ public class FilmService {
         if (!isValidFilm(film)) {
             return false;
         }
-        if (!ogFilm.getName().equals(film.getName())) {
-            if (!checkIfNameIsUsed(film.getName(), username)) {
-                return false;
-            }
-        }
+        
         if (!picture.isEmpty()) {
             File pictureFile = new File(film.getPicturepath());
             if (pictureFile.delete()) {
