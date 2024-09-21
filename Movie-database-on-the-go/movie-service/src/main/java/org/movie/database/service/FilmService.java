@@ -19,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +32,8 @@ public class FilmService {
     @Getter
     private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg"}; // Engedélyezett fájlkiterjesztések
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
+    private final int maxWidth = 480;
+    private final int maxHeight = 720;
 
     private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {
         // Szélesség és magasság ellenőrzése
@@ -51,20 +52,31 @@ public class FilmService {
             newHeight = (int) (originalHeight * ratio);
         }
 
-        // Új BufferedImage létrehozása a méretezéshez
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        // Új kép létrehozása a maxWidth és maxHeight mérettel, fekete háttérrel
+        BufferedImage finalImage = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = finalImage.createGraphics();
+
+        // Fekete háttér kitöltése
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, maxWidth, maxHeight);
+
+        // Kép középre igazítása
+        int xOffset = (maxWidth - newWidth) / 2;
+        int yOffset = (maxHeight - newHeight) / 2;
+
+        // A méretezett kép megrajzolása a közepén
+        g.drawImage(originalImage, xOffset, yOffset, newWidth, newHeight, null);
         g.dispose();
 
         // BufferedImage-t byte tömbbé konvertálása
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(resizedImage, "jpg", outputStream);
+        ImageIO.write(finalImage, "jpg", outputStream);
         byte[] resizedBytes = outputStream.toByteArray();
         outputStream.close();
 
         return resizedBytes;
     }
+
 
     public Film getFilmById(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
@@ -225,9 +237,6 @@ public class FilmService {
             createDirectoryIfNotExists(username, film.getId());
             BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
 
-            // Kép átméretezése
-            int maxWidth = 480;
-            int maxHeight = 720;
             byte[] resizedBytes = resizeImage(originalImage, maxWidth, maxHeight);
 
             // A fájlt mentjük a feltöltési mappába
