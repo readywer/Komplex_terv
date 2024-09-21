@@ -44,7 +44,8 @@
     </div>
     <div class="row" id="filmTiles">
         <!-- Placeholder for film tiles -->
-        <div class="col-sm-3 mb-2" th:each="film : ${films}">
+        <div class="col-sm-3 mb-2" th:each="film : ${films}"
+             th:attr="data-release-date=${film.releaseDate}">
             <a th:href="@{'/film_details?filmId=' + ${film.id}}">
                 <div class="card">
                     <img alt="Film kép" th:src="${film.picturePath}"/>
@@ -94,6 +95,13 @@
                     return 1;
                 }
                 return 0;
+            });
+        } else if (sortCriteria === 'releaseDate') {
+            // Rendezés a megjelenési dátum szerint
+            filmsArray.sort(function(a, b) {
+                var dateA = new Date(a.getAttribute("data-release-date"));
+                var dateB = new Date(b.getAttribute("data-release-date"));
+                return dateA - dateB;
             });
         }
 
