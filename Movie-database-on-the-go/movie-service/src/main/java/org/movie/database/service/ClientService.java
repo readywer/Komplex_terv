@@ -22,14 +22,26 @@ public class ClientService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean createClient(Client client) {
+    public String createClient(Client client) {
+        String result = null;
         if (isValidClient(client)) {
             encodePassword(client);
-            createDirectory(client);
-            clientRepository.save(client);
-            return true;
+            try {
+                createDirectory(client);
+            } catch (IOException e) {
+                result = "IO Error. Please try again";
+                return result;
+            }
+            try {
+                clientRepository.save(client);
+            } catch (Exception e) {
+                result = "Database Error. Please try again";
+                return result;
+            }
+            return result;
         }
-        return false;
+        result = "The username is already in use.";
+        return result;
     }
 
     private void encodePassword(Client client) {
@@ -37,16 +49,12 @@ public class ClientService {
         client.setPassword(encodedPassword);
     }
 
-    private void createDirectory(Client client) {
+    private void createDirectory(Client client) throws IOException {
         String folderPath = filmService.getStorageDir() + "/" + client.getUsername();
-        try {
-            Files.createDirectories(Paths.get(folderPath));
-            Path filePath = Paths.get(folderPath, "film.json");
-            if (!Files.exists(filePath)) {
-                Files.createFile(filePath);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        Files.createDirectories(Paths.get(folderPath));
+        Path filePath = Paths.get(folderPath, "film.json");
+        if (!Files.exists(filePath)) {
+            Files.createFile(filePath);
         }
     }
 
@@ -57,24 +65,24 @@ public class ClientService {
                 isValidEmail(client.getEmail());
     }
 
-    private boolean isValidUsername(String username) {
+    public boolean isValidUsername(String username) {
         return username.length() >= 3 && username.length() <= 32 &&
                 Character.isLetter(username.charAt(0)) &&
                 clientRepository.findByUsername(username) == null &&
                 username.matches("^[a-zA-Z0-9.,_-]+$");
     }
 
-    private boolean isValidName(String name) {
+    public boolean isValidName(String name) {
         return name.length() >= 3 && name.length() <= 32 &&
                 Character.isLetter(name.charAt(0));
     }
 
-    private boolean isValidPassword(String password) {
+    public boolean isValidPassword(String password) {
         return password.length() >= 6 &&
                 password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
     }
 
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         return !email.isEmpty() &&
                 email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f])+)])");
     }

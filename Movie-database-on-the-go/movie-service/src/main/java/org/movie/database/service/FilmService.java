@@ -77,7 +77,6 @@ public class FilmService {
         return resizedBytes;
     }
 
-
     public Film getFilmById(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
         return films.stream()

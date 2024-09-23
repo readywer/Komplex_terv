@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -24,10 +23,11 @@ public class RegistrationPageController {
 
     @PostMapping("/register")
     public String register(@Valid Client client, Model model) {
-        if (clientService.createClient(client)) {
+        String result = null;
+        if ((result = clientService.createClient(client)).isEmpty()) {
             return "redirect:/home";
         }
-        model.addAttribute("nameError", "A felhasználónév már foglalt.");
+        model.addAttribute("nameError", result);
         model.addAttribute("client", client);
         return "registration-page";
     }
