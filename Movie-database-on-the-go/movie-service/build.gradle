@@ -3,7 +3,7 @@ dependencies {
     implementation project(':movie-persistence')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 }
 jar {
     enabled = true
