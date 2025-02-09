@@ -90,7 +90,7 @@ public class ClientService {
     public boolean modifyClient(Client updatedClient) {
         // Ellenőrizni kell, hogy az ügyfél, amelyet frissíteni szeretnénk, megtalálható-e az adatbázisban
         Client existingClient = clientRepository.findById(updatedClient.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Az ügyfél nem található az adatbázisban"));
+                .orElseThrow(() -> new IllegalArgumentException("Client not found."));
         if (updatedClient.getName().isEmpty() && updatedClient.getEmail().isEmpty() && updatedClient.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Empty input.");
         }

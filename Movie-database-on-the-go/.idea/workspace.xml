@@ -7,9 +7,9 @@
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/ClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/RegistrationPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/RegistrationPageController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +33,17 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Movie" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Movie" type="f1a62948:ProjectNode" />
+                <item name="movie-service" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Movie" type="f1a62948:ProjectNode" />
+                <item name="movie-service" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
               </path>
             </expand>
             <select />

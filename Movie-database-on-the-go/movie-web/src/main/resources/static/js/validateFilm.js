@@ -22,7 +22,7 @@ function validateFilm() {
     }
 
     // Fájl ellenőrzése
-    if (!file || file.trim() === "" || !isValidExtension(file, [".mp4", ".webm", ".ogg"])) {
+    if (!file || file.trim() === "" || !isValidExtension(file, [".mp4", ".webm", ".ogg",".mkv",".avi"])) {
         document.getElementById("fileError").innerText = "Invalid file format!";
         isValid = false;
     } else {

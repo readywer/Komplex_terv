@@ -36,7 +36,7 @@ public class Film_AddPageController {
     @PostMapping("/film_add")
     public String filmAdd(@Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
         if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
-            return "redirect:/film_add";
+            return "redirect:/films";
         }
         model.addAttribute("film", film);
         List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
