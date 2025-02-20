@@ -11,7 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class FilmService {
@@ -160,7 +162,7 @@ public class FilmService {
     }
 
     @Transactional
-    private void addFilmToClient(String username, Film filmToAdd) {
+    protected void addFilmToClient(String username, Film filmToAdd) {
         List<Film> films = getClientFilms(username);
         films.add(filmToAdd);
         saveFilmsToJson(username, films);
@@ -170,7 +172,7 @@ public class FilmService {
         return films.isEmpty() ? 1 : films.getLast().getId() + 1;
     }
 
-    private void deleteFilmByIdFromJson(String username, Long filmId) {
+    protected void deleteFilmByIdFromJson(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
         Film film = getFilmById(username, filmId);
         films.remove(film);
@@ -205,9 +207,7 @@ public class FilmService {
             throw new RuntimeException("Could not store the file. Please try again!", ex);
         }
         if (!Objects.requireNonNull(file.getOriginalFilename()).toLowerCase().endsWith("mp4")) {
-            convertToHEVCAsync(String.valueOf(filePath)).thenRun(() ->
-                    System.out.println("Aszinkron konverzió elindítva: " + filePath)
-            );
+            VideoConverterService.addToQueue(filePath, 18, film, username);
         }
     }
 
@@ -338,95 +338,6 @@ public class FilmService {
         deleteFilmByIdFromJson(username, film.getId());
         addFilmToClient(username, film);
         return true;
-    }
-
-    private static final String FFMPEG_PATH = new File("ffmpeg/bin/ffmpeg").getAbsolutePath();
-
-    public static CompletableFuture<Void> convertToHEVCAsync(String inputFilePath) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                convertToVideo(inputFilePath);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private static void convertToVideo(String inputFilePath) throws IOException, InterruptedException {
-        File inputFile = new File(inputFilePath);
-        if (!inputFile.exists()) {
-            throw new IllegalArgumentException("A megadott fájl nem létezik: " + inputFilePath);
-        }
-
-        // Kimeneti fájl neve azonos, csak MP4 kiterjesztéssel
-        String outputFilePath = inputFile.getParent() + File.separator +
-                inputFile.getName().replaceAll("\\.\\w+$", ".mp4");
-
-        // GPU detektálás (NVENC, VAAPI, QSV stb.)
-        String gpuCodec = getAvailableGPUCodec();
-
-        // FFmpeg parancs felépítése
-        List<String> command = new ArrayList<>(Arrays.asList(
-                FFMPEG_PATH, "-y", "-hwaccel", "auto", "-i", inputFilePath,
-                "-c:v", gpuCodec, "-preset", "slow",
-                "-c:a", "copy", // Hang megtartása
-                "-c:s", "copy", // Felirat megtartása
-                outputFilePath
-        ));
-
-        System.out.println("FFmpeg Parancs: " + String.join(" ", command));
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        processBuilder.redirectErrorStream(true);
-        Process process = processBuilder.start();
-
-        // Kiírás figyelése (hogy ne blokkolódjon)
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line); // Debug log
-            }
-        }
-
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw new RuntimeException("FFmpeg hiba történt. Kilépési kód: " + exitCode);
-        }
-
-        System.out.println("Konverzió befejezve: " + outputFilePath);
-    }
-
-    private static String getAvailableGPUCodec() {
-        List<String> gpuList = new ArrayList<>();
-
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "wmic path win32_videocontroller get name");
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (!line.isEmpty() && !line.toLowerCase().contains("name")) {
-                        gpuList.add(line);
-                    }
-                }
-            }
-            process.waitFor();
-        } catch (Exception e) {
-            return "libx265";
-        }
-
-        boolean hasIntel = gpuList.stream().anyMatch(gpu -> gpu.toLowerCase().contains("intel"));
-        boolean hasNvidia = gpuList.stream().anyMatch(gpu -> gpu.toLowerCase().contains("nvidia"));
-        boolean hasAmd = gpuList.stream().anyMatch(gpu -> gpu.toLowerCase().contains("amd") || gpu.toLowerCase().contains("radeon"));
-
-        if (hasIntel) return "hevc_qsv";   // Intel QuickSync (elsődleges)
-        if (hasNvidia) return "hevc_nvenc"; // NVIDIA NVENC (másodlagos)
-        if (hasAmd) return "hevc_amf";   // AMD VCE (harmadlagos)
-
-        return "libx265"; // Ha nincs dedikált GPU, CPU-alapú konverzió
     }
 
 }
