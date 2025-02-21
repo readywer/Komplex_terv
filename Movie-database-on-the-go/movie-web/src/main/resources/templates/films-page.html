@@ -41,11 +41,23 @@
                 <option value="releaseDate">Release Date</option>
             </select>
         </div>
+        <div class="col-md-4 offset-md-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search films..."
+                   onkeyup="filterFilms()">
+        </div>
+    </div>
+    <div id="noResultsMessage" class="text-center mt-3" style="display: none; color: red;">
+        No films found.
     </div>
     <div class="row" id="filmTiles">
         <!-- Placeholder for film tiles -->
         <div class="col-sm-3 mb-2" th:each="film : ${films}"
-             th:attr="data-release-date=${film.releaseDate}">
+             th:attr="data-name=${film.name},
+              data-description=${film.description},
+              data-categories=${film.categories},
+              data-actors=${film.actors},
+              data-recommended-age=${film.recommendedAge},
+              data-release-date=${film.releaseDate}">
             <a th:href="@{'/film_details?filmId=' + ${film.id}}">
                 <div class="card">
                     <img alt="Film kép" th:src="${film.picturePath}"/>
@@ -115,6 +127,39 @@
             filmsContainer.appendChild(filmsArray[i]);
         }
     }
+
+    function filterFilms() {
+    var input = document.getElementById("searchInput").value.toLowerCase();
+    var films = document.querySelectorAll("#filmTiles .col-sm-3");
+    var found = false;
+
+    films.forEach(function(film) {
+        var name = film.getAttribute("data-name").toLowerCase();
+        var description = film.getAttribute("data-description").toLowerCase();
+        var categories = film.getAttribute("data-categories").toLowerCase();
+        var actors = film.getAttribute("data-actors").toLowerCase();
+        var recommendedAge = film.getAttribute("data-recommended-age").toLowerCase();
+        var releaseDate = film.getAttribute("data-release-date").toLowerCase();
+
+        // Ellenőrizzük, hogy a keresett szó benne van-e valamelyik mezőben
+        if (name.includes(input) || description.includes(input) || categories.includes(input) ||
+            actors.includes(input) || recommendedAge.includes(input) || releaseDate.includes(input)) {
+            film.style.display = "block";
+            found = true;
+        } else {
+            film.style.display = "none";
+        }
+    });
+
+    // Ha nincs találat, jelenjen meg az üzenet
+    var noResultsMessage = document.getElementById("noResultsMessage");
+    if (found) {
+        noResultsMessage.style.display = "none";
+        } else {
+        noResultsMessage.style.display = "block";
+        }
+    }
+
 
     // Első híváskor elmentjük az eredeti sorrendet
     window.onload = saveOriginalOrder;

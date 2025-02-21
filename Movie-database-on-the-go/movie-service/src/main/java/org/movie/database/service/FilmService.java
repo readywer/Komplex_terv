@@ -32,10 +32,12 @@ public class FilmService {
     @Getter
     private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi"}; // Engedélyezett fájlkiterjesztések
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
+    @SuppressWarnings("FieldCanBeLocal")
     private final int maxWidth = 480;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int maxHeight = 720;
 
-    private static byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) throws IOException {
+    private static byte[] resizeImage(BufferedImage originalImage, @SuppressWarnings("SameParameterValue") int maxWidth, @SuppressWarnings("SameParameterValue") int maxHeight) throws IOException {
         // Szélesség és magasság ellenőrzése
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
@@ -340,4 +342,26 @@ public class FilmService {
         return true;
     }
 
+    public long getTotalStorageUsed(String username) {
+        Path userDirectory = Paths.get(storageDir, username);
+
+        if (!Files.exists(userDirectory) || !Files.isDirectory(userDirectory)) {
+            return 0;
+        }
+
+        try {
+            return Files.walk(userDirectory)
+                    .filter(Files::isRegularFile)
+                    .mapToLong(file -> {
+                        try {
+                            return Files.size(file);
+                        } catch (IOException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+        } catch (IOException e) {
+            throw new RuntimeException("Nem sikerült kiszámítani a tárhelyhasználatot.", e);
+        }
+    }
 }
