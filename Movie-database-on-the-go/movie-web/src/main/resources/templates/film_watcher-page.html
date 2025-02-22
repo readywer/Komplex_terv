@@ -8,7 +8,7 @@
 </head>
 <body>
 <!-- Navigáció beillesztése -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <div class="container mt-4">
     <video id="videoPlayer" controls width="100%" preload="metadata">
         <source th:src="@{/film_stream(filmId=${film.id})}" type="video/mp4">

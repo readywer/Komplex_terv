@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/filmSort.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/fragments/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
