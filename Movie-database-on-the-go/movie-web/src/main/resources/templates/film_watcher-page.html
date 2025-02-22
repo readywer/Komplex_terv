@@ -2,14 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Video Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${film.name}">Film Player</title>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Video Player</h1>
-<video controls>
-    <source th:src="@{'/' + ${filePath}}" type="video/mp4"> <!-- Helyettesítsd a {filename}-et a valódi fájlneveddel -->
-    Your browser does not support the video tag.
-</video>
+<!-- Navigáció beillesztése -->
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container mt-4">
+    <video id="videoPlayer" controls width="100%" preload="metadata">
+        <source th:src="@{/film_stream(filmId=${film.id})}" type="video/mp4">
+        A böngésződ nem támogatja a videólejátszást.
+    </video>
+</div>
 </body>
 </html>

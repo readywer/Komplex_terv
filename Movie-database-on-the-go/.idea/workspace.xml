@@ -5,14 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/tester/1/family.guy.s21e01.webrip.x264-bnr.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/tester/2/family.guy.s21e02.webrip.x264-bnr.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/tester/3/family.guy.s21e03.webrip.x264-bnr.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/filmSort.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/fragments/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_WatcherPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_watcher-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_watcher-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,21 +108,24 @@
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "temurin-21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Attila/Documents/GitHub/Komplex_terv/Movie-database-on-the-go",
+    "last_opened_file_path": "C:/Users/Attila/Documents/GitHub/Komplex_terv/Movie-database-on-the-go/movie-web/src/main/resources/static",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.4090909",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "settings.editor.splitter.proportion": "0.28134558"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static" />
+      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\templates\fragments" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static\css" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static\images" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources" />
-      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-service\src\main\java\org\movie\database\service" />
-      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-persistance\src\main\java\org\movie\database\persistance" />
     </key>
   </component>
   <component name="RunManager">

@@ -9,29 +9,8 @@
     <script defer src="/js/validateClientModify.js"></script>
 </head>
 <body>
-
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="container-fluid">
-        <div class="navbar-brand">Movie Database</div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="films">Films</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="film_add">Film Add</a>
-                </li>
-            </ul>
-            <form class="d-flex" method="post" th:action="@{/logout}">
-                <button class="btn btn-outline-success" type="submit">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
-
+<!-- Navigáció beillesztése -->
+<div th:replace="fragments/navbar :: navbar"></div>
 <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card p-4 col-md-6">
         <h2 class="text-center mb-4">Account modify</h2>

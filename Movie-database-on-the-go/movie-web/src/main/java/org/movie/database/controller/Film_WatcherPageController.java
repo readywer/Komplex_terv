@@ -8,6 +8,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,7 +25,14 @@ public class Film_WatcherPageController {
     private UserLoginDetailsService userLoginDetailsService;
 
     @GetMapping("/film_watch")
-    public ResponseEntity<Resource> getVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
+    public String watchFilm(@RequestParam(name = "filmId") Long filmId, Model model) {
+        Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
+        model.addAttribute("film", film);
+        return "film_watcher-page"; // Thymeleaf nézet
+    }
+
+    @GetMapping("/film_stream")
+    public ResponseEntity<Resource> streamVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
         Path path = Paths.get(film.getFilmPath());
         Resource videoResource = new FileSystemResource(path.toFile());
@@ -37,14 +45,11 @@ public class Film_WatcherPageController {
             case "mp4" -> "video/mp4";
             case "webm" -> "video/webm";
             case "ogg" -> "video/ogg";
-            default ->
-                // Ha az adott kiterjesztés nem támogatott, akkor hibát dobunk
-                    throw new IllegalArgumentException("Unsupported file format");
+            default -> throw new IllegalArgumentException("Unsupported file format");
         };
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(contentType));
-        headers.setContentLength(videoResource.contentLength());
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
         return new ResponseEntity<>(videoResource, headers, HttpStatus.OK);
