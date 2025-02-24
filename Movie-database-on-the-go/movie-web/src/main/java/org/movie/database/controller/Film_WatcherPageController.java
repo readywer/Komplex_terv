@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,7 +31,7 @@ public class Film_WatcherPageController {
     }
 
     @GetMapping("/film_stream")
-    public ResponseEntity<Resource> streamVideo(@RequestParam(name = "filmId") Long filmId) throws IOException {
+    public ResponseEntity<Resource> streamVideo(@RequestParam(name = "filmId") Long filmId) {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
         Path path = Paths.get(film.getFilmPath());
         Resource videoResource = new FileSystemResource(path.toFile());

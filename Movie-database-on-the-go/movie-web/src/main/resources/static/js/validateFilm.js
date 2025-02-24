@@ -1,17 +1,8 @@
 function validateFilm() {
-    var name = document.getElementById("name").value;
     var recommendedAge = parseInt(document.getElementById("recommendedAge").value);
-    var file = document.getElementById("file").value;
-    var imageFile = document.getElementById("imageFile").value;
+    var file = document.getElementById("file").value.trim();
+    var imageFile = document.getElementById("imageFile").value.trim();
     var isValid = true;
-
-    // Név ellenőrzése
-    if (!/^[a-zA-Z][a-zA-Z0-9.,_-]{1,32}$/.test(name)) {
-        document.getElementById("nameError").innerText = "A név legalább 1 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
-        isValid = false;
-    } else {
-        document.getElementById("nameError").innerText = "";
-    }
 
     // Ajánlott életkor ellenőrzése
     if (isNaN(recommendedAge) || recommendedAge < 0 || recommendedAge > 18) {
@@ -21,30 +12,39 @@ function validateFilm() {
         document.getElementById("recommendedAgeError").innerText = "";
     }
 
-    // Fájl ellenőrzése
-    if (!file || file.trim() === "" || !isValidExtension(file, [".mp4", ".webm", ".ogg",".mkv",".avi"])) {
-        document.getElementById("fileError").innerText = "Invalid file format!";
+    // Video fájl ellenőrzése
+    if (file === "" || !isValidVideoExtension(file)) {
+        document.getElementById("fileError").innerText = "You can only upload videos!";
         isValid = false;
     } else {
         document.getElementById("fileError").innerText = "";
     }
 
-    if (imageFile.trim() !== "" && !isValidImageExtension(imageFile)) {
-           document.getElementById("imageFileError").innerText = "Invalid image format!";
-           isValid = false;
-       } else {
-           document.getElementById("imageFileError").innerText = "";
-       }
+    // Kép ellenőrzése
+    if (imageFile !== "" && !isValidImageExtension(imageFile)) {
+        document.getElementById("imageFileError").innerText = "You can only upload pictures!";
+        isValid = false;
+    } else {
+        document.getElementById("imageFileError").innerText = "";
+    }
 
     return isValid;
 }
 
+// Csak videófájlokat engedélyezünk
+function isValidVideoExtension(filename) {
+    var videoExtensions = [".mp4", ".mkv", ".avi", ".mov", ".flv", ".wmv", ".webm", ".ogv"];
+    return isValidExtension(filename, videoExtensions);
+}
+
+// Csak képfájlokat engedélyezünk
+function isValidImageExtension(filename) {
+    var imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    return isValidExtension(filename, imageExtensions);
+}
+
+// Általános fájl-kiterjesztés ellenőrző
 function isValidExtension(filename, extensions) {
     var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
     return extensions.includes(extension);
-}
-
-function isValidImageExtension(filename) {
-    var extensions = [".jpg", ".jpeg", ".png", ".gif",""];
-    return isValidExtension(filename, extensions);
 }

@@ -26,14 +26,14 @@
 
             <div class="form-group mt-2">
                 <label for="description">Description:</label>
-                <textarea class="form-control" id="description" required="required" rows="3"
+                <textarea class="form-control" id="description" rows="3"
                           th:field="*{description}"></textarea>
                 <span id="descriptionError" style="color: red;"></span>
             </div>
 
             <div class="form-group mt-2">
                 <label for="categories">Categories:</label><br>
-                <select class="form-control" id="categories" multiple name="categories" required="required">
+                <select class="form-control" id="categories" multiple name="categories">
                     <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
                     <span id="categoriesError" style="color: red;"></span>
                 </select>
@@ -43,7 +43,7 @@
 
             <div class="form-group mt-2">
                 <label for="actors">Actors:</label>
-                <input class="form-control" id="actors" required="required" th:field="*{actors}" type="text">
+                <input class="form-control" id="actors" th:field="*{actors}" type="text">
                 <small class="form-text text-muted">Separate multiple actors with commas (e.g., Tom Cruise, Scarlett
                     Johansson).</small>
                 <span id="actorsError" style="color: red;"></span>
@@ -51,24 +51,24 @@
 
             <div class="form-group mt-2">
                 <label for="releaseDate">Release Date:</label>
-                <input class="form-control" id="releaseDate" required="required" th:field="*{releaseDate}"
+                <input class="form-control" id="releaseDate" th:field="*{releaseDate}"
                        type="date" value="">
             </div>
 
             <div class="form-group mt-2">
                 <label for="recommendedAge">Recommended Age:</label>
-                <input class="form-control" id="recommendedAge" required="required" th:field="*{recommendedAge}"
+                <input class="form-control" id="recommendedAge" th:field="*{recommendedAge}"
                        type="number">
                 <span id="recommendedAgeError" style="color: red;"></span>
             </div>
 
             <div class="form-group mt-2">
                 <label for="file">Select File:</label>
-                <input accept=".mp4,.webm,.ogg" class="form-control-file" id="file" name="file" required="required"
-                       type="file">
+                <input accept=".mp4,.webm,.ogg,.mkv,.avi,.mov,.flv,.wmv,.ts" class="form-control-file" id="file" name="file" required="required" type="file">
                 <span id="fileError" style="color: red;"></span>
+
             </div>
-            <small class="form-text text-muted">Allowed extensions: <span>.mp4, .webm, .ogg</span></small>
+            <small class="form-text text-muted">Allowed extensions: <span>.mp4,.webm,.ogg,.mkv,.avi,.mov,.flv,.wmv,.ts</span></small>
 
             <div class="form-group mt-2">
                 <label for="imageFile">Select Image:</label>

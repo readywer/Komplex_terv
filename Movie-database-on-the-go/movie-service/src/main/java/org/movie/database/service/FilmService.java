@@ -30,7 +30,7 @@ public class FilmService {
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
-    private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedFilmExtensions = {".mp4", ".webm", ".ogg", ".mkv", ".avi", ".mov", ".flv", ".wmv", ".ts"}; // Engedélyezett fájlkiterjesztések
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxWidth = 480;
@@ -109,28 +109,37 @@ public class FilmService {
     }
 
     public boolean isValidFilm(Film film) {
-        if (isValidName(film.getName())) {
+        // Ellenőrzi, hogy a név üres vagy csak egy szóköz-e
+        if (film.getName() == null || film.getName().trim().isEmpty()) {
             return false;
         }
-        if (film.getFilmPath().contains(".") && countOccurrences(film.getFilmPath(), '.') > 1) {
+
+        // Fájlok kiterjesztésének ellenőrzése
+        if (!hasValidExtension(film.getFilmPath(), allowedFilmExtensions)) {
             return false;
         }
-        if (film.getPicturePath().contains(".") && countOccurrences(film.getPicturePath(), '.') > 1) {
+
+        if (!hasValidExtension(film.getPicturePath(), allowedFilmExtensions)) {
             return false;
         }
+
+        // Ajánlott életkor ellenőrzése
         return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
     }
 
-    private int countOccurrences(String str, char character) {
-        return (int) str.chars().filter(c -> c == character).count();
-    }
+    // Ellenőrzi, hogy a fájl egy engedélyezett kiterjesztéssel végződik-e
+    private boolean hasValidExtension(String filePath, String[] validExtensions) {
+        if (filePath == null || filePath.isEmpty()) {
+            return false;
+        }
 
-    private boolean checkIfNameIsUsed(String name, String username) {
-        return getClientFilms(username).stream().noneMatch(film -> film.getName().equals(name));
-    }
+        for (String ext : validExtensions) {
+            if (filePath.toLowerCase().endsWith(ext)) {
+                return true;
+            }
+        }
 
-    private boolean isValidName(String name) {
-        return !name.isEmpty() && name.matches("^[a-zA-Z0-9.,_-]+$");
+        return false;
     }
 
     public List<Film> getClientFilms(String username) {
