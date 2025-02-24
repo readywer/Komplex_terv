@@ -5,33 +5,36 @@ function validateRegister() {
     var email = document.getElementById("email").value;
     var isValid = true;
 
-    // Név ellenőrzése
+    // Name validation
     if (name.length < 3 || name.length > 32 || !/^[a-zA-Z][a-zA-Z0-9.,_-]{2,31}$/.test(name)) {
-        document.getElementById("nameError").innerText = "A név legalább 3 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
+        document.getElementById("nameError").innerText =
+            "The name must be between 3 and 32 characters long and can only contain letters, numbers, and ., _ or - characters. It must start with a letter.";
         isValid = false;
     } else {
         document.getElementById("nameError").innerText = "";
     }
 
-    // Felhasználónév ellenőrzése
+    // Username validation
     if (username.length < 3 || username.length > 32 || !/^[a-zA-Z][a-zA-Z0-9.,_-]{2,31}$/.test(username)) {
-        document.getElementById("usernameError").innerText = "A felhasználónév legalább 3 és legfeljebb 32 karakter hosszú lehet, és csak betűket, számokat, valamint ., _ vagy - karaktereket tartalmazhat, és betűvel kell kezdődnie.";
+        document.getElementById("usernameError").innerText =
+            "The username must be between 3 and 32 characters long and can only contain letters, numbers, and ., _ or - characters. It must start with a letter.";
         isValid = false;
     } else {
         document.getElementById("usernameError").innerText = "";
     }
 
-    // Jelszó ellenőrzése
+    // Password validation
     if (password.length < 6 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(password)) {
-        document.getElementById("passwordError").innerText = "A jelszónak legalább 6 karakter hosszúnak kell lennie, és tartalmaznia kell legalább egy kisbetűt, egy nagybetűt és egy számot.";
+        document.getElementById("passwordError").innerText =
+            "The password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, and one number.";
         isValid = false;
     } else {
         document.getElementById("passwordError").innerText = "";
     }
 
-    // E-mail ellenőrzése
+    // Email validation
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-        document.getElementById("emailError").innerText = "Kérlek adj meg egy valós e-mail címet.";
+        document.getElementById("emailError").innerText = "Please enter a valid email address.";
         isValid = false;
     } else {
         document.getElementById("emailError").innerText = "";
