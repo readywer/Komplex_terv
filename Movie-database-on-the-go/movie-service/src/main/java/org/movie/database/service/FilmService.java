@@ -36,6 +36,8 @@ public class FilmService {
     private final int maxWidth = 480;
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxHeight = 720;
+    @Getter
+    private final long bytes = 32_212_254_720L;
 
     private static byte[] resizeImage(BufferedImage originalImage, @SuppressWarnings("SameParameterValue") int maxWidth, @SuppressWarnings("SameParameterValue") int maxHeight) throws IOException {
         // Szélesség és magasság ellenőrzése
@@ -99,7 +101,7 @@ public class FilmService {
             return false;
         }
         if (!picture.isEmpty()) {
-            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
+            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }
         film.setFilmPath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
@@ -343,7 +345,7 @@ public class FilmService {
             if (pictureFile.delete()) {
                 return false;
             }
-            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + picture.getOriginalFilename().replaceAll("\\.\\w+$", ".jpg"));
+            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
             storeImageFile(username, picture, film);
         }
         deleteFilmByIdFromJson(username, film.getId());
@@ -372,5 +374,18 @@ public class FilmService {
         } catch (IOException e) {
             throw new RuntimeException("Nem sikerült kiszámítani a tárhelyhasználatot.", e);
         }
+    }
+
+    public String formatStorageSize(long bytes) {
+        String[] units = {"B", "KB", "MB", "GB", "TB"};
+        double size = bytes;
+        int unitIndex = 0;
+
+        while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+        }
+
+        return String.format("%.1f %s", size, units[unitIndex]);
     }
 }

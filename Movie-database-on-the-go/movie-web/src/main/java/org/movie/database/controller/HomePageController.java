@@ -23,6 +23,8 @@ public class HomePageController {
     public String home(Model model) {
         Client client = clientRepository.findByUsername(userLoginDetailsService.loadAuthenticatedUsername());
         client.setPassword("");
+        model.addAttribute("usableSpace", filmService.formatStorageSize(filmService.getBytes()));
+        model.addAttribute("usedSpace", filmService.formatStorageSize(filmService.getTotalStorageUsed(client.getUsername())));
         model.addAttribute("client", client);
         model.addAttribute("numberOfFilms", filmService.getClientFilms(userLoginDetailsService.loadAuthenticatedUsername()).size());
         return "home-page";
