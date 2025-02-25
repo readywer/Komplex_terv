@@ -41,7 +41,7 @@ public class Film_AddPageController {
         model.addAttribute("film", film);
         List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
-        model.addAttribute("nameFError", "A filmnév már foglalt.");
+        model.addAttribute("nameFError", "The name empty.");
         return "film_add-page";
     }
 }

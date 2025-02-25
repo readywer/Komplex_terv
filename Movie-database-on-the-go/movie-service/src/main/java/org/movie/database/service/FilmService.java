@@ -109,8 +109,8 @@ public class FilmService {
     }
 
     public boolean isValidFilm(Film film) {
-        // Ellenőrzi, hogy a név üres vagy csak egy szóköz-e
-        if (film.getName() == null || film.getName().trim().isEmpty()) {
+        // Ellenőrzi, hogy a név üres vagy csak egy szóköz
+        if (film.getName() == null || film.getName().isBlank()) {
             return false;
         }
 

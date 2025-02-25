@@ -1,8 +1,17 @@
 function validateFilm() {
+    var name = document.getElementById("name").value.trim();
     var recommendedAge = parseInt(document.getElementById("recommendedAge").value);
     var file = document.getElementById("file").value.trim();
     var imageFile = document.getElementById("imageFile").value.trim();
     var isValid = true;
+
+    // Név ellenőrzése
+    if (name === "") {
+        document.getElementById("nameError").innerText = "The name cannot be empty or contain only spaces!";
+        isValid = false;
+    } else {
+        document.getElementById("nameError").innerText = "";
+    }
 
     // Ajánlott életkor ellenőrzése
     if (isNaN(recommendedAge) || recommendedAge < 0 || recommendedAge > 18) {

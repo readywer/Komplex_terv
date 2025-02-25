@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/data/tester/1/family.guy.s21e01.webrip.x264-bnr.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/tester/2/family.guy.s21e02.webrip.x264-bnr.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/tester/3/family.guy.s21e03.webrip.x264-bnr.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/validateRegister.js" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/validateRegister.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_AddPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/Film_AddPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/validateFilm.js" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/validateFilm.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
