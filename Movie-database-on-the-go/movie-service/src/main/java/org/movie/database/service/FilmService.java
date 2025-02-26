@@ -89,7 +89,7 @@ public class FilmService {
                 .orElse(null); // Ha nem található film az adott id-vel, null értékkel tér vissza
     }
 
-    public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture) {
+    public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture, int quality) {
         film.setFilmPath(file.getOriginalFilename());
         List<Film> films = getClientFilms(username);
         film.setId(getNextAvailableId(films));
@@ -106,7 +106,7 @@ public class FilmService {
         }
         film.setFilmPath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
         addFilmToClient(username, film);
-        storeVideoFile(username, file, film);
+        storeVideoFile(username, file, film, quality);
         return true;
     }
 
@@ -192,7 +192,7 @@ public class FilmService {
         saveFilmsToJson(username, films);
     }
 
-    private void storeVideoFile(String username, MultipartFile file, Film film) {
+    private void storeVideoFile(String username, MultipartFile file, Film film, int quality) {
         Path filePath;
         try {
             // Ellenőrizzük, hogy a feltöltött fájl kiterjesztése videó-e
@@ -219,9 +219,7 @@ public class FilmService {
         } catch (IOException ex) {
             throw new RuntimeException("Could not store the file. Please try again!", ex);
         }
-        if (!Objects.requireNonNull(file.getOriginalFilename()).toLowerCase().endsWith("mp4")) {
-            VideoConverterService.addToQueue(filePath, 18, film, username);
-        }
+        VideoConverterService.addToQueue(filePath, quality, film, username);
     }
 
     private void createDirectoryIfNotExists(String username, Long filmId) throws IOException {

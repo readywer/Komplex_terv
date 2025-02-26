@@ -32,10 +32,11 @@ public class Film_AddPageController {
         model.addAttribute("categories", categories);
         return "film_add-page";
     }
-
+    
     @PostMapping("/film_add")
-    public String filmAdd(@Valid Film film, Model model, MultipartFile file, MultipartFile imageFile) {
-        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile)) {
+    public String filmAdd(@Valid Film film, Model model, MultipartFile file, MultipartFile imageFile, int quality) {
+        if (filmService.uploadFilm(userLoginDetailsService.loadAuthenticatedUsername(), film, file, imageFile, quality)) {
+            System.out.println("Minőség:"+quality);
             return "redirect:/films";
         }
         model.addAttribute("film", film);
