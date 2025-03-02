@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/tester/5/family.guy.s21e04.webrip.x264-bnr.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
@@ -90,7 +89,7 @@
     "Gradle.Build Movie-database-on-the-go.executor": "Run",
     "Gradle.Movie-database-on-the-go [:Main.main()].executor": "Run",
     "Gradle.Movie-database-on-the-go:movie-web [:movie-web:MovieDatabaseApplication.main()].executor": "Run",
-    "Gradle.Movie-database-on-the-go:movie-web [:movie-web:org.movie.database.MovieDatabaseApplication.main()].executor": "Debug",
+    "Gradle.Movie-database-on-the-go:movie-web [:movie-web:org.movie.database.MovieDatabaseApplication.main()].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",

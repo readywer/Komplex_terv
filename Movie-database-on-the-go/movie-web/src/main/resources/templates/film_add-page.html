@@ -92,7 +92,7 @@
                 <span>.jpg, .jpeg, .png, .gif, .bmp, .tiff</span></small>
 
             <div>
-                <button class="btn btn-primary my-2" type="submit">Submit</button>
+                <button class="btn btn-primary my-2" type="submit" onclick="checkStorage(event, /*[[${noSpace}]]*/ false)">Submit</button>
             </div>
 
         </form>
@@ -105,5 +105,13 @@
 
     // Dátummező értékének beállítása
     document.getElementById('releaseDate').value = today;
+</script>
+<script>
+    function checkStorage(event, noSpace) {
+        if (noSpace) {
+            event.preventDefault();
+            alert("Nincs elegendő tárhely az új film feltöltéséhez!");
+        }
+    }
 </script>
 </html>

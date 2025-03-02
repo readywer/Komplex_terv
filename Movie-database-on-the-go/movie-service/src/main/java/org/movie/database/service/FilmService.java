@@ -90,6 +90,9 @@ public class FilmService {
     }
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture, int quality) {
+        if(isStorageExceeded(username)){
+            return  false;
+        }
         film.setFilmPath(file.getOriginalFilename());
         List<Film> films = getClientFilms(username);
         film.setId(getNextAvailableId(films));
@@ -385,5 +388,9 @@ public class FilmService {
         }
 
         return String.format("%.1f %s", size, units[unitIndex]);
+    }
+    public boolean isStorageExceeded(String username) {
+        long usedStorage = getTotalStorageUsed(username);
+        return usedStorage > bytes;
     }
 }
