@@ -3,6 +3,7 @@ package org.movie.database.controller;
 import org.movie.database.domain.Film;
 import org.movie.database.security.UserLoginDetailsService;
 import org.movie.database.service.FilmService;
+import org.movie.database.service.LoggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -21,12 +22,15 @@ public class Film_WatcherPageController {
     @Autowired
     private FilmService filmService;
     @Autowired
+    private LoggerService loggerService;
+    @Autowired
     private UserLoginDetailsService userLoginDetailsService;
 
     @GetMapping("/film_watch")
     public String watchFilm(@RequestParam(name = "filmId") Long filmId, Model model) {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
         model.addAttribute("film", film);
+        loggerService.logUserActivity(userLoginDetailsService.loadAuthenticatedUsername(),film.getId());
         return "film_watcher-page"; // Thymeleaf nézet
     }
 
