@@ -29,15 +29,13 @@ import java.util.stream.Stream;
 @Service
 public class FilmService {
 
-    //TODO upload page upload state, home last watched film, recommended, admin page
+    //TODO upload page upload state, home last watched film, recommended, admin page, delet acc
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
-    private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi", "mov", "flv", "wmv", "ts"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi", "mov", "flv", "wmv", "ts"};
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
-    @SuppressWarnings("FieldCanBeLocal")
     private final int maxWidth = 480;
-    @SuppressWarnings("FieldCanBeLocal")
     private final int maxHeight = 720;
     @Getter
     private final long bytes = 32_212_254_720L;
@@ -71,7 +69,7 @@ public class FilmService {
             if (picture.getName().isEmpty()) {
                 film.setPicturePath(picture.getOriginalFilename());
             }
-            if (isValidFilm(film)) {
+            if (!isValidFilm(film)) {
                 return false;
             }
 
@@ -99,7 +97,7 @@ public class FilmService {
         if (!hasValidExtension(film.getFilmPath(), allowedFilmExtensions)) {
             return false;
         }
-        if (!hasValidExtension(film.getPicturePath(), allowedFilmExtensions)) {
+        if (!hasValidExtension(film.getPicturePath(), allowedPictureExtensions)) {
             return false;
         }
         // Ajánlott életkor ellenőrzése
@@ -168,6 +166,7 @@ public class FilmService {
             Film film = getFilmById(username, filmId);
 
             if (film == null) {
+                loggerService.logError("Failed to remove film from list: Film ID " + filmId + " for user " + username, null);
                 return false;
             }
 
@@ -252,9 +251,7 @@ public class FilmService {
         }
     }
 
-    private byte[] resizeImage(BufferedImage originalImage,
-                               @SuppressWarnings("SameParameterValue") int maxWidth,
-                               @SuppressWarnings("SameParameterValue") int maxHeight) {
+    private byte[] resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) {
         try {
             int originalWidth = originalImage.getWidth();
             int originalHeight = originalImage.getHeight();
@@ -420,12 +417,11 @@ public class FilmService {
                 }
             }
 
-            if (!deleteFilmByIdFromJson(username, film.getId())) {
+            if (deleteFilmByIdFromJson(username, film.getId())) {
                 return false;
             }
 
             return addFilmToClient(username, film);
-
         } catch (Exception e) {
             loggerService.logError("Unexpected error while modifying film for user: " + username, e);
             return false;

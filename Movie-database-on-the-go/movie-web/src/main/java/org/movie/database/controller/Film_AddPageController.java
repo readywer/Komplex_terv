@@ -43,7 +43,7 @@ public class Film_AddPageController {
         model.addAttribute("noSpace", !filmService.isStorageExceeded(userLoginDetailsService.loadAuthenticatedUsername()));
         List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
-        model.addAttribute("nameFError", "The name empty.");
+        model.addAttribute("nameFError", "Internal error.");
         return "film_add-page";
     }
 }

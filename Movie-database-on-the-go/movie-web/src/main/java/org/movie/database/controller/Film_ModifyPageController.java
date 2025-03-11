@@ -43,7 +43,7 @@ public class Film_ModifyPageController {
         model.addAttribute("film", film);
         List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
         model.addAttribute("categories", categories);
-        model.addAttribute("nameFError", "A filmnév már foglalt.");
+        model.addAttribute("nameFError", "Internal error.");
         return "film_modify-page";
     }
 }
