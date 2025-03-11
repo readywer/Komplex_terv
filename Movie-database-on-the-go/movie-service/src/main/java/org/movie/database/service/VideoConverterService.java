@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class VideoConverterService {
                     String username = (String) task.get("username");
 
                     if (convertVideo(inputFilePath, quality)) {
-                        deleteOriginalFile(inputFilePath.toString());
                         modifyFilmPath(username, film);
                     }
                 }
@@ -65,17 +65,18 @@ public class VideoConverterService {
             return false;
         }
 
-        String outputFilePath = inputFile.getParent() + File.separator + inputFile.getName().replaceAll("\\.\\w+$", ".mp4");
+        String outputFileName = "convert_" + inputFile.getName().replaceAll("\\.\\w+$", ".mp4");
+        Path outputFilePath = inputFile.getParentFile().toPath().resolve(outputFileName);
         String gpuCodec = getAvailableGPUCodec();
         List<String> qualityArgs = getQualityArgs(gpuCodec, quality);
 
         List<String> command = new ArrayList<>(List.of(
-                FFMPEG_PATH, "-i", inputFilePath.toString(),
+                FFMPEG_PATH, "-y", "-i", inputFilePath.toString(),
                 "-c:v", gpuCodec, "-preset", getPreset(gpuCodec),
-                "-threads", "14", "-vsync", "cfr"
+                "-threads", "14", "-fps_mode", "cfr"
         ));
         command.addAll(qualityArgs);
-        command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-c:s", "copy", "-map_chapters", "0", outputFilePath));
+        command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-c:s", "copy", "-map_chapters", "0", outputFilePath.toString()));
 
         if (DEBUG_MODE) System.out.println("FFmpeg Parancs: " + String.join(" ", command));
 
@@ -88,10 +89,15 @@ public class VideoConverterService {
 
         if (process.waitFor() != 0) {
             System.err.println("Hiba: FFmpeg sikertelen konverzió.");
+            Files.deleteIfExists(outputFilePath); // Sikertelen konverziónál töröljük az ideiglenes fájlt
             return false;
         }
 
-        if (DEBUG_MODE) System.out.println("Konverzió befejezve: " + outputFilePath);
+        Files.delete(inputFilePath);
+        Path finalFilePath = inputFile.getParentFile().toPath().resolve(inputFile.getName().replaceAll("\\.\\w+$", ".mp4"));
+        Files.move(outputFilePath, finalFilePath);
+
+        if (DEBUG_MODE) System.out.println("Konverzió befejezve: " + finalFilePath);
         return true;
     }
 
@@ -108,15 +114,6 @@ public class VideoConverterService {
             case "hevc_nvenc" -> "slow";
             default -> "medium";
         };
-    }
-
-    private static void deleteOriginalFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists() && file.delete()) {
-            System.out.println("Eredeti fájl törölve: " + filePath);
-        } else {
-            System.err.println("Hiba: Nem sikerült törölni a fájlt: " + filePath);
-        }
     }
 
     private static String getAvailableGPUCodec() {
