@@ -35,6 +35,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/data/**").authenticated()
                         .requestMatchers("/images/**").authenticated()
                         .requestMatchers("/error").authenticated()
+                        .requestMatchers("/client_delete").authenticated()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().denyAll()
 

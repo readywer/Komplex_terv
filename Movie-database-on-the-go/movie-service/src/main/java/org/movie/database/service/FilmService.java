@@ -28,8 +28,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FilmService {
-
-    //TODO upload page upload state, home last watched film, recommended, admin page, delet acc
+    //TODO upload page upload state, home last watched film, recommended, admin page
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter

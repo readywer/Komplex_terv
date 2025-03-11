@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 @Service
 public class ClientService {
@@ -43,7 +45,6 @@ public class ClientService {
             loggerService.logError("Failed to save client to database: " + client.getUsername(), e);
             return "Database Error. Please try again.";
         }
-
         return null;
     }
 
@@ -114,5 +115,47 @@ public class ClientService {
             loggerService.logError("Error modifying client: " + updatedClient.getId(), e);
         }
         return false;
+    }
+
+    @Transactional
+    public String deleteClient(Long clientId) {
+        Client existingClient = clientRepository.findById(clientId)
+                .orElse(null);
+
+        if (existingClient == null) {
+            return "Client not found.";
+        }
+
+        try {
+            // Töröljük az ügyfél könyvtárát és fájljait
+            deleteClientDirectory(existingClient.getUsername());
+        } catch (IOException e) {
+            loggerService.logError("Failed to delete directory for client: " + existingClient.getUsername(), e);
+            return "IO Error. Please try again.";
+        }
+
+        try {
+            clientRepository.delete(existingClient);
+        } catch (Exception e) {
+            loggerService.logError("Failed to delete client from database: " + existingClient.getUsername(), e);
+            return "Database Error. Please try again.";
+        }
+
+        return null;
+    }
+
+    private void deleteClientDirectory(String username) throws IOException {
+        Path userDir = Paths.get(filmService.getStorageDir(), username);
+        if (Files.exists(userDir)) {
+            try (Stream<Path> paths = Files.walk(userDir).sorted(Comparator.reverseOrder())) {
+                paths.forEach(path -> {
+                    try {
+                        Files.delete(path);
+                    } catch (IOException e) {
+                        loggerService.logError("Failed to delete: " + path, e);
+                    }
+                });
+            }
+        }
     }
 }
