@@ -21,12 +21,11 @@ import java.util.stream.Stream;
 
 @Service
 public class LoggerService {
+    private static final String STORAGE_DIR = "data";
     private static final Logger errorLogger = Logger.getLogger("ErrorLogger");
-    private final FilmService filmService;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public LoggerService(FilmService filmService) {
-        this.filmService = filmService;
+    public LoggerService() {
         setupErrorLogger();
     }
 
@@ -48,8 +47,7 @@ public class LoggerService {
 
     public void logUserActivity(String username, Long movieID) {
         try {
-            String storageDir = filmService.getStorageDir();
-            Path userLogDir = Paths.get(storageDir, username);
+            Path userLogDir = Paths.get(STORAGE_DIR, username);
             if (!Files.exists(userLogDir)) {
                 Files.createDirectories(userLogDir);
             }
