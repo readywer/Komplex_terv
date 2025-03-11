@@ -1,6 +1,7 @@
 package org.movie.database.service;
 
 import org.movie.database.domain.Film;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +17,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class VideoConverterService {
+    @Autowired
+    private static LoggerService loggerService;
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final LinkedBlockingQueue<Map<String, Object>> queue = new LinkedBlockingQueue<>();
     private static volatile boolean isProcessing = false;
@@ -50,18 +53,18 @@ public class VideoConverterService {
                         modifyFilmPath(username, film);
                     }
                 }
-            } catch (IOException | InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                loggerService.logError("Hiba a videófeldolgozás során.", e);
             } finally {
                 isProcessing = false;
             }
         });
     }
 
-    private static boolean convertVideo(Path inputFilePath, int quality) throws IOException, InterruptedException {
+    private static boolean convertVideo(Path inputFilePath, int quality) {
         File inputFile = inputFilePath.toFile();
         if (!inputFile.exists()) {
-            System.err.println("Hiba: A fájl nem létezik: " + inputFilePath);
+            loggerService.logError("A fájl nem létezik: " + inputFilePath, null);
             return false;
         }
 
@@ -78,27 +81,34 @@ public class VideoConverterService {
         command.addAll(qualityArgs);
         command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-c:s", "copy", "-map_chapters", "0", outputFilePath.toString()));
 
-        if (DEBUG_MODE) System.out.println("FFmpeg Parancs: " + String.join(" ", command));
+        if (DEBUG_MODE) loggerService.logError("FFmpeg Parancs: " + String.join(" ", command), null);
 
-        ProcessBuilder processBuilder = new ProcessBuilder(command).redirectErrorStream(true);
-        Process process = processBuilder.start();
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(command).redirectErrorStream(true);
+            Process process = processBuilder.start();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            if (DEBUG_MODE) reader.lines().forEach(System.out::println);
-        }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                if (DEBUG_MODE) {
+                    reader.lines().forEach(line -> loggerService.logError(line, null));
+                }
+            }
 
-        if (process.waitFor() != 0) {
-            System.err.println("Hiba: FFmpeg sikertelen konverzió.");
-            Files.deleteIfExists(outputFilePath); // Sikertelen konverziónál töröljük az ideiglenes fájlt
+            if (process.waitFor() != 0) {
+                loggerService.logError("FFmpeg sikertelen konverzió.", null);
+                Files.deleteIfExists(outputFilePath);
+                return false;
+            }
+
+            Files.delete(inputFilePath);
+            Path finalFilePath = inputFile.getParentFile().toPath().resolve(inputFile.getName().replaceAll("\\.\\w+$", ".mp4"));
+            Files.move(outputFilePath, finalFilePath);
+
+            if (DEBUG_MODE) loggerService.logError("Konverzió befejezve: " + finalFilePath, null);
+            return true;
+        } catch (IOException | InterruptedException e) {
+            loggerService.logError("Hiba a konvertálás során.", e);
             return false;
         }
-
-        Files.delete(inputFilePath);
-        Path finalFilePath = inputFile.getParentFile().toPath().resolve(inputFile.getName().replaceAll("\\.\\w+$", ".mp4"));
-        Files.move(outputFilePath, finalFilePath);
-
-        if (DEBUG_MODE) System.out.println("Konverzió befejezve: " + finalFilePath);
-        return true;
     }
 
     private static List<String> getQualityArgs(String codec, int quality) {
