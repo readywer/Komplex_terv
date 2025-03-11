@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.movie.database.domain.Film;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,14 +24,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class FilmService {
 
+    //TODO upload page upload state, home last watched film, recommended, admin page
     @Getter
     private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
     @Getter
-    private final String[] allowedFilmExtensions = {".mp4", ".webm", ".ogg", ".mkv", ".avi", ".mov", ".flv", ".wmv", ".ts"}; // Engedélyezett fájlkiterjesztések
+    private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi", "mov", "flv", "wmv", "ts"}; // Engedélyezett fájlkiterjesztések
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxWidth = 480;
@@ -38,112 +41,80 @@ public class FilmService {
     private final int maxHeight = 720;
     @Getter
     private final long bytes = 32_212_254_720L;
-
-    private static byte[] resizeImage(BufferedImage originalImage, @SuppressWarnings("SameParameterValue") int maxWidth, @SuppressWarnings("SameParameterValue") int maxHeight) throws IOException {
-        // Szélesség és magasság ellenőrzése
-        int originalWidth = originalImage.getWidth();
-        int originalHeight = originalImage.getHeight();
-        int newWidth = originalWidth;
-        int newHeight = originalHeight;
-
-        // Képarány megtartása
-        if (originalWidth > maxWidth || originalHeight > maxHeight) {
-            double widthRatio = (double) maxWidth / originalWidth;
-            double heightRatio = (double) maxHeight / originalHeight;
-            double ratio = Math.min(widthRatio, heightRatio);
-
-            newWidth = (int) (originalWidth * ratio);
-            newHeight = (int) (originalHeight * ratio);
-        }
-
-        // Új kép létrehozása a maxWidth és maxHeight mérettel, fekete háttérrel
-        BufferedImage finalImage = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = finalImage.createGraphics();
-
-        // Fekete háttér kitöltése
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, maxWidth, maxHeight);
-
-        // Kép középre igazítása
-        int xOffset = (maxWidth - newWidth) / 2;
-        int yOffset = (maxHeight - newHeight) / 2;
-
-        // A méretezett kép megrajzolása a közepén
-        g.drawImage(originalImage, xOffset, yOffset, newWidth, newHeight, null);
-        g.dispose();
-
-        // BufferedImage-t byte tömbbé konvertálása
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(finalImage, "jpg", outputStream);
-        byte[] resizedBytes = outputStream.toByteArray();
-        outputStream.close();
-
-        return resizedBytes;
-    }
+    @Autowired
+    private LoggerService loggerService;
 
     public Film getFilmById(String username, Long filmId) {
         List<Film> films = getClientFilms(username);
-        return films.stream()
-                .filter(film -> Objects.equals(film.getId(), filmId))
+        Film film = films.stream()
+                .filter(f -> Objects.equals(f.getId(), filmId))
                 .findFirst()
-                .orElse(null); // Ha nem található film az adott id-vel, null értékkel tér vissza
+                .orElse(null);
+
+        if (film == null) {
+            loggerService.logError("Film not found: ID " + filmId + " for user " + username, null);
+        }
+
+        return film;
     }
 
     public boolean uploadFilm(String username, Film film, MultipartFile file, MultipartFile picture, int quality) {
-        if(isStorageExceeded(username)){
-            return  false;
-        }
-        film.setFilmPath(file.getOriginalFilename());
-        List<Film> films = getClientFilms(username);
-        film.setId(getNextAvailableId(films));
-        film.setUploadDate(LocalDate.now().toString());
-        if (picture.getName().isEmpty()) {
-            film.setPicturePath(picture.getOriginalFilename());
-        }
-        if (isValidFilm(film)) {
+        try {
+            if (isStorageExceeded(username)) {
+                return false;
+            }
+            film.setFilmPath(file.getOriginalFilename());
+            List<Film> films = getClientFilms(username);
+            film.setId(getNextAvailableId(films));
+            film.setUploadDate(LocalDate.now().toString());
+
+            if (picture.getName().isEmpty()) {
+                film.setPicturePath(picture.getOriginalFilename());
+            }
+            if (isValidFilm(film)) {
+                return false;
+            }
+
+            if (!picture.isEmpty()) {
+                film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
+                storeImageFile(username, picture, film);
+            }
+
+            film.setFilmPath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
+            addFilmToClient(username, film);
+            storeVideoFile(username, file, film, quality);
+            return true;
+        } catch (Exception e) {
+            loggerService.logError("Failed to upload film for user: " + username, e);
             return false;
         }
-        if (!picture.isEmpty()) {
-            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
-            storeImageFile(username, picture, film);
-        }
-        film.setFilmPath(storageDir + "/" + username + "/" + film.getId() + "/" + file.getOriginalFilename());
-        addFilmToClient(username, film);
-        storeVideoFile(username, file, film, quality);
-        return true;
     }
 
-    public boolean isValidFilm(Film film) {
+    private boolean isValidFilm(Film film) {
         // Ellenőrzi, hogy a név üres vagy csak egy szóköz
         if (film.getName() == null || film.getName().isBlank()) {
             return false;
         }
-
         // Fájlok kiterjesztésének ellenőrzése
         if (!hasValidExtension(film.getFilmPath(), allowedFilmExtensions)) {
             return false;
         }
-
         if (!hasValidExtension(film.getPicturePath(), allowedFilmExtensions)) {
             return false;
         }
-
         // Ajánlott életkor ellenőrzése
         return film.getRecommendedAge() >= 0 && film.getRecommendedAge() <= 18;
     }
 
-    // Ellenőrzi, hogy a fájl egy engedélyezett kiterjesztéssel végződik-e
     private boolean hasValidExtension(String filePath, String[] validExtensions) {
         if (filePath == null || filePath.isEmpty()) {
             return false;
         }
-
         for (String ext : validExtensions) {
             if (filePath.toLowerCase().endsWith(ext)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -152,7 +123,7 @@ public class FilmService {
         File file = Paths.get(basePath, "film.json").toFile();
 
         if (!file.exists() || file.length() == 0) {
-            // Ha a fájl nem létezik vagy üres, visszaadjuk az üres listát
+            loggerService.logError("A film.json fájl nem létezik vagy üres: " + file.getAbsolutePath(), null);
             return new ArrayList<>();
         }
 
@@ -162,196 +133,303 @@ public class FilmService {
             };
             return objectMapper.readValue(file, typeRef);
         } catch (IOException e) {
-            throw new RuntimeException("IO error happened while reading personal properties: " + e);
+            loggerService.logError("Hiba történt a film.json beolvasásakor: " + file.getAbsolutePath(), e);
+            return new ArrayList<>(); // Hiba esetén üres listát adunk vissza
         }
     }
 
-    private void saveFilmsToJson(String username, List<Film> films) {
+    private boolean saveFilmsToJson(String username, List<Film> films) {
         String basePath = storageDir + "/" + username;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             File file = new File(basePath, "film.json");
             objectMapper.writeValue(file, films);
+            return true;
         } catch (IOException e) {
-            throw new RuntimeException("IO error happened while saving films to JSON: " + e);
+            loggerService.logError("Hiba történt a filmek JSON fájlba mentése közben: " + e.getMessage(), e);
+            return false;
         }
     }
 
     @Transactional
-    protected void addFilmToClient(String username, Film filmToAdd) {
+    protected boolean addFilmToClient(String username, Film filmToAdd) {
         List<Film> films = getClientFilms(username);
         films.add(filmToAdd);
-        saveFilmsToJson(username, films);
+        return saveFilmsToJson(username, films);
     }
 
     private long getNextAvailableId(List<Film> films) {
         return films.isEmpty() ? 1 : films.getLast().getId() + 1;
     }
 
-    protected void deleteFilmByIdFromJson(String username, Long filmId) {
-        List<Film> films = getClientFilms(username);
-        Film film = getFilmById(username, filmId);
-        films.remove(film);
-        saveFilmsToJson(username, films);
+    protected boolean deleteFilmByIdFromJson(String username, Long filmId) {
+        try {
+            List<Film> films = getClientFilms(username);
+            Film film = getFilmById(username, filmId);
+
+            if (film == null) {
+                return false;
+            }
+
+            if (!films.remove(film)) {
+                loggerService.logError("Failed to remove film from list: Film ID " + filmId + " for user " + username, null);
+                return false;
+            }
+
+            return !saveFilmsToJson(username, films);
+
+        } catch (Exception e) {
+            loggerService.logError("Unexpected error while deleting film ID " + filmId + " for user " + username, e);
+            return false;
+        }
     }
 
-    private void storeVideoFile(String username, MultipartFile file, Film film, int quality) {
-        Path filePath;
+    private boolean storeVideoFile(String username, MultipartFile file, Film film, int quality) {
         try {
-            // Ellenőrizzük, hogy a feltöltött fájl kiterjesztése videó-e
-            boolean isValidExtension = false;
-            for (String extension : allowedFilmExtensions) {
-                if (Objects.requireNonNull(file.getOriginalFilename()).toLowerCase().endsWith(extension)) {
-                    isValidExtension = true;
-                    break;
-                }
-            }
-            if (!isValidExtension) {
-                throw new IllegalArgumentException("Csak videófájlok engedélyezettek.");
+            if (!validateFile(file, allowedFilmExtensions)) {
+                return false;
             }
 
-            // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
-            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getId()).toAbsolutePath().normalize();
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            if (!createDirectoryIfNotExists(username, film.getId())) {
+                return false;
             }
 
             // A fájlt mentjük a feltöltési mappába
-            filePath = uploadPath.resolve(file.getOriginalFilename());
+            Path uploadPath = Paths.get(storageDir, username, String.valueOf(film.getId())).toAbsolutePath().normalize();
+            Path filePath = uploadPath.resolve(file.getOriginalFilename());
+
             Files.copy(file.getInputStream(), filePath);
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not store the file. Please try again!", ex);
-        }
-        VideoConverterService.addToQueue(filePath, quality, film, username);
-    }
-
-    private void createDirectoryIfNotExists(String username, Long filmId) throws IOException {
-        // Ellenőrizzük, hogy a feltöltési mappa létezik-e, ha nem, létrehozzuk
-        Path uploadPath = Paths.get(storageDir + "/" + username + "/" + filmId).toAbsolutePath().normalize();
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+            VideoConverterService.addToQueue(filePath, quality, film, username);
+            return true;
+        } catch (Exception ex) {
+            loggerService.logError("Nem sikerült a fájlt elmenteni: " + file.getOriginalFilename(), ex);
+            return false;
         }
     }
 
-    private String getTargetFileName(String originalFileName) {
-        String fileName = originalFileName;
-        if (fileName != null) {
-            String lowercaseFileName = fileName.toLowerCase();
-            for (String extension : allowedPictureExtensions) {
-                if (lowercaseFileName.endsWith("." + extension)) {
-                    // Ha a fájl végződése megfelel valamelyik engedélyezett kiterjesztésnek, konvertáljuk azt JPG formátumra
-                    fileName = fileName.substring(0, fileName.length() - (extension.length() + 1)) + ".jpg";
-                    break;
-                }
-            }
+    private boolean createDirectoryIfNotExists(String username, Long filmId) {
+        Path uploadPath = Paths.get(storageDir, username, String.valueOf(filmId)).toAbsolutePath().normalize();
+        if (Files.exists(uploadPath)) {
+            return true;
         }
-        return fileName;
-    }
-
-    private void storeImageFile(String username, MultipartFile imageFile, Film film) {
         try {
-            validateImageFile(imageFile);
-            createDirectoryIfNotExists(username, film.getId());
+            Files.createDirectories(uploadPath);
+            return true;
+        } catch (IOException e) {
+            loggerService.logError("Nem sikerült létrehozni a könyvtárat: " + uploadPath, e);
+            return false;
+        }
+    }
+
+    private boolean storeImageFile(String username, MultipartFile imageFile, Film film) {
+        try {
+            if (!validateFile(imageFile, allowedPictureExtensions)) {
+                return false;
+            }
+
+            String originalFileName = imageFile.getOriginalFilename();
+            String targetFileName = originalFileName.replaceFirst("\\.[^.]+$", ".jpg");
+
+            if (!createDirectoryIfNotExists(username, film.getId())) {
+                return false;
+            }
+
             BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
 
+            if (originalImage == null) {
+                loggerService.logError("Nem sikerült beolvasni a képet: " + originalFileName, null);
+                return false;
+            }
+
             byte[] resizedBytes = resizeImage(originalImage, maxWidth, maxHeight);
-
-            // A fájlt mentjük a feltöltési mappába
-            String fileName = getTargetFileName(imageFile.getOriginalFilename());
-            Path uploadPath = Paths.get(storageDir + "/" + username + "/" + film.getId()).toAbsolutePath().normalize();
-            Path imagePath = uploadPath.resolve(fileName);
+            Path uploadPath = Paths.get(storageDir, username, String.valueOf(film.getId())).toAbsolutePath().normalize();
+            Path imagePath = uploadPath.resolve(targetFileName);
             Files.write(imagePath, resizedBytes);
+            return true;
         } catch (IOException ex) {
-            throw new RuntimeException("Nem sikerült a fájlt elmenteni. Kérjük, próbálja újra!", ex);
+            loggerService.logError("Nem sikerült a kép fájlt elmenteni: " + imageFile.getOriginalFilename(), ex);
+            return false;
         }
     }
 
-    private void validateImageFile(MultipartFile imageFile) {
-        // Ellenőrizzük a fájl kiterjesztését
+    private byte[] resizeImage(BufferedImage originalImage,
+                               @SuppressWarnings("SameParameterValue") int maxWidth,
+                               @SuppressWarnings("SameParameterValue") int maxHeight) {
+        try {
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+            int newWidth = originalWidth;
+            int newHeight = originalHeight;
+
+            // Képarány megtartása
+            if (originalWidth > maxWidth || originalHeight > maxHeight) {
+                double widthRatio = (double) maxWidth / originalWidth;
+                double heightRatio = (double) maxHeight / originalHeight;
+                double ratio = Math.min(widthRatio, heightRatio);
+
+                newWidth = (int) (originalWidth * ratio);
+                newHeight = (int) (originalHeight * ratio);
+            }
+
+            // Új kép létrehozása a maxWidth és maxHeight mérettel
+            BufferedImage finalImage = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = finalImage.createGraphics();
+
+            // Fekete háttér kitöltése
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, maxWidth, maxHeight);
+
+            // Kép középre igazítása
+            int xOffset = (maxWidth - newWidth) / 2;
+            int yOffset = (maxHeight - newHeight) / 2;
+
+            // A méretezett kép megrajzolása a közepén
+            g.drawImage(originalImage, xOffset, yOffset, newWidth, newHeight, null);
+            g.dispose();
+
+            // BufferedImage-t byte tömbbé konvertálása
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(finalImage, "jpg", outputStream);
+            byte[] resizedBytes = outputStream.toByteArray();
+            outputStream.close();
+
+            return resizedBytes;
+
+        } catch (IOException e) {
+            loggerService.logError("Failed to resize image: " + e.getMessage(), e);
+            return new byte[0]; // Üres tömb visszaadása hiba esetén
+        } catch (Exception e) {
+            loggerService.logError("Unexpected error while resizing image.", e);
+            return new byte[0]; // Üres tömb visszaadása váratlan hiba esetén
+        }
+    }
+
+    private boolean validateFile(MultipartFile imageFile, String[] allowedExtensions) {
         String originalFileName = imageFile.getOriginalFilename();
-        if (originalFileName != null) {
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
-            boolean isValidExtension = false;
-            for (String extension : allowedPictureExtensions) {
-                if (extension.equals(fileExtension)) {
-                    isValidExtension = true;
-                    break;
-                }
-            }
-            if (!isValidExtension) {
-                throw new IllegalArgumentException("Csak a következő kiterjesztéseket fogadjuk el: " + Arrays.toString(allowedPictureExtensions));
-            }
-        } else {
-            throw new IllegalArgumentException("A fájlnak kiterjesztést kell tartalmaznia.");
+        if (originalFileName == null || !originalFileName.contains(".")) {
+            loggerService.logError("A fájlnak kiterjesztést kell tartalmaznia.", null);
+            return false;
         }
+
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+        if (!Arrays.asList(allowedExtensions).contains(fileExtension)) {
+            loggerService.logError("Nem megfelelő kiterjesztés: " + fileExtension + Arrays.toString(allowedExtensions), null);
+            return false;
+        }
+
+        return true;
     }
 
-    public void deleteFilm(String username, Long filmId) {
-        deleteFolder(username, getFilmById(username, filmId).getId());
-        deleteFilmByIdFromJson(username, filmId);
+    public boolean deleteFilm(String username, Long filmId) {
+        Film film = getFilmById(username, filmId);
+
+        if (film == null) {
+            loggerService.logError("Failed to delete film: Film with ID " + filmId + " not found for user " + username, null);
+            return false;
+        }
+
+        if (!deleteFolder(username, film.getId())) {
+            return false;
+        }
+
+        return !deleteFilmByIdFromJson(username, filmId);
     }
 
-    private void deleteFolder(String username, Long folderName) {
+    private boolean deleteFolder(String username, Long folderName) {
         // Elérési útvonal felépítése
         String path = storageDir + "/" + username + "/" + folderName;
         File folder = new File(path);
 
         // Ellenőrizzük, hogy a mappa létezik-e
         if (!folder.exists()) {
-            System.out.println("A megadott mappa nem létezik.");
-            return;
+            loggerService.logError("Folder does not exist: " + path, null);
+            return false;
         }
 
         // Ellenőrizzük, hogy a megadott elérési útvonal egy mappa-e
         if (!folder.isDirectory()) {
-            System.out.println("A megadott elérési útvonal nem egy mappa.");
-            return;
+            loggerService.logError("Not a directory: " + path, null);
+            return false;
         }
 
         // Rekurzívan töröljük a mappa tartalmát
-        deleteContents(folder);
+        if (!deleteContents(folder)) {
+            return false;
+        }
 
         // Töröljük magát a mappát
         if (folder.delete()) {
-            System.out.println("A mappa és annak tartalma sikeresen törölve lett.");
+            return true;
         } else {
-            System.out.println("Nem sikerült törölni a mappát és annak tartalmát.");
+            loggerService.logError("Failed to delete folder: " + path, null);
+            return false;
         }
     }
 
-    private void deleteContents(File folder) {
+    private boolean deleteContents(File folder) {
         File[] contents = folder.listFiles();
+        boolean success = true;
+
         if (contents != null) {
             for (File file : contents) {
                 if (file.isDirectory()) {
                     // Rekurzívan töröljük a mappa tartalmát
-                    deleteContents(file);
+                    if (!deleteContents(file)) {
+                        loggerService.logError("Failed to delete directory contents: " + file.getAbsolutePath(), null);
+                        success = false;
+                    }
                 }
-                // Töröljük a fájlokat vagy a mappákat
-                file.delete();
+                // Töröljük a fájlokat vagy az üres mappákat
+                if (!file.delete()) {
+                    loggerService.logError("Failed to delete file or directory: " + file.getAbsolutePath(), null);
+                    success = false;
+                }
             }
         }
+
+        return success;
     }
 
+    @Transactional
     public boolean modifyFilm(String username, Film film, MultipartFile picture) {
-        Film ogFilm = getFilmById(username, film.getId());
-        film.setFilmPath(ogFilm.getFilmPath());
-        film.setPicturePath(ogFilm.getPicturePath());
-        if (!isValidFilm(film)) {
-            return false;
-        }
-
-        if (!picture.isEmpty()) {
-            File pictureFile = new File(film.getPicturePath());
-            if (pictureFile.delete()) {
+        try {
+            Film ogFilm = getFilmById(username, film.getId());
+            if (ogFilm == null) {
                 return false;
             }
-            film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
-            storeImageFile(username, picture, film);
+
+            film.setFilmPath(ogFilm.getFilmPath());
+            film.setPicturePath(ogFilm.getPicturePath());
+
+            if (!isValidFilm(film)) {
+                return false;
+            }
+
+            if (!picture.isEmpty()) {
+                File pictureFile = new File(film.getPicturePath());
+                if (!pictureFile.delete()) {
+                    loggerService.logError("Failed to delete existing picture: " + film.getPicturePath() + " for user " + username, null);
+                    return false;
+                }
+
+                film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" +
+                        Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
+
+                if (!storeImageFile(username, picture, film)) {
+                    return false;
+                }
+            }
+
+            if (!deleteFilmByIdFromJson(username, film.getId())) {
+                return false;
+            }
+
+            return addFilmToClient(username, film);
+
+        } catch (Exception e) {
+            loggerService.logError("Unexpected error while modifying film for user: " + username, e);
+            return false;
         }
-        deleteFilmByIdFromJson(username, film.getId());
-        addFilmToClient(username, film);
-        return true;
     }
 
     public long getTotalStorageUsed(String username) {
@@ -361,19 +439,20 @@ public class FilmService {
             return 0;
         }
 
-        try {
-            return Files.walk(userDirectory)
-                    .filter(Files::isRegularFile)
+        try (Stream<Path> files = Files.walk(userDirectory)) {
+            return files.filter(Files::isRegularFile)
                     .mapToLong(file -> {
                         try {
                             return Files.size(file);
                         } catch (IOException e) {
+                            loggerService.logError("Failed to get file size: " + file, e);
                             return 0;
                         }
                     })
                     .sum();
         } catch (IOException e) {
-            throw new RuntimeException("Nem sikerült kiszámítani a tárhelyhasználatot.", e);
+            loggerService.logError("Failed to calculate storage usage for user: " + username, e);
+            return 0;
         }
     }
 
@@ -389,6 +468,7 @@ public class FilmService {
 
         return String.format("%.1f %s", size, units[unitIndex]);
     }
+
     public boolean isStorageExceeded(String username) {
         long usedStorage = getTotalStorageUsed(username);
         return usedStorage > bytes;
