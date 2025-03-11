@@ -23,8 +23,8 @@ public class RegistrationPageController {
 
     @PostMapping("/register")
     public String register(@Valid Client client, Model model) {
-        String result = null;
-        if ((result = clientService.createClient(client)).isEmpty()) {
+        String result = clientService.createClient(client);
+        if (result == null) {
             return "redirect:/home";
         }
         model.addAttribute("nameError", result);
