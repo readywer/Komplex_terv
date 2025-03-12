@@ -119,8 +119,8 @@ public class FilmService {
         String basePath = storageDir + "/" + username;
         File file = Paths.get(basePath, "film.json").toFile();
 
-        if (!file.exists() || file.length() == 0) {
-            loggerService.logError("A film.json fájl nem létezik vagy üres: " + file.getAbsolutePath(), null);
+        if (!file.exists()) {
+            loggerService.logError("A film.json fájl nem létezik: " + file.getAbsolutePath(), null);
             return new ArrayList<>();
         }
 
