@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +59,25 @@ public class LoggerService {
             Files.write(logFile, logMessage.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             logError("Failed to log user activity", e);
+        }
+    }
+
+    public void deleteLogEntry(String username, Long movieID) {
+        Path userLogDir = Paths.get(STORAGE_DIR, username);
+        Path logFile = userLogDir.resolve("history.log");
+
+        if (!Files.exists(logFile)) {
+            return;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(logFile);
+            List<String> updatedLines = lines.stream()
+                    .filter(line -> !line.contains("Watched movie: " + movieID))
+                    .toList();
+            Files.write(logFile, updatedLines, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+        } catch (IOException e) {
+            logError("Failed to delete log entry for movieID: " + movieID, e);
         }
     }
 

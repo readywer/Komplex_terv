@@ -327,7 +327,7 @@ public class FilmService {
         if (!deleteFolder(username, film.getId())) {
             return false;
         }
-
+        loggerService.deleteLogEntry(username,filmId);
         return !deleteFilmByIdFromJson(username, filmId);
     }
 
