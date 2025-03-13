@@ -72,11 +72,11 @@ public class VideoConverterService {
         Path outputFilePath = inputFile.getParentFile().toPath().resolve(outputFileName);
         String gpuCodec = getAvailableGPUCodec();
         List<String> qualityArgs = getQualityArgs(gpuCodec, quality);
-
+        String thread = String.valueOf(Runtime.getRuntime().availableProcessors()-2);
         List<String> command = new ArrayList<>(List.of(
                 FFMPEG_PATH, "-y", "-i", inputFilePath.toString(),
                 "-c:v", gpuCodec, "-preset", getPreset(gpuCodec),
-                "-threads", "14", "-fps_mode", "cfr"
+                "-threads", thread, "-fps_mode", "cfr"
         ));
         command.addAll(qualityArgs);
         command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-c:s", "copy", "-map_chapters", "0", outputFilePath.toString()));

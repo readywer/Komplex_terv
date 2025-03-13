@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FilmService {
-    //TODO upload page upload state, home film recommended, admin page
+    //TODO upload page upload state, admin page
     @Getter
     private final String storageDir = "data";
     @Getter
