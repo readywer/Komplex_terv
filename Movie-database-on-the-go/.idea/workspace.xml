@@ -5,14 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8af92337-6284-4fa2-adb1-046dc8b538a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/tester/1/family.guy.s21e01.webrip.x264-bnr.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movie-web/src/main/resources/static/js/darkMode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/database.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/database.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/tester/film.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/film.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/tester/history.log" beforeDir="false" afterPath="$PROJECT_DIR$/data/tester/history.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/LoggerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/LoggerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/HomePageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/java/org/movie/database/controller/HomePageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/movie-service/src/main/java/org/movie/database/service/FilmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/client_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/error.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_add-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_details-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_modify-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_watcher-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/film_watcher-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/films-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/fragments/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/fragments/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/home-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/registration-page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie-web/src/main/resources/templates/welcome-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/movie-web/src/main/resources/templates/welcome-page.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,9 +122,9 @@
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static\css" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\templates\fragments" />
-      <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static\css" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources\static\images" />
       <recent name="C:\Users\Attila\Documents\GitHub\Komplex_terv\Movie-database-on-the-go\movie-web\src\main\resources" />
     </key>

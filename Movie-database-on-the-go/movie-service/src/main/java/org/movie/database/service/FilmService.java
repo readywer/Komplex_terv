@@ -28,9 +28,9 @@ import java.util.stream.Stream;
 
 @Service
 public class FilmService {
-    //TODO upload page upload state, home last watched film, recommended, admin page
+    //TODO upload page upload state, home film recommended, admin page
     @Getter
-    private final String storageDir = "data"; // A fájlok mentésére szolgáló mappa elérési útvonala
+    private final String storageDir = "data";
     @Getter
     private final String[] allowedFilmExtensions = {"mp4", "webm", "ogg", "mkv", "avi", "mov", "flv", "wmv", "ts"};
     private final String[] allowedPictureExtensions = {"jpg", "png", "gif", "tif", "bmp", "jpeg"};
