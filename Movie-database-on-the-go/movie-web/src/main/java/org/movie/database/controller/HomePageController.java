@@ -1,15 +1,20 @@
 package org.movie.database.controller;
 
 import org.movie.database.domain.Client;
+import org.movie.database.domain.Film;
 import org.movie.database.persistence.ClientRepository;
 import org.movie.database.security.UserLoginDetailsService;
 import org.movie.database.service.ClientService;
 import org.movie.database.service.FilmService;
+import org.movie.database.service.LoggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class HomePageController {
@@ -31,6 +36,12 @@ public class HomePageController {
         model.addAttribute("usedSpace", filmService.formatStorageSize(filmService.getTotalStorageUsed(client.getUsername())));
         model.addAttribute("client", client);
         model.addAttribute("numberOfFilms", filmService.getClientFilms(userLoginDetailsService.loadAuthenticatedUsername()).size());
+        List<Long> lastWatchedMovieIds = LoggerService.getLastWatchedMovies(client.getUsername());
+        List<Film> films = lastWatchedMovieIds.stream()
+                .map(filmId -> filmService.getFilmById(client.getUsername(), filmId)) // Lambda használata
+                .filter(Objects::nonNull) // Eltávolítja a null értékeket
+                .toList();
+        model.addAttribute("films", films);
         return "home-page";
     }
 

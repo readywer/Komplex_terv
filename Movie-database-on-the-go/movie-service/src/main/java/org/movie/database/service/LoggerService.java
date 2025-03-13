@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +61,39 @@ public class LoggerService {
             logError("Failed to log user activity", e);
         }
     }
+
+    public static List<Long> getLastWatchedMovies(String username) {
+        Path userLogDir = Paths.get(STORAGE_DIR, username);
+        Path logFile = userLogDir.resolve("history.log");
+
+        if (!Files.exists(logFile)) {
+            return List.of();
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(logFile);
+            Collections.reverse(lines);
+
+            Set<Long> uniqueMovies = new LinkedHashSet<>();
+
+            for (String line : lines) {
+                if (line.contains("Watched movie: ")) {
+                    try {
+                        Long movieId = Long.parseLong(line.substring(line.lastIndexOf(": ") + 2));
+                        uniqueMovies.add(movieId);
+                        if (uniqueMovies.size() == 4) {
+                            break;
+                        }
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+            }
+            return new ArrayList<>(uniqueMovies);
+        } catch (IOException e) {
+            return List.of();
+        }
+    }
+
 
     public void deleteLogEntry(String username, Long movieID) {
         Path userLogDir = Paths.get(STORAGE_DIR, username);

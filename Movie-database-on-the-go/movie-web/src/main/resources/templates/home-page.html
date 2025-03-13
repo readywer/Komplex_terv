@@ -40,5 +40,21 @@
         </div>
     </div>
 </div>
+<div class="container mt-2">
+    <h2>Last Watched:</h2>
+    <div class="row" id="filmTiles">
+        <!-- Placeholder for film tiles -->
+        <div class="col-sm-3 mb-2" th:each="film : ${films}">
+            <a th:href="@{'/film_details?filmId=' + ${film.id}}">
+                <div class="card">
+                    <img alt="Film kép" th:src="${film.picturePath}"/>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${film.name}"></h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 </body>
 </html>
