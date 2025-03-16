@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <!-- Navigációs sáv fragment -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" th:fragment="navbar">
@@ -15,6 +16,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/film_add">Film Add</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link" href="/admin">Admin page</a>
                 </li>
             </ul>
             <!-- Dark Mode kapcsoló -->

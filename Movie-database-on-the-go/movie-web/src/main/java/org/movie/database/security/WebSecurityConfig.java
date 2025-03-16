@@ -1,5 +1,6 @@
 package org.movie.database.security;
 
+import org.movie.database.domain.Role;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/images/**").authenticated()
                         .requestMatchers("/error").authenticated()
                         .requestMatchers("/client_delete").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority(String.valueOf(Role.ADMIN))
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().denyAll()
 

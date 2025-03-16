@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Movie Database - Films</title>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <script defer src="/js/filmSort.js"></script>
+    <script defer src="/js/darkMode.js"></script>
+</head>
+<body>
+<!-- Navigáció beillesztése -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container mt-2">
+    <h2>Users</h2>
+    <div class="row">
+        <div class="col-md-2">
+            <label class="form-label" for="sortSelect">Sort by:</label>
+            <select class="form-select form-select-sm mb-2" id="sortSelect" onchange="sortFilms()">
+                <option value="default">Default</option>
+                <option value="name">Name</option>
+            </select>
+        </div>
+        <div class="col-md-4 offset-md-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search Users..."
+                   onkeyup="filterFilms()">
+        </div>
+    </div>
+    <div id="noResultsMessage" class="text-center mt-3" style="display: none; color: red;">
+        No users found.
+    </div>
+    <div class="row" id="clientTiles">
+        <div class="col-sm-3 mb-2" th:each="client : ${clients}"
+             th:attr="data-username=${client.username},
+              data-name=${client.name},
+              data-email=${client.email}">
+            <a th:href="@{'/admin/client_details?clientId=' + ${client.id}}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${client.username}"></h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

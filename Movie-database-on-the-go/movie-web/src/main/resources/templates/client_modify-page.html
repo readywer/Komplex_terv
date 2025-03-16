@@ -16,10 +16,11 @@
     <div class="card p-4 col-md-6">
         <h2 class="text-center mb-4">Account modify</h2>
         <p class="text-center">The empty fields will not change.</p>
-        <form method="post" onsubmit="return validateClientModify()" th:action="@{/client_modify}"
+        <form method="post" onsubmit="return validateClientModify()"
+              th:action="${#authorization.expression('hasAuthority(''ADMIN'')')} ? '/admin/client_modify' : '/client_modify'"
               th:object="${client}">
-
-            <div class="form-group mt-2">
+            <input name="id" readonly th:value="*{id}" type="hidden"/>
+        <div class="form-group mt-2">
                 <label for="name">New Name:</label>
                 <input class="form-control" id="name" th:field="*{name}" type="text">
                 <span id="nameError" style="color: red;"></span>

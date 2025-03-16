@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Movie Database</title>
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <script defer src="/js/darkMode.js"></script>
+</head>
+<body>
+<!-- Navigáció beillesztése -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="d-flex justify-content-center align-items-start m-3">
+    <div class="card border border-info border-3">
+        <div class="card-body dynamic-bg">
+            <h2>User details</h2>
+            <dl class="row">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9" th:text="${client.name}">Nagy Sándor</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9" th:text="${client.email}">nagy.sandor@gmail.com</dd>
+
+                <dt class="col-sm-3">Number of Films</dt>
+                <dd class="col-sm-9" th:text="${numberOfFilms}">0</dd>
+
+                <dt class="col-sm-3">Used Space</dt>
+                <dd class="col-sm-9" th:text="${usedSpace} + ' / ' + ${usableSpace}">0</dd>
+            </dl>
+            <div>
+                <form action="/admin/client_modify" class="d-inline-block" method="get">
+                    <input type="hidden" name="clientId" th:value="${client.Id}">
+                    <button class="btn btn-primary mx-1" type="submit">Modify Account</button>
+                </form>
+                <form action="/admin/client_delete" method="post" class="d-inline">
+                    <input type="hidden" name="clientId" th:value="${client.Id}">
+                    <button class="btn btn-danger mx-1" type="submit"
+                            onclick="return confirm('Are you sure you want to delete the account?')">
+                        Delete Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-2">
+    <h2>Films</h2>
+    <div class="row">
+        <div class="col-md-2">
+            <label class="form-label" for="sortSelect">Sort by:</label>
+            <select class="form-select form-select-sm mb-2" id="sortSelect" onchange="sortFilms()">
+                <option value="default">Default</option>
+                <option value="name">Name</option>
+                <option value="releaseDate">Release Date</option>
+            </select>
+        </div>
+        <div class="col-md-4 offset-md-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search films..."
+                   onkeyup="filterFilms()">
+        </div>
+    </div>
+    <div id="noResultsMessage" class="text-center mt-3" style="display: none; color: red;">
+        No films found.
+    </div>
+    <div class="row" id="filmTiles">
+        <!-- Placeholder for film tiles -->
+        <div class="col-sm-3 mb-2" th:each="film : ${films}"
+             th:attr="data-name=${film.name},
+              data-description=${film.description},
+              data-categories=${film.categories},
+              data-actors=${film.actors},
+              data-recommended-age=${film.recommendedAge},
+              data-release-date=${film.releaseDate}">
+            <a th:href="@{'/film_details?filmId=' + ${film.id}}">
+                <div class="card">
+                    <img alt="Film kép" th:src="${film.picturePath}"/>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${film.name}"></h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
