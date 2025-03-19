@@ -6,6 +6,7 @@ import org.movie.database.persistence.ClientRepository;
 import org.movie.database.service.ClientService;
 import org.movie.database.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,28 +48,6 @@ public class AdminPageController {
         model.addAttribute("films", films);
         model.addAttribute("client", client);
         return "client_details-page";
-    }
-
-    @GetMapping("/admin/data/{folder}/{folder2}/{filename:.+}")
-    public ResponseEntity<byte[]> getImage(@PathVariable String folder, @PathVariable String folder2, @PathVariable String filename) throws IOException {
-        String imagePath = "data/" + folder + "/" + folder2 + "/" + filename;
-
-        // Ellenőrizze, hogy a kép létezik-e
-        Path path = Path.of(imagePath);
-        if (!Files.exists(path)) {
-            // Ha a kép nem létezik, 404 Not Found hibát küldünk vissza
-            return ResponseEntity.notFound().build();
-        }
-
-        // Olvassa be a képet byte tömbbe
-        byte[] imageBytes = Files.readAllBytes(path);
-
-        // Az Image típusú tartalom típusának beállítása
-        // A kép típusa függ a MIME típustól, ebben az esetben feltételezzük, hogy PNG formátumú
-        MediaType mediaType = MediaType.IMAGE_PNG;
-
-        // Válasz küldése a byte tömbbel és a megfelelő tartalom típussal
-        return ResponseEntity.ok().contentType(mediaType).body(imageBytes);
     }
 
     @PostMapping("/admin/client_delete")

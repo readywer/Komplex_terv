@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Movie Database - Films</title>
     <link href="/css/bootstrap.css" rel="stylesheet"/>
-    <script defer src="/js/filmSort.js"></script>
+    <script defer src="/js/clientSort.js"></script>
     <script defer src="/js/darkMode.js"></script>
 </head>
 <body>
@@ -16,14 +16,14 @@
     <div class="row">
         <div class="col-md-2">
             <label class="form-label" for="sortSelect">Sort by:</label>
-            <select class="form-select form-select-sm mb-2" id="sortSelect" onchange="sortFilms()">
+            <select class="form-select form-select-sm mb-2" id="sortSelect" onchange="sortClients()">
                 <option value="default">Default</option>
                 <option value="name">Name</option>
             </select>
         </div>
         <div class="col-md-4 offset-md-6">
             <input type="text" id="searchInput" class="form-control" placeholder="Search Users..."
-                   onkeyup="filterFilms()">
+                   onkeyup="filterClients()">
         </div>
     </div>
     <div id="noResultsMessage" class="text-center mt-3" style="display: none; color: red;">
@@ -37,7 +37,7 @@
             <a th:href="@{'/admin/client_details?clientId=' + ${client.id}}">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${client.username}"></h5>
+                        <h5 class="card-title" th:text="${client.id} + ' ' + ${client.username}"></h5>
                     </div>
                 </div>
             </a>

@@ -1,6 +1,8 @@
 package org.movie.database.controller;
 
 import org.movie.database.domain.Film;
+import org.movie.database.domain.Role;
+import org.movie.database.persistence.ClientRepository;
 import org.movie.database.security.UserLoginDetailsService;
 import org.movie.database.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import java.util.List;
 public class FilmsPageController {
 
     @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
     private FilmService filmService;
     @Autowired
     private UserLoginDetailsService userLoginDetailsService;
@@ -35,7 +39,9 @@ public class FilmsPageController {
     public ResponseEntity<byte[]> getImage(@PathVariable String folder, @PathVariable String folder2, @PathVariable String filename) throws IOException {
         String username = userLoginDetailsService.loadAuthenticatedUsername();
         String imagePath = "data/" + username + "/" + folder2 + "/" + filename;
-
+        if(clientRepository.findByUsername(username).getRole().equals(Role.ADMIN)){
+            imagePath = "data/" + folder + "/" + folder2 + "/" + filename;
+        }
         // Ellenőrizze, hogy a kép létezik-e
         Path path = Path.of(imagePath);
         if (!Files.exists(path)) {

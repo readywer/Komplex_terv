@@ -73,7 +73,7 @@
               data-release-date=${film.releaseDate}">
             <a th:href="@{'/film_details?filmId=' + ${film.id}}">
                 <div class="card">
-                    <img alt="Film kép" th:src="${film.picturePath}"/>
+                    <img alt="Film kép" th:src="@{/{path}(path=${film.picturePath})}"/>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${film.name}"></h5>
                     </div>
