@@ -1,6 +1,7 @@
 package org.movie.database.service;
 
 import org.movie.database.domain.Client;
+import org.movie.database.domain.Role;
 import org.movie.database.persistence.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -113,6 +114,40 @@ public class ClientService {
             loggerService.logError("Validation error: " + e.getMessage(), e);
         } catch (Exception e) {
             loggerService.logError("Error modifying client: " + updatedClient.getId(), e);
+        }
+        return false;
+    }
+
+    public boolean grantAdminRole(Long clientId) {
+        try {
+            Client existingClient = clientRepository.findById(clientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Client not found."));
+
+            existingClient.setRole(Role.ADMIN);
+            clientRepository.save(existingClient);
+
+            return true;
+        } catch (IllegalArgumentException e) {
+            loggerService.logError("Validation error: " + e.getMessage(), e);
+        } catch (Exception e) {
+            loggerService.logError("Error granting admin role to client: " + clientId, e);
+        }
+        return false;
+    }
+
+    public boolean revokeAdminRole(Long clientId) {
+        try {
+            Client existingClient = clientRepository.findById(clientId)
+                    .orElseThrow(() -> new IllegalArgumentException("Client not found."));
+
+            existingClient.setRole(Role.CLIENT);
+            clientRepository.save(existingClient);
+
+            return true;
+        } catch (IllegalArgumentException e) {
+            loggerService.logError("Validation error: " + e.getMessage(), e);
+        } catch (Exception e) {
+            loggerService.logError("Error granting admin role to client: " + clientId, e);
         }
         return false;
     }

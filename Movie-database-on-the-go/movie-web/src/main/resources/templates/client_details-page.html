@@ -6,6 +6,7 @@
     <title>Movie Database</title>
     <link href="/css/bootstrap.css" rel="stylesheet"/>
     <script defer src="/js/darkMode.js"></script>
+    <script defer src="/js/filmSort.js"></script>
 </head>
 <body>
 <!-- Navigáció beillesztése -->
@@ -24,6 +25,9 @@
                 <dt class="col-sm-3">Number of Films</dt>
                 <dd class="col-sm-9" th:text="${numberOfFilms}">0</dd>
 
+                <dt class="col-sm-3">Role</dt>
+                <dd class="col-sm-9" th:text="${client.role}">0</dd>
+
                 <dt class="col-sm-3">Used Space</dt>
                 <dd class="col-sm-9" th:text="${usedSpace} + ' / ' + ${usableSpace}">0</dd>
             </dl>
@@ -37,6 +41,20 @@
                     <button class="btn btn-danger mx-1" type="submit"
                             onclick="return confirm('Are you sure you want to delete the account?')">
                         Delete Account
+                    </button>
+                </form>
+                <form action="/admin/client_revoke_admin_role" method="post" class="d-inline">
+                    <input type="hidden" name="clientId" th:value="${client.Id}">
+                    <button class="btn btn-danger mx-1" type="submit"
+                            onclick="return confirm('Are you sure you want to revoke Admin Role from the account?')">
+                        Revoke Admin Role
+                    </button>
+                </form>
+                <form action="/admin/client_add_admin_role" method="post" class="d-inline">
+                    <input type="hidden" name="clientId" th:value="${client.Id}">
+                    <button class="btn btn-danger mx-1" type="submit"
+                            onclick="return confirm('Are you sure you want to add Admin Role to the account?')">
+                        Add Admin Role
                     </button>
                 </form>
             </div>
@@ -71,7 +89,7 @@
               data-actors=${film.actors},
               data-recommended-age=${film.recommendedAge},
               data-release-date=${film.releaseDate}">
-            <a th:href="@{'/film_details?filmId=' + ${film.id}}">
+            <a>
                 <div class="card">
                     <img alt="Film kép" th:src="@{/{path}(path=${film.picturePath})}"/>
                     <div class="card-body">

@@ -45,6 +45,7 @@ public class AdminPageController {
         List<Film> films = filmService.getClientFilms(client.getUsername());
         model.addAttribute("usableSpace", filmService.formatStorageSize(filmService.getBytes()));
         model.addAttribute("usedSpace", filmService.formatStorageSize(filmService.getTotalStorageUsed(client.getUsername())));
+        model.addAttribute("numberOfFilms", filmService.getClientFilms(client.getUsername()).size());
         model.addAttribute("films", films);
         model.addAttribute("client", client);
         return "client_details-page";
@@ -53,6 +54,18 @@ public class AdminPageController {
     @PostMapping("/admin/client_delete")
     public String deleteClient(@RequestParam(name = "clientId") Long clientId) {
         clientService.deleteClient(clientId);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/client_add_admin_role")
+    public String ClientAddAdminRole(@RequestParam(name = "clientId") Long clientId) {
+        clientService.grantAdminRole(clientId);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/client_revoke_admin_role")
+    public String ClientRevokeAdminRole(@RequestParam(name = "clientId") Long clientId) {
+        clientService.revokeAdminRole(clientId);
         return "redirect:/admin";
     }
 }
