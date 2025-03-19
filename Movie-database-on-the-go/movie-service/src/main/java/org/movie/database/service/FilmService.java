@@ -403,9 +403,11 @@ public class FilmService {
 
             if (!picture.isEmpty()) {
                 File pictureFile = new File(film.getPicturePath());
-                if (!pictureFile.delete()) {
-                    loggerService.logError("Failed to delete existing picture: " + film.getPicturePath() + " for user " + username, null);
-                    return false;
+                if (!"images/noimage.jpg".equals(film.getPicturePath())) {
+                    if (!pictureFile.delete()) {
+                        loggerService.logError("Failed to delete existing picture: " + film.getPicturePath() + " for user " + username, null);
+                        return false;
+                    }
                 }
 
                 film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" +
