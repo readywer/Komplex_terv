@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,6 +60,7 @@ public class ClientService {
         Path filePath = Paths.get(folderPath, "film.json");
         if (!Files.exists(filePath)) {
             Files.createFile(filePath);
+            Files.writeString(filePath, "[]", StandardCharsets.UTF_8);
         }
     }
 
