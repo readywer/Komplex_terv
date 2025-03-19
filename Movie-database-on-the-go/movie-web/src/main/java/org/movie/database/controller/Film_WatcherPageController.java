@@ -30,7 +30,7 @@ public class Film_WatcherPageController {
     public String watchFilm(@RequestParam(name = "filmId") Long filmId, Model model) {
         Film film = filmService.getFilmById(userLoginDetailsService.loadAuthenticatedUsername(), filmId);
         model.addAttribute("film", film);
-        loggerService.logUserActivity(userLoginDetailsService.loadAuthenticatedUsername(),film.getId());
+        loggerService.logUserActivity(userLoginDetailsService.loadAuthenticatedUsername(), film.getId());
         return "film_watcher-page"; // Thymeleaf nézet
     }
 

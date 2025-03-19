@@ -39,7 +39,7 @@ public class FilmsPageController {
     public ResponseEntity<byte[]> getImage(@PathVariable String folder, @PathVariable String folder2, @PathVariable String filename) throws IOException {
         String username = userLoginDetailsService.loadAuthenticatedUsername();
         String imagePath = "data/" + username + "/" + folder2 + "/" + filename;
-        if(clientRepository.findByUsername(username).getRole().equals(Role.ADMIN)){
+        if (clientRepository.findByUsername(username).getRole().equals(Role.ADMIN)) {
             imagePath = "data/" + folder + "/" + folder2 + "/" + filename;
         }
         // Ellenőrizze, hogy a kép létezik-e

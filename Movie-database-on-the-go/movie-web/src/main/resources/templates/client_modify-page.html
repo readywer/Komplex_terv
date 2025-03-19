@@ -20,7 +20,7 @@
               th:action="${#authorization.expression('hasAuthority(''ADMIN'')')} ? '/admin/client_modify' : '/client_modify'"
               th:object="${client}">
             <input name="id" readonly th:value="*{id}" type="hidden"/>
-        <div class="form-group mt-2">
+            <div class="form-group mt-2">
                 <label for="name">New Name:</label>
                 <input class="form-control" id="name" th:field="*{name}" type="text">
                 <span id="nameError" style="color: red;"></span>

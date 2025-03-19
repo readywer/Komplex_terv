@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FilmService {
-    //TODO upload page upload state, admin page
+
     @Getter
     private final String storageDir = "data";
     @Getter
@@ -65,14 +65,14 @@ public class FilmService {
             film.setId(getNextAvailableId(films));
             film.setUploadDate(LocalDate.now().toString());
 
-            if (picture.getName().isEmpty()) {
+            if (picture != null) {
                 film.setPicturePath(picture.getOriginalFilename());
             }
             if (!isValidFilm(film)) {
                 return false;
             }
 
-            if (!picture.isEmpty()) {
+            if (picture != null) {
                 film.setPicturePath(storageDir + "/" + username + "/" + film.getId() + "/" + Objects.requireNonNull(picture.getOriginalFilename()).replaceAll("\\.\\w+$", ".jpg"));
                 storeImageFile(username, picture, film);
             }
@@ -195,8 +195,7 @@ public class FilmService {
             // A fájlt mentjük a feltöltési mappába
             Path uploadPath = Paths.get(storageDir, username, String.valueOf(film.getId())).toAbsolutePath().normalize();
             Path filePath = uploadPath.resolve(file.getOriginalFilename());
-
-            Files.copy(file.getInputStream(), filePath);
+            file.transferTo(filePath.toFile());
             VideoConverterService.addToQueue(filePath, quality, film, username);
             return true;
         } catch (Exception ex) {
@@ -327,7 +326,7 @@ public class FilmService {
         if (!deleteFolder(username, film.getId())) {
             return false;
         }
-        loggerService.deleteLogEntry(username,filmId);
+        loggerService.deleteLogEntry(username, filmId);
         return !deleteFilmByIdFromJson(username, filmId);
     }
 
