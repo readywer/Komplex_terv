@@ -18,7 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class VideoConverterService {
     @Autowired
-    private static LoggerService loggerService;
+    private LoggerService loggerService;
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final LinkedBlockingQueue<Map<String, Object>> queue = new LinkedBlockingQueue<>();
     private static volatile boolean isProcessing = false;
@@ -54,7 +54,7 @@ public class VideoConverterService {
                     }
                 }
             } catch (Exception e) {
-                loggerService.logError("Hiba a videófeldolgozás során.", e);
+                LoggerService.logConversion("Hiba a videófeldolgozás során.", e);
             } finally {
                 isProcessing = false;
             }
@@ -64,10 +64,9 @@ public class VideoConverterService {
     private static boolean convertVideo(Path inputFilePath, int quality) {
         File inputFile = inputFilePath.toFile();
         if (!inputFile.exists()) {
-            loggerService.logError("A fájl nem létezik: " + inputFilePath, null);
+            LoggerService.logConversion("A fájl nem létezik: " + inputFilePath, null);
             return false;
         }
-
         String outputFileName = "convert_" + inputFile.getName().replaceAll("\\.\\w+$", ".mp4");
         Path outputFilePath = inputFile.getParentFile().toPath().resolve(outputFileName);
         String gpuCodec = getAvailableGPUCodec();
@@ -79,22 +78,19 @@ public class VideoConverterService {
                 "-threads", thread, "-fps_mode", "cfr"
         ));
         command.addAll(qualityArgs);
-        command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-c:s", "copy", "-map_chapters", "0", outputFilePath.toString()));
-
-        if (DEBUG_MODE) loggerService.logError("FFmpeg Parancs: " + String.join(" ", command), null);
-
+        command.addAll(List.of("-c:a", "aac", "-b:a", "192k", "-map_chapters", "0", outputFilePath.toString()));
+        if (DEBUG_MODE) LoggerService.logConversion("FFmpeg Parancs: " + String.join(" ", command), null);
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command).redirectErrorStream(true);
             Process process = processBuilder.start();
-
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 if (DEBUG_MODE) {
-                    reader.lines().forEach(line -> loggerService.logError(line, null));
+                    reader.lines().forEach(line -> LoggerService.logConversion(line, null));
                 }
             }
 
             if (process.waitFor() != 0) {
-                loggerService.logError("FFmpeg sikertelen konverzió.", null);
+                LoggerService.logConversion("FFmpeg sikertelen konverzió.", null);
                 Files.deleteIfExists(outputFilePath);
                 return false;
             }
@@ -103,10 +99,10 @@ public class VideoConverterService {
             Path finalFilePath = inputFile.getParentFile().toPath().resolve(inputFile.getName().replaceAll("\\.\\w+$", ".mp4"));
             Files.move(outputFilePath, finalFilePath);
 
-            if (DEBUG_MODE) loggerService.logError("Konverzió befejezve: " + finalFilePath, null);
+            if (DEBUG_MODE) LoggerService.logConversion("Konverzió befejezve: " + finalFilePath, null);
             return true;
         } catch (IOException | InterruptedException e) {
-            loggerService.logError("Hiba a konvertálás során.", e);
+            LoggerService.logConversion("Hiba a konvertálás során.", e);
             return false;
         }
     }

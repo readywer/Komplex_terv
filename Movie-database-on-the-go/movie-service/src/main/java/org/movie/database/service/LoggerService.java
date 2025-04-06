@@ -119,6 +119,10 @@ public class LoggerService {
         errorLogger.log(Level.SEVERE, timestamp + " - " + message, throwable);
         cleanupOldLogs();
     }
+    public static void logConversion(String message, Throwable throwable) {
+        String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
+        errorLogger.log(Level.SEVERE, timestamp + " - " + message, throwable);
+    }
 
     private void cleanupOldLogs() {
         Path logDir = Paths.get("logs");
