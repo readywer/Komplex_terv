@@ -67,7 +67,7 @@
 
             <div class="form-group mt-2">
                 <label for="file">Select File:</label>
-                <input accept=".mp4,.webm,.ogg,.mkv,.avi,.mov,.flv,.wmv,.ts" class="form-control-file" id="file"
+                <input accept=".mp4,.webm,.ogg,.mkv,.avi,.mov,.flv,.wmv,.ts" class="form-control" id="file"
                        name="file" required="required" type="file">
                 <span id="fileError" style="color: red;"></span>
             </div>
@@ -86,10 +86,12 @@
                 <p>Speed: <span id="uploadSpeed">0 MB/s</span></p>
             </div>
             <div class="form-group mt-2">
-                <label for="quality">Quality:</label>
-                <input type="range" class="form-control w-50" id="quality" name="quality" min="15" max="30" value="21"
+                <label for="quality">
+                    Quality: <span id="qualityValue">21</span>
+                </label>
+                <input type="range" class="form-range w-100 w-md-50" id="quality" name="quality" min="15" max="30" value="21"
                        oninput="document.getElementById('qualityValue').textContent = this.value">
-                <div class="d-flex justify-content-between mt-1 w-50">
+                <div class="d-flex justify-content-between mt-1">
                     <small>High Quality</small>
                     <small>Balanced</small>
                     <small>Low Quality</small>
@@ -97,7 +99,7 @@
 
                 <div class="form-group mt-2">
                     <label for="imageFile">Select Image:</label>
-                    <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control-file" id="imageFile"
+                    <input accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" id="imageFile"
                            name="imageFile"
                            type="file">
                     <span id="imageFileError" style="color: red;"></span>
