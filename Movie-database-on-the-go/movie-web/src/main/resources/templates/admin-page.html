@@ -34,7 +34,8 @@
         <div class="col-sm-3 mb-2" th:each="client : ${clients}"
              th:attr="data-username=${client.username},
               data-name=${client.name},
-              data-email=${client.email}">
+              data-email=${client.email},
+              data-id=${client.id}">
             <a th:href="@{'/admin/client_details?clientId=' + ${client.id}}">
                 <div class="card">
                     <div class="card-body">

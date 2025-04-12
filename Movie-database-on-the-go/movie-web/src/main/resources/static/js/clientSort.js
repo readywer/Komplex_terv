@@ -48,9 +48,9 @@ function filterClients() {
         var username = client.getAttribute("data-username").toLowerCase();
         var name = client.getAttribute("data-name").toLowerCase();
         var email = client.getAttribute("data-email").toLowerCase();
+        var id = client.getAttribute("data-id").toLowerCase();
 
-        // Ellenőrizzük, hogy a keresett szó szerepel-e valamelyik mezőben
-        if (username.includes(input) || name.includes(input) || email.includes(input)) {
+        if (username.includes(input) || name.includes(input) || email.includes(input) || id.includes(input)) {
             client.style.display = "block";
             found = true;
         } else {
@@ -58,7 +58,6 @@ function filterClients() {
         }
     });
 
-    // Ha nincs találat, megjelenítjük az üzenetet
     var noResultsMessage = document.getElementById("noResultsMessage");
     noResultsMessage.style.display = found ? "none" : "block";
 }

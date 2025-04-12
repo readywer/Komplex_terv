@@ -109,16 +109,17 @@ public class VideoConverterService {
 
     private static List<String> getQualityArgs(String codec, int quality) {
         return switch (codec) {
-            case "hevc_qsv", "hevc_nvenc", "hevc_amf" -> List.of("-cq", String.valueOf(quality));
+            case "hevc_nvenc", "hevc_amf" -> List.of("-cq", String.valueOf(quality));
+            case "hevc_qsv" -> List.of("-global_quality", String.valueOf(quality));
             default -> List.of("-crf", String.valueOf(quality));
         };
     }
 
     private static String getPreset(String codec) {
         return switch (codec) {
-            case "hevc_qsv", "hevc_amf" -> "quality";
-            case "hevc_nvenc" -> "slow";
-            default -> "medium";
+            case "hevc_qsv", "hevc_amf" -> "medium";
+            case "hevc_nvenc" -> "medium";
+            default -> "fast";
         };
     }
 
